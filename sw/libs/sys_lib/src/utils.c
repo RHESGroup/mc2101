@@ -44,7 +44,9 @@ void sleep_busy(volatile int iter)
     asm volatile ("nop");
 }
 
-#ifdef __riscv__
+// #ifdef __riscv__
+// Support for macro __riscv, introduced in the last version of the toolchain, was not included (modified Gianluca Roascio 22/10/2020)
+#if defined(__riscv__) || defined(__riscv)
 /* Set the specified counter to the specified value */
 void cpu_perf_set(unsigned int counterId, unsigned int value) {
   printf("cpu_perf_set: not implemented yet\n");

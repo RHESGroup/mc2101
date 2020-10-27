@@ -24,7 +24,9 @@
 #ifndef _INT_H_
 #define _INT_H_
 
-#ifndef __riscv__
+// #ifndef __riscv__
+// Support for macro __riscv, introduced in the last version of the toolchain, was not included (modified Gianluca Roascio 22/10/2020)
+#ifndef __riscv
 #include "spr-defs.h"
 #endif
 
@@ -41,7 +43,9 @@
  * interrupts are globally disable.
  */
 static inline void int_disable(void) {
-#ifdef __riscv__
+// #ifdef __riscv__
+// Support for macro __riscv, introduced in the last version of the toolchain, was not included (modified Gianluca Roascio 22/10/2020)
+#if defined(__riscv__) || defined(__riscv)
   // read-modify-write
   int mstatus;
   asm volatile ("csrr %0, mstatus": "=r" (mstatus));
@@ -64,8 +68,9 @@ static inline void int_disable(void) {
  * interrupts are globally enabled.
  */
 static inline void int_enable(void) {
-#ifdef __riscv__
-
+// #ifdef __riscv__
+// Support for macro __riscv, introduced in the last version of the toolchain, was not included (modified Gianluca Roascio 22/10/2020)
+#if defined(__riscv__) || defined(__riscv)
   // read-modify-write
   int mstatus;
   asm volatile ("csrr %0, mstatus": "=r" (mstatus));

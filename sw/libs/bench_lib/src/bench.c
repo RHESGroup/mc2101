@@ -100,7 +100,9 @@ void check_uint32(testresult_t* result, const char* fail_msg, uint32_t actual, u
 }
 
 void perf_print_all(void) {
-#ifdef __riscv__
+// #ifdef __riscv__
+// Support for macro __riscv, introduced in the last version of the toolchain, was not included (modified Gianluca Roascio 22/10/2020)
+#if defined(__riscv__) || defined(__riscv)
   printf("Perf CYCLES:   %d\n", cpu_perf_get(0));
   printf("Perf INSN:     %d\n", cpu_perf_get(1));
   printf("Perf CINSN:    %d\n", cpu_perf_get(10));

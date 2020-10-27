@@ -33,7 +33,9 @@ static inline int get_core_num()
   return 0;
 }
 
-#ifdef __riscv__
+// #ifdef __riscv__
+// Support for macro __riscv, introduced in the last version of the toolchain, was not included (modified Gianluca Roascio 22/10/2020)
+#if defined(__riscv__) || defined(__riscv)
 /**
  * @brief Write to CSR.
  * @param CSR register to write.

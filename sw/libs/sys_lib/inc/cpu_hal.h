@@ -14,7 +14,9 @@
 #include "spr-defs.h"
 #include <stdint.h>
 
-#ifdef __riscv__
+// #ifdef __riscv__
+// Support for macro __riscv, introduced in the last version of the toolchain, was not included (modified Gianluca Roascio 22/10/2020)
+#if defined(__riscv__) || defined(__riscv)
 
 #define CSR_PCMR_ACTIVE 0x1
 
