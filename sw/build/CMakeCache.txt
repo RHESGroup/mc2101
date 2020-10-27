@@ -237,7 +237,7 @@ RVC:UNINITIALIZED=0
 UNIX:STRING=TRUE
 
 //No help, variable specified on the command line.
-USE_ZERO_RISCY:UNINITIALIZED=0
+USE_ZERO_RISCY:UNINITIALIZED=1
 
 //Path to the vsim executable
 VSIM:FILEPATH=/opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim
@@ -246,7 +246,7 @@ VSIM:FILEPATH=/opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim
 ZERO_RV32E:UNINITIALIZED=0
 
 //No help, variable specified on the command line.
-ZERO_RV32M:UNINITIALIZED=0
+ZERO_RV32M:UNINITIALIZED=1
 
 //Dependencies for target
 bench_LIB_DEPENDS:STATIC=

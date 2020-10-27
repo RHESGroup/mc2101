@@ -55,7 +55,7 @@ include apps/fpga/gpio_demo/CMakeFiles/gpio_demo.sc.pl.dir/progress.make
 
 apps/fpga/gpio_demo/CMakeFiles/gpio_demo.sc.pl:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/sf_Shared/pulpino/sw/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running scan chain testing (post layout)"
-	cd /media/sf_Shared/pulpino/sw/build/apps/fpga/gpio_demo && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=0\ RISCY_RV32F=0\ ZERO_RV32M=0\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_sc_pl.tcl\;'
+	cd /media/sf_Shared/pulpino/sw/build/apps/fpga/gpio_demo && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=1\ RISCY_RV32F=0\ ZERO_RV32M=1\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_sc_pl.tcl\;'
 
 gpio_demo.sc.pl: apps/fpga/gpio_demo/CMakeFiles/gpio_demo.sc.pl
 gpio_demo.sc.pl: apps/fpga/gpio_demo/CMakeFiles/gpio_demo.sc.pl.dir/build.make

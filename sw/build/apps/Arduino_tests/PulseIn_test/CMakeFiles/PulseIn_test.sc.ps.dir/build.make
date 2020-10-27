@@ -55,7 +55,7 @@ include apps/Arduino_tests/PulseIn_test/CMakeFiles/PulseIn_test.sc.ps.dir/progre
 
 apps/Arduino_tests/PulseIn_test/CMakeFiles/PulseIn_test.sc.ps:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/sf_Shared/pulpino/sw/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running scan chain testing (post synthesis)"
-	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/PulseIn_test && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=0\ RISCY_RV32F=0\ ZERO_RV32M=0\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST="ARDUINO_PULSEIN"\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_sc_ps.tcl\;'
+	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/PulseIn_test && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=1\ RISCY_RV32F=0\ ZERO_RV32M=1\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST="ARDUINO_PULSEIN"\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_sc_ps.tcl\;'
 
 PulseIn_test.sc.ps: apps/Arduino_tests/PulseIn_test/CMakeFiles/PulseIn_test.sc.ps
 PulseIn_test.sc.ps: apps/Arduino_tests/PulseIn_test/CMakeFiles/PulseIn_test.sc.ps.dir/build.make

@@ -12,7 +12,7 @@
 `include "tb_jtag_pkg.sv"
 
 `define REF_CLK_PERIOD   (2*15.25us)  // 32.786 kHz --> FLL reset value --> 50 MHz
-`define CLK_PERIOD       40.00ns      // 25 MHz
+`define CLK_PERIOD       5ns      	  // 200 MHz
 
 `define EXIT_SUCCESS  0
 `define EXIT_FAIL     1
@@ -27,7 +27,7 @@ module tb;
   parameter  BAUDRATE       = 781250;    // 1562500
   parameter  CLK_USE_FLL    = 0;  // 0 or 1
   parameter  TEST           = ""; //valid values are "" (NONE), "DEBUG"
-  parameter  USE_ZERO_RISCY = 0;
+  parameter  USE_ZERO_RISCY = 1;
   parameter  RISCY_RV32F    = 0;
   parameter  ZERO_RV32M     = 1;
   parameter  ZERO_RV32E     = 0;
@@ -224,11 +224,11 @@ module tb;
     s_rst_n      = 1'b0;
     fetch_enable = 1'b0;
 
-    #500ns;
+    #10ns;
 
     s_rst_n = 1'b1;
 
-    #500ns;
+    #10ns;
     if (use_qspi)
       spi_enable_qpi();
 
@@ -253,7 +253,7 @@ module tb;
       spi_check(use_qspi);
     end
 
-    #200ns;
+    #10ns;
     fetch_enable = 1'b1;
 
     if(TEST == "DEBUG") begin

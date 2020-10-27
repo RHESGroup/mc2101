@@ -13,7 +13,7 @@ valu_ff
 Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
 Z2 DXx4 work 13 riscv_defines 0 22 2=8J_J_YNe0TaHnJBY]gR2
 Z3 DXx4 work 17 riscv_alu_sv_unit 0 22 6LJeV_Zndl9BVEelBP`z:2
-Z4 !s110 1603718133
+Z4 !s110 1603802031
 Z5 VDg1SIo80bB@j0V0VzS_@n1
 r1
 !s85 0
@@ -30,7 +30,7 @@ Z9 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu.sv
 L0 1042 74
 Z10 OV;L;2020.1;71
 31
-Z11 !s108 1603718132.000000
+Z11 !s108 1603802031.000000
 Z12 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu.sv|
 Z13 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu.sv|
 !i113 1
@@ -67,7 +67,7 @@ R15
 R16
 Xapu_core_package
 R1
-Z17 !s110 1603718132
+Z17 !s110 1603802030
 !i10b 1
 !s100 P78ka@g6F[F1`eAfL[<5N3
 Z18 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -84,7 +84,7 @@ R10
 r1
 !s85 0
 31
-R11
+Z19 !s108 1603802030.000000
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/include/apu_core_package.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/include/apu_core_package.sv|
 !i113 1
@@ -134,13 +134,13 @@ IB9VmdB]DN2SkVB;IkGV@J2
 S1
 R0
 R7
-Z19 8/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_basic.sv
-Z20 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_basic.sv
+Z20 8/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_basic.sv
+Z21 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_basic.sv
 !i122 4
 L0 30 292
 R10
 31
-Z21 !s108 1603718133.000000
+R11
 Z22 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_basic.sv|
 Z23 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_basic.sv|
 !i113 1
@@ -161,13 +161,13 @@ IUeRIWLO4G7KQeJlAFXlbG3
 S1
 R0
 R7
-R19
 R20
+R21
 !i122 4
 Z24 L0 28 0
 R10
 31
-R21
+R11
 R22
 R23
 !i113 1
@@ -193,7 +193,7 @@ R10
 r1
 !s85 0
 31
-R21
+R11
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_div.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_alu_div.sv|
 !i113 1
@@ -231,7 +231,7 @@ vriscv_apu_disp
 R1
 Z26 DXx4 work 16 apu_core_package 0 22 P8DXzHMH>AGeNP4B0Dgn51
 DXx4 work 22 riscv_apu_disp_sv_unit 0 22 LF42Y;CofAScc_0o;EaF^1
-Z27 !s110 1603718134
+Z27 !s110 1603802032
 R5
 r1
 !s85 0
@@ -248,7 +248,7 @@ Z29 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_apu_disp.sv
 L0 27 222
 R10
 31
-Z30 !s108 1603718134.000000
+Z30 !s108 1603802032.000000
 Z31 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/include/apu_macros.sv|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_apu_disp.sv|
 Z32 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_apu_disp.sv|
 !i113 1
@@ -304,7 +304,7 @@ Z36 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_compressed_decoder.sv
 L0 30 270
 R10
 31
-R21
+R11
 Z37 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_compressed_decoder.sv|
 Z38 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_compressed_decoder.sv|
 !i113 1
@@ -331,7 +331,7 @@ R36
 R24
 R10
 31
-R21
+R11
 R37
 R38
 !i113 1
@@ -359,7 +359,7 @@ Z40 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_controller.sv
 L0 31 838
 R10
 31
-R21
+R11
 Z41 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_controller.sv|
 Z42 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_controller.sv|
 !i113 1
@@ -386,7 +386,7 @@ R40
 R25
 R10
 31
-R21
+R11
 R41
 R42
 !i113 1
@@ -472,7 +472,7 @@ Z48 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_cs_registers.sv
 L0 37 831
 R10
 31
-R21
+R11
 Z49 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_cs_registers.sv|
 Z50 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_cs_registers.sv|
 !i113 1
@@ -499,7 +499,7 @@ R48
 R25
 R10
 31
-R21
+R11
 R49
 R50
 !i113 1
@@ -527,7 +527,7 @@ Z52 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_debug_unit.sv
 L0 25 538
 R10
 31
-R21
+R11
 Z53 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_debug_unit.sv|
 Z54 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_debug_unit.sv|
 !i113 1
@@ -554,7 +554,7 @@ R52
 L0 23 0
 R10
 31
-R21
+R11
 R53
 R54
 !i113 1
@@ -583,7 +583,7 @@ Z56 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_decoder.sv
 L0 32 1511
 R10
 31
-R21
+R11
 Z57 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/include/apu_macros.sv|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_decoder.sv|
 Z58 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_decoder.sv|
 !i113 1
@@ -612,7 +612,7 @@ R33
 R34
 R10
 31
-R21
+R11
 R57
 R58
 !i113 1
@@ -638,7 +638,7 @@ R10
 r1
 !s85 0
 31
-R11
+R19
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/include/riscv_defines.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/include/riscv_defines.sv|
 !i113 1
@@ -667,7 +667,7 @@ Z60 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_ex_stage.sv
 L0 40 446
 R10
 31
-R21
+R11
 Z61 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/include/apu_macros.sv|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_ex_stage.sv|
 Z62 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_ex_stage.sv|
 !i113 1
@@ -696,7 +696,7 @@ R33
 R34
 R10
 31
-R21
+R11
 R61
 R62
 !i113 1
@@ -748,7 +748,7 @@ R10
 r1
 !s85 0
 31
-R21
+R11
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_hwloop_controller.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_hwloop_controller.sv|
 !i113 1
@@ -774,7 +774,7 @@ R10
 r1
 !s85 0
 31
-R21
+R11
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_hwloop_regs.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_hwloop_regs.sv|
 !i113 1
@@ -803,7 +803,7 @@ Z64 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_id_stage.sv
 L0 40 1495
 R10
 31
-R21
+R11
 Z65 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_id_stage.sv|
 Z66 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_id_stage.sv|
 !i113 1
@@ -831,7 +831,7 @@ R64
 L0 30 0
 R10
 31
-R21
+R11
 R65
 R66
 !i113 1
@@ -859,7 +859,7 @@ Z68 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_if_stage.sv
 L0 31 374
 R10
 31
-R21
+R11
 Z69 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_if_stage.sv|
 Z70 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_if_stage.sv|
 !i113 1
@@ -886,7 +886,7 @@ R68
 R25
 R10
 31
-R21
+R11
 R69
 R70
 !i113 1
@@ -914,7 +914,7 @@ Z72 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_int_controller.sv
 L0 26 101
 R10
 31
-R21
+R11
 Z73 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_int_controller.sv|
 Z74 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_int_controller.sv|
 !i113 1
@@ -941,7 +941,7 @@ R72
 L0 24 0
 R10
 31
-R21
+R11
 R73
 R74
 !i113 1
@@ -994,7 +994,7 @@ R10
 r1
 !s85 0
 31
-R21
+R11
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_load_store_unit.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_load_store_unit.sv|
 !i113 1
@@ -1022,7 +1022,7 @@ Z76 F/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_mult.sv
 L0 30 312
 R10
 31
-R21
+R11
 Z77 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_mult.sv|
 Z78 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/riscv_mult.sv|
 !i113 1
@@ -1049,7 +1049,7 @@ R76
 R24
 R10
 31
-R21
+R11
 R77
 R78
 !i113 1
@@ -1184,7 +1184,7 @@ R10
 r1
 !s85 0
 31
-R11
+R19
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/riscv/include/riscv_tracer_defines.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/riscv_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/include+incdir+/media/sf_Shared/pulpino/vsim/..//ips/riscv/../../rtl/includes|/media/sf_Shared/pulpino/vsim/..//ips/riscv/include/riscv_tracer_defines.sv|
 !i113 1

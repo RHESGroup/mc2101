@@ -55,7 +55,7 @@ include apps/sequential_tests/cnn_layer/CMakeFiles/cnn_layer.sc.pl.dir/progress.
 
 apps/sequential_tests/cnn_layer/CMakeFiles/cnn_layer.sc.pl:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/sf_Shared/pulpino/sw/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running scan chain testing (post layout)"
-	cd /media/sf_Shared/pulpino/sw/build/apps/sequential_tests/cnn_layer && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=0\ RISCY_RV32F=0\ ZERO_RV32M=0\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_sc_pl.tcl\;'
+	cd /media/sf_Shared/pulpino/sw/build/apps/sequential_tests/cnn_layer && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=1\ RISCY_RV32F=0\ ZERO_RV32M=1\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_sc_pl.tcl\;'
 
 cnn_layer.sc.pl: apps/sequential_tests/cnn_layer/CMakeFiles/cnn_layer.sc.pl
 cnn_layer.sc.pl: apps/sequential_tests/cnn_layer/CMakeFiles/cnn_layer.sc.pl.dir/build.make

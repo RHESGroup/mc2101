@@ -13,7 +13,7 @@ vzeroriscy_alu
 Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
 Z2 DXx4 work 17 zeroriscy_defines 0 22 ZPmdfNg3<b[e_:iNR`QOe2
 DXx4 work 21 zeroriscy_alu_sv_unit 0 22 12D@`k4KVWo;b;_Z`3O6E2
-Z3 !s110 1603718131
+Z3 !s110 1603802029
 Z4 VDg1SIo80bB@j0V0VzS_@n1
 r1
 !s85 0
@@ -30,7 +30,7 @@ Z7 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_alu.sv
 L0 30 252
 Z8 OV;L;2020.1;71
 31
-Z9 !s108 1603718131.000000
+Z9 !s108 1603802029.000000
 Z10 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_alu.sv|
 Z11 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_alu.sv|
 !i113 1
@@ -180,7 +180,7 @@ vzeroriscy_core
 R1
 R2
 DXx4 work 22 zeroriscy_core_sv_unit 0 22 Z>;KU`1M]Ui52mi:MVfgf1
-Z25 !s110 1603718132
+Z25 !s110 1603802030
 R4
 r1
 !s85 0
@@ -197,9 +197,9 @@ Z27 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_core.sv
 L0 33 704
 R8
 31
-R9
-Z28 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_core.sv|
-Z29 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_core.sv|
+Z28 !s108 1603802030.000000
+Z29 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_core.sv|
+Z30 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_core.sv|
 !i113 1
 R12
 R13
@@ -222,12 +222,12 @@ R26
 R27
 R15
 !i122 17
-Z30 L0 31 0
+Z31 L0 31 0
 R8
 31
-R9
 R28
 R29
+R30
 !i113 1
 R12
 R13
@@ -247,15 +247,15 @@ I=NfkMm?fYbDl=286n>`ej2
 S1
 R0
 R5
-Z31 8/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv
-Z32 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv
+Z32 8/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv
+Z33 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv
 !i122 5
 L0 37 441
 R8
 31
 R9
-Z33 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv|
-Z34 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv|
+Z34 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv|
+Z35 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_cs_registers.sv|
 !i113 1
 R12
 R13
@@ -274,16 +274,16 @@ IAnfPc9<=e]_6eN9iN^ZRJ0
 S1
 R0
 R5
-R31
 R32
+R33
 R15
 !i122 5
 L0 29 0
 R8
 31
 R9
-R33
 R34
+R35
 !i113 1
 R12
 R13
@@ -303,15 +303,15 @@ Imdi@X_5?7YogbK>iO61BK3
 S1
 R0
 R5
-Z35 8/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv
-Z36 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv
+Z36 8/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv
+Z37 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv
 !i122 6
 L0 29 460
 R8
 31
 R9
-Z37 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv|
-Z38 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv|
+Z38 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv|
+Z39 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_debug_unit.sv|
 !i113 1
 R12
 R13
@@ -330,16 +330,16 @@ IJhRTl<9cQ7UXRDbzkmJ[I2
 S1
 R0
 R5
-R35
 R36
+R37
 R15
 !i122 6
 L0 27 0
 R8
 31
 R9
-R37
 R38
+R39
 !i113 1
 R12
 R13
@@ -359,15 +359,15 @@ I38L9m7Zade8C6];cRAb2X1
 S1
 R0
 R5
-Z39 8/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv
-Z40 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv
+Z40 8/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv
+Z41 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv
 !i122 7
 L0 33 558
 R8
 31
 R9
-Z41 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv|
-Z42 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv|
+Z42 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv|
+Z43 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_decoder.sv|
 !i113 1
 R12
 R13
@@ -386,16 +386,16 @@ I<AENOl[mLck3jP0QF`CGN0
 S1
 R0
 R5
-R39
 R40
+R41
 R15
 !i122 7
-R30
+R31
 R8
 31
 R9
-R41
 R42
+R43
 !i113 1
 R12
 R13
@@ -405,7 +405,7 @@ R1
 R25
 !i10b 1
 !s100 B`^l7_ESM?ezJ2^B9>Bd22
-Z43 !s11b Dg1SIo80bB@j0V0VzS_@n1
+Z44 !s11b Dg1SIo80bB@j0V0VzS_@n1
 IZPmdfNg3<b[e_:iNR`QOe2
 VZPmdfNg3<b[e_:iNR`QOe2
 S1
@@ -419,7 +419,7 @@ R8
 r1
 !s85 0
 31
-Z44 !s108 1603718132.000000
+R28
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_defines.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_defines.sv|
 !i113 1
@@ -472,7 +472,7 @@ R45
 R46
 R15
 !i122 9
-R30
+R31
 R8
 31
 R9
@@ -484,10 +484,10 @@ R13
 R14
 vzeroriscy_fetch_fifo
 R1
-R3
+R25
 !i10b 1
 !s100 24?lGVk^8L426KbHSMOk00
-R43
+R44
 Ie3CQ:[Nj3z?h@9`kkkm5R2
 R4
 S1
@@ -501,7 +501,7 @@ R8
 r1
 !s85 0
 31
-R9
+R28
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_fetch_fifo.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_fetch_fifo.sv|
 !i113 1
@@ -554,7 +554,7 @@ R49
 R50
 R15
 !i122 10
-R30
+R31
 R8
 31
 R9
@@ -680,7 +680,7 @@ R1
 R3
 !i10b 1
 !s100 _9o`^2NR4dIL]abZnI_FL1
-R43
+R44
 IGlWYPPIHzkgLk4acD5=b=2
 R4
 S1
@@ -705,7 +705,7 @@ vzeroriscy_multdiv_fast
 R1
 R2
 DXx4 work 30 zeroriscy_multdiv_fast_sv_unit 0 22 [FhE7gJOb]2`:;26zn10>2
-R3
+R25
 R4
 r1
 !s85 0
@@ -732,7 +732,7 @@ R14
 Xzeroriscy_multdiv_fast_sv_unit
 R1
 R2
-R3
+R25
 V[FhE7gJOb]2`:;26zn10>2
 r1
 !s85 0
@@ -813,10 +813,10 @@ R13
 R14
 vzeroriscy_prefetch_buffer
 R1
-R3
+R25
 !i10b 1
 !s100 i0e0akei`=hine7Snfi[o1
-R43
+R44
 IAOZQ<JHMZ5OIh=1cfjKOj3
 R4
 S1
@@ -830,7 +830,7 @@ R8
 r1
 !s85 0
 31
-R9
+R28
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_prefetch_buffer.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_prefetch_buffer.sv|
 !i113 1
@@ -842,7 +842,7 @@ R1
 R25
 !i10b 1
 !s100 L5ejc]WNc[^;=1hXlkaaE3
-R43
+R44
 I9HS;dcR79IGmMC_=bLQ<33
 R4
 S1
@@ -856,7 +856,7 @@ R8
 r1
 !s85 0
 31
-R44
+R28
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_register_file.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_register_file.sv|
 !i113 1
@@ -885,7 +885,7 @@ Z72 F/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_tracer.sv
 L0 41 403
 R8
 31
-R44
+R28
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_tracer.sv|
 Z73 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_tracer.sv|
 !i113 1
@@ -898,7 +898,7 @@ R2
 R25
 !i10b 1
 !s100 zS`FRj0b5V5lYaSzK@SUQ0
-R43
+R44
 IlZcefA?nTPgkBn??9cN470
 VlZcefA?nTPgkBn??9cN470
 S1
@@ -912,7 +912,7 @@ R8
 r1
 !s85 0
 31
-R44
+R28
 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_tracer_defines.sv|
 !s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/zero_riscy_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_tracer_defines.sv|
 !i113 1
@@ -941,7 +941,7 @@ R15
 R24
 R8
 31
-R44
+R28
 Z74 !s107 /media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/include/zeroriscy_config.sv|/media/sf_Shared/pulpino/vsim/..//ips/zero-riscy/zeroriscy_tracer.sv|
 R73
 !i113 1

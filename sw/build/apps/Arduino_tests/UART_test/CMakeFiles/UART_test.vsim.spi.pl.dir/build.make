@@ -57,7 +57,7 @@ apps/Arduino_tests/UART_test/CMakeFiles/UART_test.vsim.spi.pl:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/sf_Shared/pulpino/sw/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running UART_test in ModelSim (post layout)"
 	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/UART_test && /usr/bin/cmake -E remove stdout/*
 	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/UART_test && /usr/bin/cmake -E remove FS/*
-	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/UART_test && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=0\ RISCY_RV32F=0\ ZERO_RV32M=0\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST="ARDUINO_UART"\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_spi_pl.tcl\;'
+	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/UART_test && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=1\ RISCY_RV32F=0\ ZERO_RV32M=1\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST="ARDUINO_UART"\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_spi_pl.tcl\;'
 
 UART_test.vsim.spi.pl: apps/Arduino_tests/UART_test/CMakeFiles/UART_test.vsim.spi.pl
 UART_test.vsim.spi.pl: apps/Arduino_tests/UART_test/CMakeFiles/UART_test.vsim.spi.pl.dir/build.make

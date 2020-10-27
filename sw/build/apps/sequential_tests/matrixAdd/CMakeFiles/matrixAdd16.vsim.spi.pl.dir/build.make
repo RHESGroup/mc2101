@@ -57,7 +57,7 @@ apps/sequential_tests/matrixAdd/CMakeFiles/matrixAdd16.vsim.spi.pl:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/sf_Shared/pulpino/sw/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running matrixAdd16 in ModelSim (post layout)"
 	cd /media/sf_Shared/pulpino/sw/build/apps/sequential_tests/matrixAdd/matrixAdd16 && /usr/bin/cmake -E remove stdout/*
 	cd /media/sf_Shared/pulpino/sw/build/apps/sequential_tests/matrixAdd/matrixAdd16 && /usr/bin/cmake -E remove FS/*
-	cd /media/sf_Shared/pulpino/sw/build/apps/sequential_tests/matrixAdd/matrixAdd16 && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=0\ RISCY_RV32F=0\ ZERO_RV32M=0\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_spi_pl.tcl\;'
+	cd /media/sf_Shared/pulpino/sw/build/apps/sequential_tests/matrixAdd/matrixAdd16 && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=1\ RISCY_RV32F=0\ ZERO_RV32M=1\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_spi_pl.tcl\;'
 
 matrixAdd16.vsim.spi.pl: apps/sequential_tests/matrixAdd/CMakeFiles/matrixAdd16.vsim.spi.pl
 matrixAdd16.vsim.spi.pl: apps/sequential_tests/matrixAdd/CMakeFiles/matrixAdd16.vsim.spi.pl.dir/build.make

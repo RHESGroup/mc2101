@@ -57,7 +57,7 @@ apps/Arduino_tests/timer_test/CMakeFiles/timer_test.power:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/media/sf_Shared/pulpino/sw/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running timer_test in ModelSim (post layout)"
 	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/timer_test && /usr/bin/cmake -E remove stdout/*
 	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/timer_test && /usr/bin/cmake -E remove FS/*
-	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/timer_test && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=0\ RISCY_RV32F=0\ ZERO_RV32M=0\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_power.tcl\;'
+	cd /media/sf_Shared/pulpino/sw/build/apps/Arduino_tests/timer_test && tcsh -c env\ VSIM_DIR=/media/sf_Shared/pulpino/vsim\ USE_ZERO_RISCY=1\ RISCY_RV32F=0\ ZERO_RV32M=1\ ZERO_RV32E=0\ PL_NETLIST=\ TB_TEST=""\ /opt/intelFPGA/20.1/modelsim_ase/linuxaloem/vsim\ \ -64\ -do\ 'source\ tcl_files/run_power.tcl\;'
 
 timer_test.power: apps/Arduino_tests/timer_test/CMakeFiles/timer_test.power
 timer_test.power: apps/Arduino_tests/timer_test/CMakeFiles/timer_test.power.dir/build.make
