@@ -1,0 +1,136 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/media/sf_Shared/pulpino/vsim
+vapb_uart_sv
+Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
+Z2 !s110 1603718127
+!i10b 1
+!s100 aC2Y=HoFV5E6XCocHAl380
+Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I4G]]7WBQZ7][od=abcZok1
+Z4 VDg1SIo80bB@j0V0VzS_@n1
+S1
+R0
+Z5 w1603354278
+8/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/apb_uart_sv.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/apb_uart_sv.sv
+!i122 0
+L0 11 337
+Z6 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z7 !s108 1603718127.000000
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/apb_uart_sv.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/apb_uart_sv_lib|/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/apb_uart_sv.sv|
+!i113 1
+Z8 o-suppress 2583 -quiet -sv -work /media/sf_Shared/pulpino/vsim/modelsim_libs/apb_uart_sv_lib
+Z9 tCvgOpt 0
+vio_generic_fifo
+R1
+R2
+!i10b 1
+!s100 1_n^Kh5QzhK;Q2@1IWKWY0
+R3
+IUH=;9HEF1QC62mk[ifPDd0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/io_generic_fifo.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/io_generic_fifo.sv
+!i122 3
+L0 11 129
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/io_generic_fifo.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/apb_uart_sv_lib|/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/io_generic_fifo.sv|
+!i113 1
+R8
+R9
+vuart_interrupt
+R1
+R2
+!i10b 1
+!s100 61N24@dLBENh`lEfA3Rfz2
+R3
+I>nQ6Cf8jM0`EQHR[cSYi:0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_interrupt.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_interrupt.sv
+!i122 4
+L0 11 88
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_interrupt.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/apb_uart_sv_lib|/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_interrupt.sv|
+!i113 1
+R8
+R9
+vuart_rx
+R1
+R2
+!i10b 1
+!s100 c=kBOlo=h94CeTPUeG^LP3
+R3
+I:WOV?02_NE3U_eai?B2_]2
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_rx.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_rx.sv
+!i122 1
+L0 11 250
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_rx.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/apb_uart_sv_lib|/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_rx.sv|
+!i113 1
+R8
+R9
+vuart_tx
+R1
+R2
+!i10b 1
+!s100 5DA>S0Umm=SRoTSX5[MhP3
+R3
+ITz1nh[6Elcc[Hf?;d7jI:3
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_tx.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_tx.sv
+!i122 2
+L0 11 203
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_tx.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/apb_uart_sv_lib|/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_uart_sv/uart_tx.sv|
+!i113 1
+R8
+R9

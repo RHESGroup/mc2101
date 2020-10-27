@@ -1,0 +1,570 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/media/sf_Shared/pulpino/vsim
+vapb_regs_top
+Z1 DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
+Z2 !s110 1603718124
+!i10b 1
+!s100 UJmRE;>4AjP]ce`Ei;5zX0
+Z3 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I29Ql1Z>bF[0EF0S7eL_dn1
+Z4 VDg1SIo80bB@j0V0VzS_@n1
+S1
+R0
+Z5 w1603354282
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/apb_regs_top.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/apb_regs_top.sv
+!i122 0
+L0 72 112
+Z6 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z7 !s108 1603718124.000000
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/apb_regs_top.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/apb_regs_top.sv|
+!i113 1
+Z8 o-suppress 2583 -quiet -sv -work /media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib
+Z9 !s92 -suppress 2583 -quiet -sv -work /media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib +incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.
+Z10 tCvgOpt 0
+vaxi_address_decoder_AR
+R1
+R2
+!i10b 1
+!s100 BUlYaSK0ViRZ50cST8hhX1
+R3
+Idl1c6V;2[a`Mjhk?kZ5_:2
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AR.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AR.sv
+!i122 1
+L0 42 186
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AR.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AR.sv|
+!i113 1
+R8
+R9
+R10
+naxi_address_decoder_@a@r
+vaxi_address_decoder_AW
+R1
+R2
+!i10b 1
+!s100 de?eLd2O3@FHg`dKe@L]z1
+R3
+IS8e3clEBkFfAG`@hSBUWK0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AW.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AW.sv
+!i122 2
+L0 42 235
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AW.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_AW.sv|
+!i113 1
+R8
+R9
+R10
+naxi_address_decoder_@a@w
+vaxi_address_decoder_BR
+R1
+R2
+!i10b 1
+!s100 8WbXl03;aWkHRJhzO5Ck93
+R3
+IRfXnQnlTU3nXQ4U_fAXih1
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BR.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BR.sv
+!i122 3
+L0 45 44
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BR.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BR.sv|
+!i113 1
+R8
+R9
+R10
+naxi_address_decoder_@b@r
+vaxi_address_decoder_BW
+R1
+R2
+!i10b 1
+!s100 >024CWAKL^z@GbYYQDzQj1
+R3
+I9l]bCLBV?z0aFzP_=n=:I0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BW.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BW.sv
+!i122 4
+L0 43 45
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BW.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_BW.sv|
+!i113 1
+R8
+R9
+R10
+naxi_address_decoder_@b@w
+vaxi_address_decoder_DW
+R1
+R2
+!i10b 1
+!s100 ^oNo>j=AY<NQcL?0=fR`b0
+R3
+IgId4YP@O_QonIV9@TQ=4d3
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_DW.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_DW.sv
+!i122 5
+L0 45 82
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_DW.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_address_decoder_DW.sv|
+!i113 1
+R8
+R9
+R10
+naxi_address_decoder_@d@w
+vaxi_AR_allocator
+R1
+R2
+!i10b 1
+!s100 d8NfH=Jz_H<fPY5z<fhEX2
+R3
+IKmSUXHbJ@336j^Jg_l6IB1
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AR_allocator.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AR_allocator.sv
+!i122 6
+L0 42 110
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AR_allocator.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AR_allocator.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@a@r_allocator
+vaxi_ArbitrationTree
+R1
+R2
+!i10b 1
+!s100 7FM03YzKi]^244IeTlD2`1
+R3
+I>eaDkk[lUNSlfiEW60GH80
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_ArbitrationTree.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_ArbitrationTree.sv
+!i122 7
+L0 44 257
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_ArbitrationTree.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_ArbitrationTree.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@arbitration@tree
+vaxi_AW_allocator
+R1
+R2
+!i10b 1
+!s100 i[DUQWn6Q0nSAO5ZUbbh=2
+R3
+ICL9:9>AFdbSjD=J9Hk4;12
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AW_allocator.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AW_allocator.sv
+!i122 8
+L0 42 122
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AW_allocator.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_AW_allocator.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@a@w_allocator
+vaxi_BR_allocator
+R1
+R2
+!i10b 1
+!s100 F?HZ`liIK8c5b^1]?cLS13
+R3
+IGHeBCMU1PVn=2aE`SBQcL2
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BR_allocator.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BR_allocator.sv
+!i122 9
+L0 44 358
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/./defines.v|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BR_allocator.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BR_allocator.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@b@r_allocator
+vaxi_BW_allocator
+R1
+R2
+!i10b 1
+!s100 11gaFDjNF<A5OR;@;AFab3
+R3
+IRF``PdJUk7jE2@3Dl:Z7e0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BW_allocator.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BW_allocator.sv
+!i122 10
+L0 45 272
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/./defines.v|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BW_allocator.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_BW_allocator.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@b@w_allocator
+vaxi_DW_allocator
+R1
+R2
+!i10b 1
+!s100 J4nCjNaPZMjDQ_f4LbmT72
+R3
+IiPRf7W49m=HAZAC3<NdA@0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_DW_allocator.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_DW_allocator.sv
+!i122 11
+L0 44 221
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_DW_allocator.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_DW_allocator.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@d@w_allocator
+vaxi_FanInPrimitive_Req
+R1
+R2
+!i10b 1
+!s100 WcdVBTSoe_VfhO3<[fci82
+R3
+I0o::@KFg30T_?lEbe`]<b2
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_FanInPrimitive_Req.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_FanInPrimitive_Req.sv
+!i122 12
+L0 42 73
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_FanInPrimitive_Req.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_FanInPrimitive_Req.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@fan@in@primitive_@req
+vaxi_multiplexer
+R1
+R2
+!i10b 1
+!s100 NS]8=HR67Va1g9eEUB4J92
+R3
+IcahXH1jB<k_[DH7P4Rk[_2
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_multiplexer.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_multiplexer.sv
+!i122 13
+L0 42 16
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_multiplexer.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_multiplexer.sv|
+!i113 1
+R8
+R9
+R10
+vaxi_node
+R1
+Z11 !s110 1603718125
+!i10b 1
+!s100 eiC=W7NU2d8fM:hLA5>7M1
+R3
+IEgA`Z;Yk_zEX[W;1_4h=^3
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node.sv
+!i122 14
+L0 43 609
+R6
+r1
+!s85 0
+31
+R7
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/./defines.v|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node.sv|
+!i113 1
+R8
+R9
+R10
+vaxi_node_wrap
+R1
+R11
+!i10b 1
+!s100 LWECISk9I6?lYoSZP`jgQ2
+R3
+I0Zo[>cgVS;fcDhF:=o=eU3
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap.sv
+!i122 15
+L0 43 569
+R6
+r1
+!s85 0
+31
+Z12 !s108 1603718125.000000
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/./defines.v|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap.sv|
+!i113 1
+R8
+R9
+R10
+vaxi_node_wrap_with_slices
+R1
+R11
+!i10b 1
+!s100 DQbBnL?Y`R:blmU5GFQV02
+R3
+IgkXj?2^`0fjjd9m@?2[D60
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap_with_slices.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap_with_slices.sv
+!i122 16
+L0 43 159
+R6
+r1
+!s85 0
+31
+R12
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/./defines.v|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap_with_slices.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_node_wrap_with_slices.sv|
+!i113 1
+R8
+R9
+R10
+vaxi_regs_top
+R1
+R11
+!i10b 1
+!s100 3d@<=CRhcQcJ>:5o>@8Cj0
+R3
+IVkId^]LC=Kh>?<BKLMd:73
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_regs_top.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_regs_top.sv
+!i122 17
+L0 92 371
+R6
+r1
+!s85 0
+31
+R12
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_regs_top.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_regs_top.sv|
+!i113 1
+R8
+R9
+R10
+vaxi_request_block
+R1
+R11
+!i10b 1
+!s100 J9JZU:^1;PfDzJ:AL5GCe1
+R3
+I1?hkL8gXgjg:djMnN7?4V0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_request_block.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_request_block.sv
+!i122 18
+L0 42 323
+R6
+r1
+!s85 0
+31
+R12
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_request_block.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_request_block.sv|
+!i113 1
+R8
+R9
+R10
+vaxi_response_block
+R1
+R11
+!i10b 1
+!s100 QkSFAUQRFmoJY57Ulk3]i3
+R3
+IA]YF>55]3VFS_[95j>E510
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_response_block.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_response_block.sv
+!i122 19
+L0 42 306
+R6
+r1
+!s85 0
+31
+R12
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_response_block.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_response_block.sv|
+!i113 1
+R8
+R9
+R10
+vaxi_RR_Flag_Req
+R1
+R11
+!i10b 1
+!s100 l9D39PXQjgBAbY2He>WXZ2
+R3
+I0U[fWk_nEHm[P6@5Aj=V[0
+R4
+S1
+R0
+R5
+8/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_RR_Flag_Req.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_RR_Flag_Req.sv
+!i122 20
+L0 43 32
+R6
+r1
+!s85 0
+31
+R12
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_RR_Flag_Req.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/axi_node_lib|+incdir+/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/.|/media/sf_Shared/pulpino/vsim/..//ips/axi/axi_node/axi_RR_Flag_Req.sv|
+!i113 1
+R8
+R9
+R10
+naxi_@r@r_@flag_@req

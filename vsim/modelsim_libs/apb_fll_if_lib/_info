@@ -1,0 +1,36 @@
+m255
+K4
+z2
+!s11f vlog 2020.1 2020.02, Feb 28 2020
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/media/sf_Shared/pulpino/vsim
+vapb_fll_if
+DXx6 sv_std 3 std 0 22 VYECXdT12H8WgbUP_5Y6:3
+!s110 1603718129
+!i10b 1
+!s100 _HMR_cQ>^B3=`FKhAg[M?2
+!s11b Dg1SIo80bB@j0V0VzS_@n1
+I?4Jz3jbB]7>YRiNbGfZc[3
+VDg1SIo80bB@j0V0VzS_@n1
+S1
+R0
+w1603354270
+8/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_fll_if/apb_fll_if.sv
+F/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_fll_if/apb_fll_if.sv
+!i122 0
+L0 11 255
+OV;L;2020.1;71
+r1
+!s85 0
+31
+!s108 1603718129.000000
+!s107 /media/sf_Shared/pulpino/vsim/..//ips/apb/apb_fll_if/apb_fll_if.sv|
+!s90 -quiet|-sv|-suppress|2583|-work|/media/sf_Shared/pulpino/vsim/modelsim_libs/apb_fll_if_lib|/media/sf_Shared/pulpino/vsim/..//ips/apb/apb_fll_if/apb_fll_if.sv|
+!i113 1
+o-suppress 2583 -quiet -sv -work /media/sf_Shared/pulpino/vsim/modelsim_libs/apb_fll_if_lib
+tCvgOpt 0

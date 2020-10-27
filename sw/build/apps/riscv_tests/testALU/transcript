@@ -1,0 +1,44 @@
+# source tcl_files/run.tcl
+# vsim -quiet tb -L pulpino_lib -L axi_node_lib -L apb_node_lib -L axi_mem_if_DP_lib -L axi_spi_slave_lib -L axi_spi_master_lib -L apb_uart_sv_lib -L apb_gpio_lib -L apb_event_unit_lib -L apb_spi_master_lib -L fpu_lib -L apb_pulpino_lib -L apb_fll_if_lib -L core2axi_lib -L apb_timer_lib -L axi2apb_lib -L apb_i2c_lib -L zero_riscy_lib -L axi_slice_dc_lib -L riscv_lib -L apb_uart_lib -L axi_slice_lib -L adv_dbg_if_lib -L apb2per_lib "+nowarnTRAN" "+nowarnTSCALE" "+nowarnTFMPC" "+MEMLOAD=PRELOAD" -t ps -voptargs="+acc -suppress 2103" -dpicpppath /usr/bin/gcc -GTEST="" -gRISCY_RV32F=0 -gZERO_RV32E=0 -gZERO_RV32M=0 -gUSE_ZERO_RISCY=0 
+# Start time: 14:15:50 on Oct 26,2020
+# ** Warning: (vsim-8311) System Verilog assertions are supported only in Questasim.
+# ** Note: (vsim-7082) For C/C++ auto compile, choosing compiler /usr/bin/gcc set by the -dpicpppath switch.
+# ** Warning: (vsim-16074) No C/C++ auto compile object files are found for the current platform 'linuxaloem_gcc-7'.
+# However some C/C++ auto compile objects are found on the following platform(s):
+#     linuxaloem_gcc-4.7.4 
+# Please check whether you are missing the C/C++ auto compile step on the current platform.
+# 
+#    Time: 0 ps  Iteration: 0  Instance: /tb File: /media/sf_Shared/pulpino/vsim/..//tb/tb.sv
+# ** Warning: (vsim-3770) Failed to find user specified function 'mem_init' in DPI C/C++ source files.
+#    Time: 0 ps  Iteration: 0  Instance: /tb File: /media/sf_Shared/pulpino/vsim/..//tb/tb.sv
+# ** Warning: (vsim-3770) Failed to find user specified function 'mem_poll' in DPI C/C++ source files.
+#    Time: 0 ps  Iteration: 0  Instance: /tb File: /media/sf_Shared/pulpino/vsim/..//tb/tb.sv
+# ** Warning: (vsim-3770) Failed to find user specified function 'mem_push' in DPI C/C++ source files.
+#    Time: 0 ps  Iteration: 0  Instance: /tb File: /media/sf_Shared/pulpino/vsim/..//tb/tb.sv
+# ** Warning: (vsim-3770) Failed to find user specified function 'mem_push' in DPI C/C++ source files.
+#    Time: 0 ps  Iteration: 0  Instance: /tb File: /media/sf_Shared/pulpino/vsim/..//tb/tb.sv
+# ** Warning: Design size of 20491 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# Expect performance to be adversely affected.
+# 
+run 0 ns
+# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /tb/top_i/peripherals_i/apb_uart_i/UART_RXFF
+# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
+#    Time: 0 ps  Iteration: 0  Instance: /tb/top_i/peripherals_i/apb_uart_i/UART_TXFF
+# Using MEMLOAD method: PRELOAD
+# Using      ri5cy core
+source waves/riscy_core.tcl
+run 1 us
+# [SPI] Enabling QPI mode
+run 10 us
+run 10 us
+# [adv_dbg_if] AXI4 WRITE         32 burst @1a107008 for           4 bytes.
+# Preloading memory
+# Preloading instruction memory from slm_files/l2_stim.slm
+# Preloading data memory from slm_files/tcdm_bank0.slm
+run 5 us
+add wave -position insertpoint sim:/tb/top_i/core_region_i/instr_mem/sp_ram_wrap_i/sp_ram_i/*
+add wave -position insertpoint sim:/tb/top_i/core_region_i/instr_mem/sp_ram_wrap_i/sp_ram_i/mem
+run 10 us
+# End time: 14:22:44 on Oct 26,2020, Elapsed time: 0:06:54
+# Errors: 0, Warnings: 9
