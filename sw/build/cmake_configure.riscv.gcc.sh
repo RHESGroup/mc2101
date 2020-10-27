@@ -10,7 +10,9 @@ RANLIB=`which riscv32-unknown-elf-ranlib`
 
 VSIM=`which vsim`
 
-TARGET_C_FLAGS="-O3 -m32 -g"
+#TARGET_C_FLAGS="-O3 -m32 -g"
+TARGET_C_FLAGS="-O3 -g" 
+# -m32 is not anymore supported, modified Gianluca Roascio 19/10/2020
 #TARGET_C_FLAGS="-O2 -g -falign-functions=16  -funroll-all-loops"
 
 # if you want to have compressed instructions, set this to 1
@@ -28,10 +30,11 @@ ZERO_RV32M=0
 ZERO_RV32E=0
 
 # riscy with PULPextensions, it is assumed you use the ETH GCC Compiler
-GCC_MARCH="IMXpulpv2"
-
+#GCC_MARCH="IMXpulpv2"
+GCC_MARCH="rv32im" 
+# not compiling with PULPextensions, I set here the characteristics of ri5cy, edit Gianluca Roascio 19/10/2020
 #compile arduino lib
-ARDUINO_LIB=1
+ARDUINO_LIB=0
 
 PULP_GIT_DIRECTORY=../../
 SIM_DIRECTORY="$PULP_GIT_DIRECTORY/vsim"
