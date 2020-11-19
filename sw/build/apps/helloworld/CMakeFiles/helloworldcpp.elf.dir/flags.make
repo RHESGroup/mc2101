@@ -3,13 +3,13 @@
 
 # compile C with /opt/riscv/bin/riscv32-unknown-elf-gcc
 # compile CXX with /opt/riscv/bin/riscv32-unknown-elf-gcc
-C_FLAGS = -O3 -g -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always  
+C_FLAGS = -O3 -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always  
 
 C_DEFINES = 
 
 C_INCLUDES = -I/media/sf_Shared/pulpino/sw/libs/sys_lib/inc -I/media/sf_Shared/pulpino/sw/libs/malloc_lib/inc -I/media/sf_Shared/pulpino/sw/libs/string_lib/inc -I/media/sf_Shared/pulpino/sw/libs/bench_lib/inc 
 
-CXX_FLAGS = -O3 -g -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always  
+CXX_FLAGS = -O3 -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always  
 
 CXX_DEFINES = 
 

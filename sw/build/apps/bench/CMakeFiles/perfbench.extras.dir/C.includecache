@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/media/sf_Shared/pulpino/sw/apps/bench/common.h
+stdint.h
+-
+stddef.h
+-
+string.h
+/media/sf_Shared/pulpino/sw/apps/bench/string.h
+
+/media/sf_Shared/pulpino/sw/apps/bench/crc32.c
+common.h
+/media/sf_Shared/pulpino/sw/apps/bench/common.h
+

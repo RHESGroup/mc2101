@@ -98,7 +98,7 @@ CMAKE_C_COMPILER_AR:FILEPATH=/opt/riscv/bin/riscv32-unknown-elf-gcc-ar
 CMAKE_C_COMPILER_RANLIB:FILEPATH=/opt/riscv/bin/riscv32-unknown-elf-gcc-ranlib
 
 //Flags used by the compiler during all build types.
-CMAKE_C_FLAGS:STRING=-O3 -g
+CMAKE_C_FLAGS:STRING=-O3
 
 //Flags used by the compiler during debug builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g

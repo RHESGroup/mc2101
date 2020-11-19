@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../apps/bench/./common.h
+stdint.h
+-
+stddef.h
+-
+string.h
+../apps/bench/./string.h
+
+/media/sf_Shared/pulpino/sw/apps/bench/common.h
+stdint.h
+-
+stddef.h
+-
+string.h
+/media/sf_Shared/pulpino/sw/apps/bench/string.h
+
+/media/sf_Shared/pulpino/sw/apps/bench/fir/fir.c
+../common.h
+/media/sf_Shared/pulpino/sw/apps/bench/common.h
+
+/media/sf_Shared/pulpino/sw/apps/bench/fir/fir_test.c
+common.h
+/media/sf_Shared/pulpino/sw/apps/bench/fir/common.h
+
