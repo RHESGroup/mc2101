@@ -876,6 +876,318 @@ helloworldcpp.vsimc/fast:
 .PHONY : helloworldcpp.vsimc/fast
 
 #=============================================================================
+# Target rules for targets named client.kcg
+
+# Build rule for target.
+client.kcg: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.kcg
+.PHONY : client.kcg
+
+# fast build rule for target.
+client.kcg/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.kcg.dir/build.make apps/user_apps/client/CMakeFiles/client.kcg.dir/build
+.PHONY : client.kcg/fast
+
+#=============================================================================
+# Target rules for targets named client.fpga
+
+# Build rule for target.
+client.fpga: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.fpga
+.PHONY : client.fpga
+
+# fast build rule for target.
+client.fpga/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.fpga.dir/build.make apps/user_apps/client/CMakeFiles/client.fpga.dir/build
+.PHONY : client.fpga/fast
+
+#=============================================================================
+# Target rules for targets named client
+
+# Build rule for target.
+client: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client
+.PHONY : client
+
+# fast build rule for target.
+client/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.dir/build.make apps/user_apps/client/CMakeFiles/client.dir/build
+.PHONY : client/fast
+
+#=============================================================================
+# Target rules for targets named client.sc.ps
+
+# Build rule for target.
+client.sc.ps: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.sc.ps
+.PHONY : client.sc.ps
+
+# fast build rule for target.
+client.sc.ps/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.sc.ps.dir/build.make apps/user_apps/client/CMakeFiles/client.sc.ps.dir/build
+.PHONY : client.sc.ps/fast
+
+#=============================================================================
+# Target rules for targets named client.vsim.boot.ps
+
+# Build rule for target.
+client.vsim.boot.ps: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsim.boot.ps
+.PHONY : client.vsim.boot.ps
+
+# fast build rule for target.
+client.vsim.boot.ps/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsim.boot.ps.dir/build.make apps/user_apps/client/CMakeFiles/client.vsim.boot.ps.dir/build
+.PHONY : client.vsim.boot.ps/fast
+
+#=============================================================================
+# Target rules for targets named client.powerc
+
+# Build rule for target.
+client.powerc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.powerc
+.PHONY : client.powerc
+
+# fast build rule for target.
+client.powerc/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.powerc.dir/build.make apps/user_apps/client/CMakeFiles/client.powerc.dir/build
+.PHONY : client.powerc/fast
+
+#=============================================================================
+# Target rules for targets named client.sc.pl
+
+# Build rule for target.
+client.sc.pl: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.sc.pl
+.PHONY : client.sc.pl
+
+# fast build rule for target.
+client.sc.pl/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.sc.pl.dir/build.make apps/user_apps/client/CMakeFiles/client.sc.pl.dir/build
+.PHONY : client.sc.pl/fast
+
+#=============================================================================
+# Target rules for targets named client.bin.cmd
+
+# Build rule for target.
+client.bin.cmd: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.bin.cmd
+.PHONY : client.bin.cmd
+
+# fast build rule for target.
+client.bin.cmd/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.bin.cmd.dir/build.make apps/user_apps/client/CMakeFiles/client.bin.cmd.dir/build
+.PHONY : client.bin.cmd/fast
+
+#=============================================================================
+# Target rules for targets named client.vsim.spi.ps
+
+# Build rule for target.
+client.vsim.spi.ps: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsim.spi.ps
+.PHONY : client.vsim.spi.ps
+
+# fast build rule for target.
+client.vsim.spi.ps/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsim.spi.ps.dir/build.make apps/user_apps/client/CMakeFiles/client.vsim.spi.ps.dir/build
+.PHONY : client.vsim.spi.ps/fast
+
+#=============================================================================
+# Target rules for targets named client.s19.cmd
+
+# Build rule for target.
+client.s19.cmd: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.s19.cmd
+.PHONY : client.s19.cmd
+
+# fast build rule for target.
+client.s19.cmd/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.s19.cmd.dir/build.make apps/user_apps/client/CMakeFiles/client.s19.cmd.dir/build
+.PHONY : client.s19.cmd/fast
+
+#=============================================================================
+# Target rules for targets named client.elf
+
+# Build rule for target.
+client.elf: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.elf
+.PHONY : client.elf
+
+# fast build rule for target.
+client.elf/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.elf.dir/build.make apps/user_apps/client/CMakeFiles/client.elf.dir/build
+.PHONY : client.elf/fast
+
+#=============================================================================
+# Target rules for targets named client.links
+
+# Build rule for target.
+client.links: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.links
+.PHONY : client.links
+
+# fast build rule for target.
+client.links/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.links.dir/build.make apps/user_apps/client/CMakeFiles/client.links.dir/build
+.PHONY : client.links/fast
+
+#=============================================================================
+# Target rules for targets named client.vsimc
+
+# Build rule for target.
+client.vsimc: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsimc
+.PHONY : client.vsimc
+
+# fast build rule for target.
+client.vsimc/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsimc.dir/build.make apps/user_apps/client/CMakeFiles/client.vsimc.dir/build
+.PHONY : client.vsimc/fast
+
+#=============================================================================
+# Target rules for targets named client.slm.cmd
+
+# Build rule for target.
+client.slm.cmd: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.slm.cmd
+.PHONY : client.slm.cmd
+
+# fast build rule for target.
+client.slm.cmd/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.slm.cmd.dir/build.make apps/user_apps/client/CMakeFiles/client.slm.cmd.dir/build
+.PHONY : client.slm.cmd/fast
+
+#=============================================================================
+# Target rules for targets named client.power
+
+# Build rule for target.
+client.power: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.power
+.PHONY : client.power
+
+# fast build rule for target.
+client.power/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.power.dir/build.make apps/user_apps/client/CMakeFiles/client.power.dir/build
+.PHONY : client.power/fast
+
+#=============================================================================
+# Target rules for targets named client.annotate
+
+# Build rule for target.
+client.annotate: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.annotate
+.PHONY : client.annotate
+
+# fast build rule for target.
+client.annotate/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.annotate.dir/build.make apps/user_apps/client/CMakeFiles/client.annotate.dir/build
+.PHONY : client.annotate/fast
+
+#=============================================================================
+# Target rules for targets named client.stim.txt
+
+# Build rule for target.
+client.stim.txt: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.stim.txt
+.PHONY : client.stim.txt
+
+# fast build rule for target.
+client.stim.txt/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.stim.txt.dir/build.make apps/user_apps/client/CMakeFiles/client.stim.txt.dir/build
+.PHONY : client.stim.txt/fast
+
+#=============================================================================
+# Target rules for targets named client.vsim
+
+# Build rule for target.
+client.vsim: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsim
+.PHONY : client.vsim
+
+# fast build rule for target.
+client.vsim/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsim.dir/build.make apps/user_apps/client/CMakeFiles/client.vsim.dir/build
+.PHONY : client.vsim/fast
+
+#=============================================================================
+# Target rules for targets named client.vsimc.spi.pl
+
+# Build rule for target.
+client.vsimc.spi.pl: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsimc.spi.pl
+.PHONY : client.vsimc.spi.pl
+
+# fast build rule for target.
+client.vsimc.spi.pl/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsimc.spi.pl.dir/build.make apps/user_apps/client/CMakeFiles/client.vsimc.spi.pl.dir/build
+.PHONY : client.vsimc.spi.pl/fast
+
+#=============================================================================
+# Target rules for targets named client.read
+
+# Build rule for target.
+client.read: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.read
+.PHONY : client.read
+
+# fast build rule for target.
+client.read/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.read.dir/build.make apps/user_apps/client/CMakeFiles/client.read.dir/build
+.PHONY : client.read/fast
+
+#=============================================================================
+# Target rules for targets named client.vsim.spi
+
+# Build rule for target.
+client.vsim.spi: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsim.spi
+.PHONY : client.vsim.spi
+
+# fast build rule for target.
+client.vsim.spi/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsim.spi.dir/build.make apps/user_apps/client/CMakeFiles/client.vsim.spi.dir/build
+.PHONY : client.vsim.spi/fast
+
+#=============================================================================
+# Target rules for targets named client.vsim.boot
+
+# Build rule for target.
+client.vsim.boot: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsim.boot
+.PHONY : client.vsim.boot
+
+# fast build rule for target.
+client.vsim.boot/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsim.boot.dir/build.make apps/user_apps/client/CMakeFiles/client.vsim.boot.dir/build
+.PHONY : client.vsim.boot/fast
+
+#=============================================================================
+# Target rules for targets named client.vsim.spi.pl
+
+# Build rule for target.
+client.vsim.spi.pl: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsim.spi.pl
+.PHONY : client.vsim.spi.pl
+
+# fast build rule for target.
+client.vsim.spi.pl/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsim.spi.pl.dir/build.make apps/user_apps/client/CMakeFiles/client.vsim.spi.pl.dir/build
+.PHONY : client.vsim.spi.pl/fast
+
+#=============================================================================
+# Target rules for targets named client.vsim.boot.pl
+
+# Build rule for target.
+client.vsim.boot.pl: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 client.vsim.boot.pl
+.PHONY : client.vsim.boot.pl
+
+# fast build rule for target.
+client.vsim.boot.pl/fast:
+	$(MAKE) -f apps/user_apps/client/CMakeFiles/client.vsim.boot.pl.dir/build.make apps/user_apps/client/CMakeFiles/client.vsim.boot.pl.dir/build
+.PHONY : client.vsim.boot.pl/fast
+
+#=============================================================================
 # Target rules for targets named perfbench.core
 
 # Build rule for target.
@@ -16292,6 +16604,30 @@ help:
 	@echo "... helloworldcpp.vsim"
 	@echo "... helloworld.slm.cmd"
 	@echo "... helloworldcpp.vsimc"
+	@echo "... client.kcg"
+	@echo "... client.fpga"
+	@echo "... client"
+	@echo "... client.sc.ps"
+	@echo "... client.vsim.boot.ps"
+	@echo "... client.powerc"
+	@echo "... client.sc.pl"
+	@echo "... client.bin.cmd"
+	@echo "... client.vsim.spi.ps"
+	@echo "... client.s19.cmd"
+	@echo "... client.elf"
+	@echo "... client.links"
+	@echo "... client.vsimc"
+	@echo "... client.slm.cmd"
+	@echo "... client.power"
+	@echo "... client.annotate"
+	@echo "... client.stim.txt"
+	@echo "... client.vsim"
+	@echo "... client.vsimc.spi.pl"
+	@echo "... client.read"
+	@echo "... client.vsim.spi"
+	@echo "... client.vsim.boot"
+	@echo "... client.vsim.spi.pl"
+	@echo "... client.vsim.boot.pl"
 	@echo "... perfbench.core"
 	@echo "... perfbench.extras"
 	@echo "... perfbench.conv2d.kcg"

@@ -3,13 +3,13 @@
 
 # compile ASM with /opt/riscv/bin/riscv32-unknown-elf-gcc
 # compile C with /opt/riscv/bin/riscv32-unknown-elf-gcc
-ASM_FLAGS = -O3 -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always  
+ASM_FLAGS = -O0 -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always  
 
 ASM_DEFINES = 
 
 ASM_INCLUDES = -I/media/sf_Shared/pulpino/sw/libs/sys_lib/inc 
 
-C_FLAGS = -O3 -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always -mrvc  
+C_FLAGS = -O0 -march=rv32im -Wa,-march=rv32im -Wextra -Wall -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -fdata-sections -ffunction-sections -fdiagnostics-color=always -mrvc  
 
 C_DEFINES = 
 

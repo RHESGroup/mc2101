@@ -194,6 +194,8 @@ endmacro()
 
 add_subdirectory(helloworld)
 
+add_subdirectory(user_apps) # inserted Gianluca Roascio 20/11/2020
+
 if(${ARDUINO_LIB})
   add_subdirectory(Arduino_tests)
 endif()

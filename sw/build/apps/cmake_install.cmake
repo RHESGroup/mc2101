@@ -35,6 +35,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/media/sf_Shared/pulpino/sw/build/apps/helloworld/cmake_install.cmake")
+  include("/media/sf_Shared/pulpino/sw/build/apps/user_apps/cmake_install.cmake")
   include("/media/sf_Shared/pulpino/sw/build/apps/bench/cmake_install.cmake")
   include("/media/sf_Shared/pulpino/sw/build/apps/fpga/cmake_install.cmake")
   include("/media/sf_Shared/pulpino/sw/build/apps/riscv_tests/cmake_install.cmake")
