@@ -1,10 +1,8 @@
-#!/bin/tcsh
 # **************************************************************************************
-#  Filename: build_rtl_sim.csh  #
+#  Filename: test_asm_csr.s  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  History:
-#  Date:     29 March, 2022  #
+#  Date:     01 April, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -32,41 +30,63 @@
 # **************************************************************************************
 #
 #  File content description:
-#  Build rtl sim  #
+#  Assembly test of illegal csr-instruction for missing privileges.  #
 #
 # **************************************************************************************
 
-if (! $?VSIM_PATH ) then
-  setenv VSIM_PATH      `pwd`
-endif
+    .text
+    .globl    main
+    .type main, @function
+main:
+   lui x18,0x100
+   jal x1, set_regs
+    
+    # In file sw/apps/CMakeLists.txt uncomment: set(BOOT_MODE "crt0_boot_MU_test_csr")
+    csrrw  x0,0xC10,x4
+    sw     x9,512(x18)
+    li     x9,0 
+    csrrc  x4,0xC10,x4
+    sw     x9,516(x18)
+    li     x9,0
+    csrrs  x4,0xC10,x4
+    sw     x9,520(x18)
+    li     x9,0    
+    csrrwi x4,0xC10,3 
+    sw     x9,524(x18)
+    li     x9,0
+    csrrci x4,0xC10,3
+    sw     x9,528(x18)
+    li     x9,0
+    csrrsi x4,0xC10,3
+    sw     x9,532(x18)
+    li     x9,0
+    csrrw  x4,mie,x0
+    sw     x9,536(x18)
+    li     x9,0
+    csrrc  x4,mie,x0
+    sw     x9,540(x18)
+    li     x9,0
+    csrrs  x4,mie,x0 
+    sw     x9,544(x18)
+    li     x9,0    
+    csrrwi x4,mie,0
+    sw     x9,548(x18)
+    li     x9,0
+    csrrci x4,mie,0
+    sw     x9,552(x18)
+    li     x9,0
+    csrrsi x4,mie,0
+    sw     x9,556(x18)
+    li     x9,0
+      ret
 
-if (! $?AFTAB_PATH ) then
-  setenv AFTAB_PATH      `pwd`/../
-endif
+    .text
+    .globl  set_regs
+    .type   set_regs, @function
+set_regs:
+    li x4,0x2
+    li x5,-0x1
+    li x6,-0x2
+    li x7,-0x1
+    jalr x0, x1
 
-# setenv MSIM_LIBS_PATH ${VSIM_PATH}/modelsim_libs
-
-# setenv IPS_PATH       ${AFTAB_PATH}/ips
-setenv RTL_PATH       ${AFTAB_PATH}/rtl
-setenv TB_PATH        ${AFTAB_PATH}/tb
-
-clear
-source ${AFTAB_PATH}/vsim/vcompile/colors.csh
-
-# rm -rf modelsim_libs
-# vlib modelsim_libs
-
-rm -rf work
-vlib work
-
-echo ""
-echo "${Green}--> Compiling AFTAB core... ${NC}"
-echo ""
-
-# # IP blocks
-
-source ${AFTAB_PATH}/vsim/vcompile/rtl/vcompile_aftab.sh  || exit 1
-
-echo ""
-echo "${Green}--> AFTAB environment compilation complete! ${NC}"
-echo ""

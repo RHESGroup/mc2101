@@ -1,10 +1,9 @@
-#!/bin/tcsh
 # **************************************************************************************
-#  Filename: build_rtl_sim.csh  #
+#  Filename: sim_check.py  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     29 March, 2022  #
+#  Date:     30 March, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -32,41 +31,47 @@
 # **************************************************************************************
 #
 #  File content description:
-#  Build rtl sim  #
+#  Simulation results check against golden model  #
 #
 # **************************************************************************************
 
-if (! $?VSIM_PATH ) then
-  setenv VSIM_PATH      `pwd`
-endif
+try:
+    data_mem = open("./slm_files/dram_dump.txt", 'r')
+    golden_model = open("./slm_files/golden_dump.txt", 'r')
 
-if (! $?AFTAB_PATH ) then
-  setenv AFTAB_PATH      `pwd`/../
-endif
+    e_flag = 0
+    m_count = 0
+    print("")
+    print("")
+    for line_dm, line_g in zip(data_mem, golden_model):
+        if line_dm != line_g :
+            content_dm = line_dm.split("_")
+            content_g = line_g.split("_")
+            print("Mismatch @ address 0x"+content_dm[0]+": expected "+content_g[1].rstrip("\n")+" but found "+content_dm[1].rstrip("\n"))
+            m_count = m_count + 1
+            e_flag = 1
 
-# setenv MSIM_LIBS_PATH ${VSIM_PATH}/modelsim_libs
 
-# setenv IPS_PATH       ${AFTAB_PATH}/ips
-setenv RTL_PATH       ${AFTAB_PATH}/rtl
-setenv TB_PATH        ${AFTAB_PATH}/tb
+    if e_flag == 0:
+        print("")
+        print("")
+        print("Simulation ended successfully: 0 mismatches found comparing DRAM dump and golden dump.")
+    else:
+        print("")
+        print("")
+        print("Simulation ended unsuccessfully: "+str(m_count)+" mismatches found comparing DRAM dump and golden dump.")
+        print("Try to enlarge simulation time or check your RTL files.")
 
-clear
-source ${AFTAB_PATH}/vsim/vcompile/colors.csh
+    data_mem.close()
+    golden_model.close()
 
-# rm -rf modelsim_libs
-# vlib modelsim_libs
+except IOError:
+    
+    print("")
+    print("")
+    print("Warning: dram_dump.txt or golden_dump.txt does not exist under ./slm_files/. Simulation check exits. ")
+finally:
 
-rm -rf work
-vlib work
+    exit 
 
-echo ""
-echo "${Green}--> Compiling AFTAB core... ${NC}"
-echo ""
 
-# # IP blocks
-
-source ${AFTAB_PATH}/vsim/vcompile/rtl/vcompile_aftab.sh  || exit 1
-
-echo ""
-echo "${Green}--> AFTAB environment compilation complete! ${NC}"
-echo ""

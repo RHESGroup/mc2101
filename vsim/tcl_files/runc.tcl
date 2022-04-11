@@ -1,10 +1,9 @@
-#!/bin/tcsh
 # **************************************************************************************
-#  Filename: build_rtl_sim.csh  #
+#  Filename: run.tcl  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     29 March, 2022  #
+#  Date:     30 March, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -32,41 +31,28 @@
 # **************************************************************************************
 #
 #  File content description:
-#  Build rtl sim  #
+#  Run command-line simulation of the target and compare results  #
 #
 # **************************************************************************************
 
-if (! $?VSIM_PATH ) then
-  setenv VSIM_PATH      `pwd`
-endif
+vsim -quiet work.aftab_testbench +nowarnTRAN +nowarnTSCALE +nowarnTFMPC -t 10ps -voptargs="+acc -suppress 2103" -dpicpppath /usr/bin/gcc 
 
-if (! $?AFTAB_PATH ) then
-  setenv AFTAB_PATH      `pwd`/../
-endif
+run $var ns
+force memRead 0
+run 1000 ns
+force log_en 1
+run 1000 ns
+force log_en 0
+run 1000 ns
 
-# setenv MSIM_LIBS_PATH ${VSIM_PATH}/modelsim_libs
+proc sim_check {} {
+    set output [exec python ../../../../vsim/tcl_files/sim_check.py]
+    echo $output
+    quit
+}
 
-# setenv IPS_PATH       ${AFTAB_PATH}/ips
-setenv RTL_PATH       ${AFTAB_PATH}/rtl
-setenv TB_PATH        ${AFTAB_PATH}/tb
+sim_check
 
-clear
-source ${AFTAB_PATH}/vsim/vcompile/colors.csh
 
-# rm -rf modelsim_libs
-# vlib modelsim_libs
 
-rm -rf work
-vlib work
 
-echo ""
-echo "${Green}--> Compiling AFTAB core... ${NC}"
-echo ""
-
-# # IP blocks
-
-source ${AFTAB_PATH}/vsim/vcompile/rtl/vcompile_aftab.sh  || exit 1
-
-echo ""
-echo "${Green}--> AFTAB environment compilation complete! ${NC}"
-echo ""
