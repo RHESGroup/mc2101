@@ -4,7 +4,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     29 March, 2022  #
+#  Date:     06 May, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -46,8 +46,9 @@ endif
 
 # setenv MSIM_LIBS_PATH ${VSIM_PATH}/modelsim_libs
 
-# setenv IPS_PATH       ${AFTAB_PATH}/ips
-setenv RTL_PATH       ${AFTAB_PATH}/rtl
+#setenv IPS_PATH       ${AFTAB_PATH}/ips/
+#changed luca, rtl is now in ips
+setenv RTL_PATH       ${AFTAB_PATH}/ips/
 setenv TB_PATH        ${AFTAB_PATH}/tb
 
 clear
