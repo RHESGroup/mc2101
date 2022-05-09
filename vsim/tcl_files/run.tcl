@@ -3,7 +3,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     08 April, 2022  #
+#  Date:     09 May, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -35,96 +35,56 @@
 #
 # **************************************************************************************
 
-vsim -quiet work.aftab_testbench +nowarnTRAN +nowarnTSCALE +nowarnTFMPC -t 10ps -voptargs="+acc -suppress 2103" -dpicpppath /usr/bin/gcc 
+vsim -quiet work.tb_hsystem +nowarnTRAN +nowarnTSCALE +nowarnTFMPC -t 10ps -voptargs="+acc -suppress 2103" -dpicpppath /usr/bin/gcc 
 
-#added by Luca to check priviledges
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/clk
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/rst
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/datapathAFTAB/inst
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/controllerAFTAB/p_state
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/datapathAFTAB/register_bank/CSR_registers/rData(16)
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/controllerAFTAB/previousPRV
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/datapathAFTAB/CSRISL/outCSR
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/datapathAFTAB/register_bank/outRegBank
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/datapathAFTAB/curPRV
+#modified by luca, simulation for hsystem
 
-#added by Luca to check reserved interrupts
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/datapathAFTAB/outPC
-add wave -noupdate -group TEST -radix hexadecimal /aftab_testbench/core/datapathAFTAB/interrCheckCauseDetection/interReserved
+#global signals
+add wave -noupdate -group GLOBALS -radix hexadecimal /tb_hsystem/clk
+add wave -noupdate -group GLOBALS -radix hexadecimal /tb_hsystem/rst
+
+#hbus signals
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hready
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hselram
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hselflash
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hselgpio
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hseluart
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hwrite
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hwrdata
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/haddr
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hrdata
+add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hresp
+
+#hslave(1) RAM signals
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/latchDinEn
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/latchAinEn
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memSelByte
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSBout
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB1out
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB2out
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB3out
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSBin
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB1in
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB2in
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB3in
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/controller/current_state
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/address
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/dataIn
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/byteEn
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/dataOut
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/mem
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/readMem
+add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/writeMem
 
 
-
-add wave -noupdate -group SYSTEM /aftab_testbench/clk          
-add wave -noupdate -group SYSTEM /aftab_testbench/rst          
-add wave -noupdate -group SYSTEM /aftab_testbench/memReady 
-add wave -noupdate -group SYSTEM /aftab_testbench/memRead 
-add wave -noupdate -group SYSTEM /aftab_testbench/memWrite     
-add wave -noupdate -group SYSTEM -radix hexadecimal /aftab_testbench/memAddr     
-add wave -noupdate -group SYSTEM -radix hexadecimal /aftab_testbench/dataBusIn
-add wave -noupdate -group SYSTEM -radix hexadecimal /aftab_testbench/dataBusOut     
-add wave -noupdate -group SYSTEM /aftab_testbench/log_en
-add wave -noupdate -group SYSTEM -radix hexadecimal /aftab_testbench/core/datapathAFTAB/inst
-add wave -noupdate -group SYSTEM -radix hexadecimal /aftab_testbench/core/datapathAFTAB/outPC
-add wave -noupdate -group SYSTEM /aftab_testbench/core/controllerAFTAB/p_state         
-
-add wave -noupdate -group CONTROLLER /aftab_testbench/core/controllerAFTAB/*
-
-add wave -noupdate -group DATAPATH /aftab_testbench/core/datapathAFTAB/*
-
-add wave -noupdate -group REGISTER_FILE /aftab_testbench/core/datapathAFTAB/registerFile/*
-
-add wave -noupdate -group REGISTERS -radix hexadecimal /aftab_testbench/core/datapathAFTAB/registerFile/rData
-
-add wave -noupdate -group LLU /aftab_testbench/core/datapathAFTAB/LLU/*
-
-add wave -noupdate -group BSU /aftab_testbench/core/datapathAFTAB/BSU/*
-
-add wave -noupdate -group COMPARATOR /aftab_testbench/core/datapathAFTAB/comparator/*
-
-add wave -noupdate -group ADD_SUB /aftab_testbench/core/datapathAFTAB/addSub/*
-
-add wave -noupdate -group AAU /aftab_testbench/core/datapathAFTAB/aau/*
-
-add wave -noupdate -group MUL /aftab_testbench/core/datapathAFTAB/aau/Multiplication/*
-add wave -noupdate -group MUL /aftab_testbench/core/datapathAFTAB/aau/Multiplication/controller/pstate
-
-add wave -noupdate -group DIV /aftab_testbench/core/datapathAFTAB/aau/Division/*
-add wave -noupdate -group DIV /aftab_testbench/core/datapathAFTAB/aau/Division/unsignedDiv/ControllerDiv/pstate
-
-add wave -noupdate -group DAWU /aftab_testbench/core/datapathAFTAB/dawu/*
-
-add wave -noupdate -group DARU /aftab_testbench/core/datapathAFTAB/daru/*
-
-add wave -noupdate -group SULU /aftab_testbench/core/datapathAFTAB/sulu/*
-
-add wave -noupdate -group INTERRUPTS /aftab_testbench/core/datapathAFTAB/platformInterruptSignals
-
-add wave -noupdate -group INTER_SRC_SYNC_REG /aftab_testbench/core/datapathAFTAB/interSrcSynchReg/*
-
-add wave -noupdate -group CSR_REGISTERS -radix hexadecimal /aftab_testbench/core/datapathAFTAB/register_bank/addressRegBank
-add wave -noupdate -group CSR_REGISTERS -radix unsigned /aftab_testbench/core/datapathAFTAB/register_bank/translatedAddress
-add wave -noupdate -group CSR_REGISTERS -radix hexadecimal /aftab_testbench/core/datapathAFTAB/register_bank/CSR_registers/rData
-
-add wave -noupdate -group INT_CAUSE_DETECTOR /aftab_testbench/core/datapathAFTAB/interrCheckCauseDetection/*
-
-add wave -noupdate -group EXCEPTIONS /aftab_testbench/core/datapathAFTAB/ecallFlag
-add wave -noupdate -group EXCEPTIONS /aftab_testbench/core/datapathAFTAB/dividedByZeroFlag
-add wave -noupdate -group EXCEPTIONS /aftab_testbench/core/datapathAFTAB/illegalInstrFlag
-add wave -noupdate -group EXCEPTIONS /aftab_testbench/core/datapathAFTAB/instrMisalignedFlag
-
-add wave -noupdate -group EXC_ADDRESS_GENERATOR /aftab_testbench/core/datapathAFTAB/interruptStartAddressGenerator/*
-
-add wave -noupdate -group MEMORY -radix hexadecimal /aftab_testbench/memory/rw/adr
-add wave -noupdate -group MEMORY -radix hexadecimal /aftab_testbench/memory/mem
-
+#core (master) signals
+add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/read
+add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/write
+add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/coreOnInterrupt
+add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/current_state
+add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/master_core/datapathAFTAB/registerFile/rData
 
 run $var ns
-# uncomment here if you want to debug interrupts
-# run 13000 ns 
-# force platformInterruptSignals(15) 1
-# run 10000 ns
-# force platformInterruptSignals(15) 0
-# run 100000 ns
 
 
 
