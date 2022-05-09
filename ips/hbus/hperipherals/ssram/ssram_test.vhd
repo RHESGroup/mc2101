@@ -93,7 +93,7 @@ BEGIN
             --mem <= (others => (others => '0'));
             -- Load memory content from file
 			--mem <= (OTHERS => (OTHERS => '0'));
-			FILE_OPEN(err_check, f, ("../spi_stim.txt"), READ_MODE);
+			FILE_OPEN(err_check, f, ("./slm_files/spi_stim.txt"), READ_MODE);
 			IF err_check = open_ok THEN
 				WHILE NOT ENDFILE (f) LOOP
 					READLINE (f, memline);

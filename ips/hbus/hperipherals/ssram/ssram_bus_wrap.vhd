@@ -107,14 +107,15 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
 		memWrite      : OUT STD_LOGIC;
 		memSelByte    : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
 		memResponse   : OUT STD_LOGIC;
-		latchInEn     : OUT STD_LOGIC;
+		latchDinEn    : OUT STD_LOGIC;
+		latchAinEn    : OUT STD_LOGIC;
 		memReady      : OUT STD_LOGIC
 	);
     END COMPONENT;
     
     SIGNAL chip_select: STD_LOGIC;
     SIGNAL request: STD_LOGIC;
-    SIGNAL latchInEn: STD_LOGIC;
+    SIGNAL latchDinEn, latchAinEn: STD_LOGIC;
     --serial out mux
     SIGNAL memSelByte: STD_LOGIC_VECTOR(1 DOWNTO 0);
     --serial out bytes
@@ -136,7 +137,7 @@ BEGIN
 		rst            =>rst,
 		readMem        =>readMem,
 		writeMem       =>writeMem,
-		address        =>haddr,
+		address        =>address,
 		dataIn     	   =>dataIn,
 		byteEN         =>memSelByte,
 		dataOut        =>dataOut		   
@@ -152,7 +153,8 @@ BEGIN
 		memWrite       =>writeMem,
 		memSelByte     =>memSelByte,
 		memResponse    =>hresp,
-		latchInEn      =>latchInEn,
+		latchDinEn     =>latchDinEn,
+		latchAinEn     =>latchAinEn, 
 		memReady       =>hready
 	);
 
@@ -168,8 +170,8 @@ BEGIN
                 byteLSB2out WHEN memSelByte="10" ELSE
                 byteLSB3out;
              
-    --serial in buffer
-    PROCESS(clk, rst, writeMem, hwrdata)
+    --serial Data in buffer
+    PROCESS(clk, rst, latchDinEn, hwrdata)
     BEGIN
         IF rst='1' THEN
             byteLSBin<=(OTHERS=>'0');
@@ -177,7 +179,7 @@ BEGIN
             byteLSB2in<=(OTHERS=>'0');
             byteLSB3in<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
-            IF latchInEn='1' THEN
+            IF latchDinEn='1' THEN
                 byteLSBin<=hwrdata;
                 byteLSB1in<=byteLSBin;
                 byteLSB2in<=byteLSB1in;
@@ -186,7 +188,22 @@ BEGIN
         END IF;
     END PROCESS;
     
-    dataIn<=byteLSB3in & byteLSB2in & byteLSB1in & byteLSBin;
+    --base address sample
+    PROCESS(clk,rst,haddr,latchAinEn)
+    BEGIN
+        IF rst='1' THEN
+            address<=(OTHERS=>'0');
+        ELSIF rising_edge(clk) THEN
+            IF latchAinEn='1' THEN
+                address<=haddr;
+            END IF;
+        END IF;
+    END PROCESS;
     
+    --changed luca, processor sends LSB-->MSB
+    --this data assignment will probably work only for 32 bit write operations..
+    --an fsm is needed
+    --dataIn<=byteLSB3in & byteLSB2in & byteLSB1in & byteLSBin;
+    dataIn<=byteLSBin & byteLSB1in & byteLSB2in & byteLSB3in;
 
 END behavior;

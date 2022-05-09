@@ -53,7 +53,8 @@ ENTITY ssram_controller IS
 		memWrite      : OUT STD_LOGIC;
 		memSelByte    : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
 		memResponse   : OUT STD_LOGIC;
-		latchInEn     : OUT STD_LOGIC;
+		latchDinEn    : OUT STD_LOGIC;
+		latchAinEn    : OUT STD_LOGIC;
 		memReady      : OUT STD_LOGIC
 	);
 END ssram_controller;
@@ -85,7 +86,8 @@ BEGIN
     BEGIN
         CASE current_state IS
             WHEN IDLE=>
-                latchInEn<='0';
+                latchDinEn<='0';
+                latchAinEn<='0';
                 memResponse<='1';
                 memRead<='0';
                 memWrite<='0';
@@ -95,15 +97,19 @@ BEGIN
                     next_state<=LATCH32;
                     memRead<='1';
                     memReady<='0';
+                    latchAinEn<='1';
                 ELSIF writeReq='1' THEN
                     next_state<=WR_BUFFER;
-                    latchInEn<='1';
+                    latchDinEn<='1';
                     memReady<='1';
+                    latchAinEn<='1';
                 ELSE
                     next_state<=IDLE;
                     memReady<='1';
                 END IF;
             WHEN WR_BUFFER=>
+                --latchAin must stay up for 1 clock cycle
+                latchAinEn<='0';
                 memReady<='1';
                 memResponse<='1';
                 memRead<='0';
@@ -111,25 +117,27 @@ BEGIN
                 IF writeReq='1' THEN
                     next_count<=STD_LOGIC_VECTOR(UNSIGNED(current_count)+1);
                     next_state<=WR_BUFFER;
-                    latchInEn<='1';
+                    latchDinEn<='1';
                     memWrite<='0';
                 ELSE
                     next_count<=current_count;
                     next_state<=MEM_WR;
-                    latchInEn<='0';
+                    latchDinEn<='0';
                     memWrite<='1';
                 END IF;   
             WHEN MEM_WR=>
-                memReady<='1';
+                latchAinEn<='0';
+                memReady<='0';
                 memResponse<='1';
                 memRead<='0';
                 memSelByte<=current_count;
                 next_count<=(OTHERS=>'0');
                 memWrite<='1';
                 next_state<=IDLE;
-                latchInEn<='0';
+                latchDinEn<='0';
             WHEN LATCH32=>
-                latchInEn<='0';
+                latchAinEn<='1';
+                latchDinEn<='0';
                 memReady<='0';
                 memResponse<='1';
                 memRead<='1';
@@ -138,7 +146,8 @@ BEGIN
                 next_state<=SERIAL_OUT;
                 next_count<=(OTHERS=>'0');
             WHEN SERIAL_OUT=>
-                latchInEn<='0';
+                latchAinEn<='0';
+                latchDinEn<='0';
                 memReady<='1';
                 memResponse<='1';
                 memRead<='0';
