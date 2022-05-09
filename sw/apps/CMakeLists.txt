@@ -2,7 +2,7 @@
 #  Filename: CMakeSim.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     29 March, 2022  #
+#  Date:     09 May, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -257,6 +257,8 @@ add_subdirectory(test_asm_logical_shift_lui)
 add_subdirectory(test_machine)
 add_subdirectory(test_machine_user)
 add_subdirectory(test_asm_csr)
+#added luca
+add_subdirectory(test_bus_transfer)
 
 
 # if(${ARDUINO_LIB})

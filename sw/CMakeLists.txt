@@ -2,7 +2,7 @@
 #  Filename: CMakeLists.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     30 March, 2022  #
+#  Date:     09 May, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -213,7 +213,10 @@ set( SUB_DIRS "test_add"
               "test_asm_logical_shift_lui" 
               "test_machine" 
               "test_machine_user"
-              "test_asm_csr") 
+              "test_asm_csr"
+              #added luca
+              "test_bus_transfer"
+              ) 
 
 set( CLEAN_TARGETS "")
 
