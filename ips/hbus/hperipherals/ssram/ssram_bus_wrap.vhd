@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 May 2022
+--	Date:		10 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -68,10 +68,8 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
     --ssram
     COMPONENT ssram_test IS
 	GENERIC (
-		dataWidth      : INTEGER := 32;
-		addressWidth   : INTEGER := 32;
-		actual_address : INTEGER := 13;
-		size           : INTEGER := 2**actual_address -- 2^12 for data and 2^12 for instr, 4 K each
+		dataWidth      : INTEGER :=8;
+		addressWidth   : INTEGER :=13
 	);  
 	PORT (
 		clk           : IN  STD_LOGIC;
@@ -80,18 +78,17 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
 		writeMem      : IN  STD_LOGIC;
 		address       : IN  STD_LOGIC_VECTOR (addressWidth - 1 DOWNTO 0);
 		dataIn     	  : IN  STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0);
-		byteEn        : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
 		dataOut       : OUT STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0)
 	);
     END COMPONENT;
     
     SIGNAL readMem: STD_LOGIC;
     SIGNAL writeMem: STD_LOGIC;
-    SIGNAL address: STD_LOGIC_VECTOR (busAddressWidth - 1 DOWNTO 0);
-    SIGNAL dataIn: STD_LOGIC_VECTOR (31 DOWNTO 0);
-    SIGNAL dataOut: STD_LOGIC_VECTOR (31 DOWNTO 0);
+    SIGNAL dataOut: STD_LOGIC_VECTOR (busDataWidth -1 DOWNTO 0);
     SIGNAL ready: STD_LOGIC;
-    
+    --The actual physical size of the ram is 2**13
+    CONSTANT PHSIZE: integer:=13;
+    SIGNAL phyaddr: STD_LOGIC_VECTOR(PHSIZE-1 DOWNTO 0);
     
     --controller
     COMPONENT ssram_controller IS 
@@ -105,41 +102,29 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
 		--output
 		memRead       : OUT STD_LOGIC;
 		memWrite      : OUT STD_LOGIC;
-		memSelByte    : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
 		memResponse   : OUT STD_LOGIC;
-		latchDinEn    : OUT STD_LOGIC;
-		latchAinEn    : OUT STD_LOGIC;
 		memReady      : OUT STD_LOGIC
 	);
     END COMPONENT;
     
     SIGNAL chip_select: STD_LOGIC;
     SIGNAL request: STD_LOGIC;
-    SIGNAL latchDinEn, latchAinEn: STD_LOGIC;
-    --serial out mux
-    SIGNAL memSelByte: STD_LOGIC_VECTOR(1 DOWNTO 0);
-    --serial out bytes
-    SIGNAL byteLSBout, byteLSB1out, byteLSB2out, byteLSB3out: STD_LOGIC_VECTOR (7 DOWNTO 0);
-    --serial in buffer
-    SIGNAL byteLSBin, byteLSB1in, byteLSB2in, byteLSB3in: STD_LOGIC_VECTOR (7 DOWNTO 0);
+    
     
 BEGIN
 
     memory: ssram_test
 	GENERIC MAP(
-		dataWidth      => 32,
-		addressWidth   => busAddressWidth,
-		actual_address => 13,
-		size           => 2**13
+		dataWidth      => busDataWidth,
+		addressWidth   => PHSIZE
 	)  
 	PORT MAP(
 		clk            =>clk,
 		rst            =>rst,
 		readMem        =>readMem,
 		writeMem       =>writeMem,
-		address        =>address,
-		dataIn     	   =>dataIn,
-		byteEN         =>memSelByte,
+		address        =>phyaddr,
+		dataIn     	   =>hwrdata,
 		dataOut        =>dataOut		   
 	);
     
@@ -151,59 +136,28 @@ BEGIN
 		request        =>hwrite,
 		memRead        =>readMem,
 		memWrite       =>writeMem,
-		memSelByte     =>memSelByte,
-		memResponse    =>hresp,
-		latchDinEn     =>latchDinEn,
-		latchAinEn     =>latchAinEn, 
+		memResponse    =>hresp, 
 		memReady       =>hready
 	);
 
-    --output bytes
-    byteLSBout  <= dataOut(7 DOWNTO 0);
-    byteLSB1out <= dataOut(15 DOWNTO 8);
-    byteLSB2out <= dataOut(23 DOWNTO 16);
-    byteLSB3out <= dataOut(31 DOWNTO 24);
+    hrdata   <= dataOut;
     
-    --mux serial out
-    hrdata   <= byteLSBout  WHEN memSelByte="00" ELSE
-                byteLSB1out WHEN memSelByte="01" ELSE
-                byteLSB2out WHEN memSelByte="10" ELSE
-                byteLSB3out;
-             
-    --serial Data in buffer
-    PROCESS(clk, rst, latchDinEn, hwrdata)
+    --Viritual address to physical address
+    --When haddr changes, in this module can assume two intervals:
+    --1) haddr<=0x00001000 :Instruction Memory--->phaddr=haddr(
+    --2) haddr>=0x00100000 :Data OR Stack
+    PROCESS(haddr)
     BEGIN
-        IF rst='1' THEN
-            byteLSBin<=(OTHERS=>'0');
-            byteLSB1in<=(OTHERS=>'0');
-            byteLSB2in<=(OTHERS=>'0');
-            byteLSB3in<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF latchDinEn='1' THEN
-                byteLSBin<=hwrdata;
-                byteLSB1in<=byteLSBin;
-                byteLSB2in<=byteLSB1in;
-                byteLSB3in<=byteLSB2in;
-            END IF;
+        IF haddr(20)='1' THEN
+            --r/w to stack or data
+            phyaddr<='1' & haddr(PHSIZE-2 DOWNTO 0);
+        ELSIF haddr(20)='0' THEN
+            --r/w to iram
+            phyaddr<='0' & haddr(PHSIZE-2 DOWNTO 0);
+        ELSE
+            --high impedence
+            phyaddr<=haddr(PHSIZE-1 DOWNTO 0);
         END IF;
     END PROCESS;
-    
-    --base address sample
-    PROCESS(clk,rst,haddr,latchAinEn)
-    BEGIN
-        IF rst='1' THEN
-            address<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF latchAinEn='1' THEN
-                address<=haddr;
-            END IF;
-        END IF;
-    END PROCESS;
-    
-    --changed luca, processor sends LSB-->MSB
-    --this data assignment will probably work only for 32 bit write operations..
-    --an fsm is needed
-    --dataIn<=byteLSB3in & byteLSB2in & byteLSB1in & byteLSBin;
-    dataIn<=byteLSBin & byteLSB1in & byteLSB2in & byteLSB3in;
 
 END behavior;

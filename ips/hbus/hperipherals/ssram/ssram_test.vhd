@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 May 2022
+--	Date:		10 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -44,10 +44,8 @@ USE STD.TEXTIO.ALL;
 
 ENTITY ssram_test IS
 	GENERIC (
-		dataWidth      : INTEGER := 32;
-		addressWidth   : INTEGER := 32;
-		actual_address : INTEGER := 13;
-		size           : INTEGER := 2**actual_address -- 2^12 for data and 2^12 for instr, 4 K each
+		dataWidth      : INTEGER :=8;
+		addressWidth   : INTEGER :=13
 	);  
 	PORT (
 		clk           : IN  STD_LOGIC;
@@ -56,7 +54,6 @@ ENTITY ssram_test IS
 		writeMem      : IN  STD_LOGIC;
 		address       : IN  STD_LOGIC_VECTOR (addressWidth - 1 DOWNTO 0);
 		dataIn     	  : IN  STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0);
-		byteEn        : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
 		dataOut       : OUT STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0)
 	);
 END ssram_test;
@@ -64,9 +61,11 @@ END ssram_test;
 
 ARCHITECTURE behavior OF ssram_test IS
     
-    TYPE mem_type IS ARRAY (0 TO size - 1) OF STD_LOGIC_VECTOR (dataWidth-1 DOWNTO 0);
+    TYPE mem_type IS ARRAY (0 TO 2**addressWidth - 1) OF STD_LOGIC_VECTOR (dataWidth-1 DOWNTO 0);
 	SIGNAL mem : MEM_TYPE;
-
+	
+	SIGNAL dOut: STD_LOGIC_VECTOR (dataWidth-1 DOWNTO 0);
+	
 	-- Memory boundaries - change this according to the linker script: sw/ref/link.common.ld
 	CONSTANT base_iram : INTEGER := 16#00000#; 
 	CONSTANT end_iram : INTEGER := 16#FFFFF#;
@@ -76,11 +75,11 @@ ARCHITECTURE behavior OF ssram_test IS
 
 	CONSTANT base_dram_actual : INTEGER := 16#1000#;
 	CONSTANT size_dram : INTEGER := 16#0FFF#;
-	
+
 BEGIN
 
     process(rst, clk)
-        variable adr: STD_LOGIC_VECTOR(actual_address-1 DOWNTO 0);
+        variable adr: STD_LOGIC_VECTOR(addressWidth-1 DOWNTO 0);
         VARIABLE memline             : LINE;
 		VARIABLE memline_log         : LINE;
 		VARIABLE err_check           : FILE_OPEN_STATUS;
@@ -90,9 +89,6 @@ BEGIN
 		FILE f                       : TEXT;
     begin
         if rst='1' then
-            --mem <= (others => (others => '0'));
-            -- Load memory content from file
-			--mem <= (OTHERS => (OTHERS => '0'));
 			FILE_OPEN(err_check, f, ("./slm_files/spi_stim.txt"), READ_MODE);
 			IF err_check = open_ok THEN
 				WHILE NOT ENDFILE (f) LOOP
@@ -100,40 +96,31 @@ BEGIN
 					HREAD (memline, read_address);
 					READ (memline, linechar); -- read character '_' 
 					HREAD (memline, read_data);
+					--this must be kept, program still uses virtual addresses not physical
 					IF UNSIGNED(read_address) > end_iram THEN -- it is a data address (see file link.common.ld)
-						adr := '1' & read_address(actual_address-2 DOWNTO 0);
+						adr := '1' & read_address(addressWidth-2 DOWNTO 0);
 					ELSE -- it is a program address
-						adr := '0' & read_address(actual_address-2 DOWNTO 0);
+						adr := '0' & read_address(addressWidth-2 DOWNTO 0);
 					END IF;
-					mem(TO_INTEGER(UNSIGNED(adr)))<=read_data;
+					mem(TO_INTEGER(UNSIGNED(adr))) 	   <= read_data(7 DOWNTO 0);
+					mem(TO_INTEGER(UNSIGNED(adr) + 1)) <= read_data(15 DOWNTO 8);
+					mem(TO_INTEGER(UNSIGNED(adr) + 2)) <= read_data(23 DOWNTO 16);
+					mem(TO_INTEGER(UNSIGNED(adr) + 3)) <= read_data(31 DOWNTO 24);
 				END LOOP;
 				FILE_CLOSE (f);
 			END IF;
-        elsif (rising_edge(clk) and readMem='1') then
-            if UNSIGNED(address) > end_iram then 
-		        adr := '1' & address(actual_address-2 downto 0);
-			else
-				adr := '0' & address(actual_address-2 downto 0);
-			end if;
-			--always read 32 bit
-			dataOut <= mem(TO_INTEGER(UNSIGNED(adr)));
 	    elsif (rising_edge(clk) and writeMem='1') then
-			if UNSIGNED(address) > end_iram then 
-	            adr := '1' & address(actual_address-2 downto 0);
-				IF byteEn="00" THEN
-				    --write byte
-				    mem(TO_INTEGER(UNSIGNED(adr)))(7 DOWNTO 0) <= dataIn(7 DOWNTO 0);
-				ELSIF byteEn="01" THEN
-				    --write half word
-				    mem(TO_INTEGER(UNSIGNED(adr)))(15 DOWNTO 0) <= dataIn(15 DOWNTO 0);
-				ELSE
-				    --write word
-				    mem(TO_INTEGER(UNSIGNED(adr)))(31 DOWNTO 0) <= dataIn(31 DOWNTO 0);
-				END IF;
-			end if;
-			-- writing on instruction portion is inhibited
+	        mem(TO_INTEGER(UNSIGNED(address))) <= dataIn;
         end if;
     end process;
 
+    process(readMem, address)
+    begin
+        if readMem='1' then
+			dOut <= mem(TO_INTEGER(UNSIGNED(address)));
+        end if;
+    end process;
+    
+    dataOut<=dOut;
 
 END behavior;

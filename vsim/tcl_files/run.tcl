@@ -56,21 +56,9 @@ add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hrdata
 add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hresp
 
 #hslave(1) RAM signals
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/latchDinEn
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/latchAinEn
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memSelByte
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSBout
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB1out
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB2out
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB3out
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSBin
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB1in
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB2in
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/byteLSB3in
 add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/controller/current_state
 add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/address
 add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/dataIn
-add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/byteEn
 add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/dataOut
 add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/mem
 add wave -noupdate -group HSLAVE_SRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/readMem
@@ -84,7 +72,7 @@ add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/core
 add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/current_state
 add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/master_core/datapathAFTAB/registerFile/rData
 
-run $var ns
+#run $var ns
 
 
 
