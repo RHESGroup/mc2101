@@ -155,5 +155,13 @@ main:
     sw   x31,0(x1)
     addi x31,x0,0
     lw   x31,0(x1)
+    
+    addi x31, x0, 0x012
+    sb   x31,0(x1)
+    addi x31,x0,0x010
+    lb   x31,0(x1)
+    sh   x31,0(x1)
+    addi x31,x31,0
+    lh   x31,0(x1)
 
 stop: j stop
