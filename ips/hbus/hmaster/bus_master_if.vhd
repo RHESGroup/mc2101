@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 May 2022
+--	Date:		17 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -44,7 +44,6 @@ USE IEEE.NUMERIC_STD.ALL;
 --PERIPHERALS
     --GPIO  (TODO) -->(hselgpio)
     --UART  (TODO) -->(hseluart)
-    --FLASH (TODO) -->(hselflash)
 
 
 ENTITY bus_master_if IS
@@ -102,13 +101,13 @@ ARCHITECTURE behavior OF bus_master_if IS
     END COMPONENT;
 
     --stall the processor in fetch stage or load/store stage
-    SIGNAL busReady: STD_LOGIC;
-    SIGNAL dataOut: STD_LOGIC_VECTOR (busDataWidth-1 DOWNTO 0);
+    SIGNAL coreMemReady: STD_LOGIC;
+    SIGNAL coreDout: STD_LOGIC_VECTOR (busDataWidth-1 DOWNTO 0);
     --read request
-    SIGNAL read: STD_LOGIC;
+    SIGNAL coreReadReq: STD_LOGIC;
     --write request
-    SIGNAL write: STD_LOGIC;
-    SIGNAL address: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+    SIGNAL coreWriteReq: STD_LOGIC;
+    SIGNAL coreAddr: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
     SIGNAL coreOnInterrupt : STD_LOGIC;
     --interrupts (TODO)
     
@@ -133,20 +132,68 @@ ARCHITECTURE behavior OF bus_master_if IS
     SIGNAL selGPIO: STD_LOGIC;
     SIGNAL selUART: STD_LOGIC;
     
-    --fsm
-    TYPE statetype IS (S_IDLE, S_READ, S_WRITE);
-    SIGNAL current_state, next_state: statetype;
+    --bootloader
+    COMPONENT boot_loader IS
+    GENERIC (
+		busDataWidth      : INTEGER := 8;
+		busAddressWidth   : INTEGER := 32;
+		--4Kb instruction memory
+		intrMemWidth      : INTEGER := 12
+	);
+    PORT (
+        --system signals
+        clk         : IN  STD_LOGIC;
+        rst         : IN  STD_LOGIC;
+        --reset event
+        rst_event   : IN  STD_LOGIC;
+        --(hready)
+        memReady    : IN  STD_LOGIC;
+        --(hread)
+		memDataIn   : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		--(hwrite)
+		memDataOut  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		--(read  request)
+		memRead     : OUT  STD_LOGIC;
+		--(write request)
+		memWrite    : OUT STD_LOGIC;
+		--(haddr)
+		memAddr     : OUT STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+		--status signal (='1' when boot process is still on-going)
+		boot_end    : OUT STD_LOGIC
+    );
+    END COMPONENT;
     
+    SIGNAL blDataOut: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+    SIGNAL blReadReq: STD_LOGIC;
+    SIGNAL blWriteReq: STD_LOGIC;
+    SIGNAL blAddr: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+    SIGNAL boot_end: STD_LOGIC;
+    
+    --htrans (BUS STATUS) controller
+    TYPE BUS_STAT_TYPE IS (S_IDLE, S_READ, S_WRITE);
+    SIGNAL curr_bus_state, next_bus_state: BUS_STAT_TYPE;
+    
+    --haddr branch for decoder
+    SIGNAL cc_haddr: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+    
+    --read, write request from a master
+    SIGNAL read,write: STD_LOGIC;
+    --arbiter controller
+    TYPE ARB_STAT_TYPE IS (BL_GRANT, CORE_GRANT);
+    SIGNAL curr_arb_state, next_arb_state: ARB_STAT_TYPE;
+    SIGNAL grant: STD_LOGIC;
     
 BEGIN
 
+    --######################################
+    --TARGET PERIPHERAL SELECTION
     decoder: bus_sel_decoder
     GENERIC MAP(
         slavesCount=>4,
-        addressWidth=>32
+        addressWidth=>busAddressWidth
     )
     PORT MAP(
-        address=>address,
+        address=>cc_haddr,
         selRAM =>selRAM,
         selFLASH=>selFLASH,
         selGPIO=>selGPIO,
@@ -157,20 +204,23 @@ BEGIN
     hselflash<=selFLASH AND (read OR write);
 	hselgpio<=selGPIO AND (read OR write);
 	hseluart<=selUART AND (read OR write);
+	--######################################
 	
-	master_core: aftab_core
-	GENERIC MAP (
-	    len=>busAddressWidth
-	)
-	PORT MAP (
+	--######################################
+    --CORE
+    core: aftab_core
+	GENERIC MAP
+		(len=>busAddressWidth)
+	PORT MAP
+	(
 		clk=>clk,
 		rst=>rst,
-		memReady=>busReady,
+		memReady=>coreMemReady,
 		memDataIn=>hrdata,
-		memDataOut=>hwrdata,
-		memRead=>read,
-		memWrite=>write,
-		memAddr=>address,
+		memDataOut=>coreDout,
+		memRead=>coreReadReq,
+		memWrite=>coreWriteReq,
+		memAddr=>coreAddr,
 		machineExternalInterrupt=>'0',
 		machineTimerInterrupt=>'0',
 		machineSoftwareInterrupt=>'0',
@@ -180,51 +230,112 @@ BEGIN
 		platformInterruptSignals=>x"0000",
 		interruptProcessing=>coreOnInterrupt
 	);
+    --######################################
+    
+    --######################################
+    --BOOT LOADER
+    bootloader: boot_loader
+    GENERIC MAP(
+		busDataWidth=>busDataWidth,
+		busAddressWidth=>busAddressWidth,
+		intrMemWidth=>12
+	)
+    PORT MAP(
+        clk=>clk,
+        rst=>rst,
+        rst_event=>grant,
+        memReady=>hready,
+		memDataIn=>hrdata,
+		memDataOut=>blDataOut,
+		memRead=>blReadReq,
+		memWrite=>blWriteReq,
+		memAddr=>blAddr,
+		boot_end=>boot_end
+    ); 
+    --######################################
 	
-	haddr<=address;
-	
-	PROCESS(clk, rst)
+	--######################################
+	--BUS ARBITER
+	PROCESS(clk,rst)
 	BEGIN
 	    IF rst='1' THEN
-	        current_state<=S_IDLE;
+	        curr_arb_state<=BL_GRANT;
 	    ELSIF rising_edge(clk) THEN
-	        current_state<=next_state;
+	        curr_arb_state<=next_arb_state;
 	    END IF;
-	END PROCESS;    
+	END PROCESS;
 	
+	PROCESS(curr_arb_state, boot_end)
+	BEGIN
+	    CASE curr_arb_state IS
+	        WHEN BL_GRANT=>
+	            grant<='1';
+	            IF boot_end='1' THEN
+	                next_arb_state<=CORE_GRANT;
+	            ELSE
+	                next_arb_state<=BL_GRANT;
+	            END IF;
+	        WHEN CORE_GRANT=>
+	            grant<='0';
+	            next_arb_state<=CORE_GRANT;
+	    END CASE;
+	END PROCESS;
+	--######################################
+	
+	
+	--REQUEST MUX
+	read<=coreReadReq WHEN grant='0' ELSE blReadReq;
+	write<=coreWriteReq WHEN grant='0' ELSE blWriteReq;
+	--DISABLE CORE IF NOT GRANT
+	coreMemReady<=hready WHEN grant='0' ELSE '0';
+	--BUS REQUEST SIGNAL
 	hwrite<='0' WHEN read='1' ELSE
 	        '1' WHEN write='1' ELSE
 	        '0';
-	busReady<=hready;
+	haddr<=coreAddr WHEN grant='0' ELSE blAddr;
+	hwrdata<=coreDout WHEN grant='0' ELSE blDataOut;
+	cc_haddr<=haddr;
 	
-	PROCESS(hselram, hselflash, hselgpio, hseluart, current_state, hready, read, write)
+	--######################################
+	--BUS STATUS CONTROLLER
+	PROCESS(clk, rst)
 	BEGIN
-	    CASE current_state IS
+	    IF rst='1' THEN
+	        curr_bus_state<=S_IDLE;
+	    ELSIF rising_edge(clk) THEN
+	        curr_bus_state<=next_bus_state;
+	    END IF;
+	END PROCESS;    
+	
+	PROCESS(hselram, hselflash, hselgpio, hseluart, curr_bus_state, read, write)
+	BEGIN
+	    CASE curr_bus_state IS
 	        WHEN S_IDLE=>
 	            htrans<="00";
 	            IF( read='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
-	                next_state<=S_READ;
+	                next_bus_state<=S_READ;
 	            ELSIF( write='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
-	                next_state<=S_WRITE;
+	                next_bus_state<=S_WRITE;
 	            ELSE
-	                next_state<=S_IDLE;
+	                next_bus_state<=S_IDLE;
 	            END IF;
 	        WHEN S_READ=>
 	            htrans<="01";
 	            IF read='1' THEN
-	                next_state<=S_READ;
+	                next_bus_state<=S_READ;
 	            ELSE
-	                next_state<=S_IDLE;
+	                next_bus_state<=S_IDLE;
 	            END IF;
 	        WHEN S_WRITE=>
 	            htrans<="10";
 	            IF write='1' THEN
-	                next_state<=S_WRITE;
+	                next_bus_state<=S_WRITE;
 	            ELSE
-	                next_state<=S_IDLE;
+	                next_bus_state<=S_IDLE;
 	            END IF;
 	    END CASE;
 	END PROCESS;
-
+    --######################################
+    
 
 END behavior;
