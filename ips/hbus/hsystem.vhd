@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 May 2022
+--	Date:		18 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -39,8 +39,6 @@ LIBRARY STD;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
---master (core) <--> slaves
-
 ENTITY hsystem IS
 	PORT(
 	    sys_clk: IN  STD_LOGIC;
@@ -50,6 +48,10 @@ END hsystem;
 
 
 ARCHITECTURE behavior OF hsystem IS
+
+    --BUS CONFIGURATION
+    CONSTANT busDataWidth: INTEGER:=8;
+    CONSTANT busAddressWidth: INTEGER:=32;
 
     --MASTER INTERFACE
     COMPONENT bus_master_if IS
@@ -78,7 +80,7 @@ ARCHITECTURE behavior OF hsystem IS
 		);
     END COMPONENT;
     
-    --SLAVES INTERFACE (JUST RAM FOR NOW)
+    --SLAVES INTERFACE
     COMPONENT ssram_bus_wrap IS
 	GENERIC (
 		busDataWidth      : INTEGER := 8;
@@ -101,6 +103,38 @@ ARCHITECTURE behavior OF hsystem IS
 	);
     END COMPONENT;
     
+    SIGNAL ssram_hrdata: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+    SIGNAL ssram_hready: STD_LOGIC;
+    SIGNAL ssram_hresp:  STD_LOGIC;
+    
+    COMPONENT flash_bus_wrap IS
+	GENERIC (
+		busDataWidth      : INTEGER := 8;
+		busAddressWidth   : INTEGER := 32
+	);  
+	PORT (
+	    --system signals
+		clk           : IN  STD_LOGIC;
+		rst           : IN  STD_LOGIC;
+		--master driven signals
+		htrans        : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
+		hselx         : IN  STD_LOGIC;
+		hwrite        : IN  STD_LOGIC;
+		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		haddr         : IN  STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+		--slave driven signals
+		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		hready        : OUT STD_LOGIC;
+		hresp         : OUT STD_LOGIC
+	);
+    END COMPONENT;
+    
+    
+    
+    SIGNAL flash_hrdata: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+    SIGNAL flash_hready: STD_LOGIC;
+    SIGNAL flash_hresp:  STD_LOGIC;
+    
     --BUS INTERCONNECTION
     SIGNAL htrans: STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL hselram: STD_LOGIC;
@@ -108,9 +142,9 @@ ARCHITECTURE behavior OF hsystem IS
     SIGNAL hselgpio: STD_LOGIC;
     SIGNAL hseluart: STD_LOGIC;
     SIGNAL hwrite: STD_LOGIC;
-    SIGNAL hwrdata: STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL haddr: STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL hrdata: STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL hwrdata: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+    SIGNAL haddr: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+    SIGNAL hrdata: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
     SIGNAL hresp: STD_LOGIC;
     SIGNAL hready: STD_LOGIC;
     
@@ -119,8 +153,8 @@ BEGIN
 
     master: bus_master_if
     GENERIC MAP(
-		busDataWidth=>8,
-		busAddressWidth=>32
+		busDataWidth=>busDataWidth,
+		busAddressWidth=>busAddressWidth
 	) 
 	PORT MAP(
 		clk=>sys_clk,
@@ -140,8 +174,8 @@ BEGIN
     
     slave_ram: ssram_bus_wrap
 	GENERIC MAP(
-		busDataWidth=>8,
-		busAddressWidth=>32
+		busDataWidth=>busDataWidth,
+		busAddressWidth=>busAddressWidth
 	)  
 	PORT MAP(
 		clk=>sys_clk,
@@ -151,9 +185,37 @@ BEGIN
 		hwrite=>hwrite,
 		hwrdata=>hwrdata,
 		haddr=>haddr,
-		hrdata=>hrdata,
-		hready=>hready,
-		hresp=>hresp
+		hrdata=>ssram_hrdata,
+		hready=>ssram_hready,
+		hresp=>ssram_hresp
 	);
+	
+	slave_flash: flash_bus_wrap
+	GENERIC MAP(
+		busDataWidth=>busDataWidth,
+		busAddressWidth=>busAddressWidth
+	)  
+	PORT MAP(
+		clk=>sys_clk,
+		rst=>sys_rst,
+		htrans=>htrans,
+		hselx=>hselflash,
+		hwrite=>hwrite,
+		hwrdata=>hwrdata,
+		haddr=>haddr,
+		hrdata=>flash_hrdata,
+		hready=>flash_hready,
+		hresp=>flash_hresp
+	);
+	
+	--SLAVES MUX
+	hrdata<=flash_hrdata WHEN hselflash = '1' ELSE
+	        ssram_hrdata;
+	        
+	hready<=flash_hready WHEN hselflash = '1' ELSE
+	        ssram_hready;
+	        
+	hresp <=flash_hresp  WHEN hselflash = '1' ELSE
+	        ssram_hresp;
 
 END behavior;
