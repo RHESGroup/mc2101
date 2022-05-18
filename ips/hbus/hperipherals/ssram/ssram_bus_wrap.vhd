@@ -66,14 +66,13 @@ END ssram_bus_wrap;
 ARCHITECTURE behavior OF ssram_bus_wrap IS
 
     --ssram
-    COMPONENT ssram_test IS
+    COMPONENT ssram_fpga IS
 	GENERIC (
 		dataWidth      : INTEGER :=8;
 		addressWidth   : INTEGER :=13
 	);  
 	PORT (
 		clk           : IN  STD_LOGIC;
-		rst           : IN  STD_LOGIC;
 		readMem       : IN  STD_LOGIC;
 		writeMem      : IN  STD_LOGIC;
 		address       : IN  STD_LOGIC_VECTOR (addressWidth - 1 DOWNTO 0);
@@ -113,14 +112,13 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
     
 BEGIN
 
-    memory: ssram_test
+    memory: ssram_fpga
 	GENERIC MAP(
 		dataWidth      => busDataWidth,
 		addressWidth   => PHSIZE
 	)  
 	PORT MAP(
 		clk            =>clk,
-		rst            =>rst,
 		readMem        =>readMem,
 		writeMem       =>writeMem,
 		address        =>phyaddr,

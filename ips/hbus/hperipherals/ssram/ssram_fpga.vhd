@@ -65,7 +65,7 @@ ARCHITECTURE behavior OF ssram_fpga IS
 
     TYPE mem_type IS ARRAY (0 TO 2**addressWidth - 1) OF STD_LOGIC_VECTOR (dataWidth-1 DOWNTO 0);
 	SIGNAL mem : MEM_TYPE;
-	SIGNAL dOut: STD_LOGIC_VECTOR (addressWidth - 1 DOWNTO 0);   
+	SIGNAL dOut: STD_LOGIC_VECTOR (dataWidth - 1 DOWNTO 0);   
 
 BEGIN
 

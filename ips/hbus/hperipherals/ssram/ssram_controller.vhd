@@ -82,6 +82,7 @@ BEGIN
         --memReady is always 1
         --timing should be checked with gate level simulation
         memReady<='1';
+        memResponse<='1';
         CASE current_state IS
             WHEN IDLE=>
                 memResponse<='1';
