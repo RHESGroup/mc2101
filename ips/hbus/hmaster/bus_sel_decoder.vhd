@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 May 2022
+--	Date:		17 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -59,27 +59,35 @@ END bus_sel_decoder;
 ARCHITECTURE behavior OF bus_sel_decoder IS
 
     --SSRAM MEMORY MAP
-    SIGNAL INSTRUCTIONS_START  : UNSIGNED(31 DOWNTO 0):=x"00000000";
-    SIGNAL INSTRUCTIONS_END    : UNSIGNED(31 DOWNTO 0):=x"00001000";
-    SIGNAL DATA_STACK_START    : UNSIGNED(31 DOWNTO 0):=x"00100000";
-    SIGNAL DATA_STACK_END      : UNSIGNED(31 DOWNTO 0):=x"00101000";
+    CONSTANT INSTRUCTIONS_START  : UNSIGNED(31 DOWNTO 0):=x"00000000";
+    CONSTANT INSTRUCTIONS_END    : UNSIGNED(31 DOWNTO 0):=x"00001000";
+    CONSTANT DATA_STACK_START    : UNSIGNED(31 DOWNTO 0):=x"00100000";
+    CONSTANT DATA_STACK_END      : UNSIGNED(31 DOWNTO 0):=x"00101000";
     --PERIPHERAL MEMORY MAP(TODO)
-
+    CONSTANT FLASH_START         : UNSIGNED(31 DOWNTO 0):=x"1A100000";
+    CONSTANT FLASH_END           : UNSIGNED(31 DOWNTO 0):=x"1A101000";
+    
 BEGIN
 
     PROCESS(address)
     BEGIN
-        IF( (UNSIGNED(address(addressWidth-1 DOWNTO 0))<=INSTRUCTIONS_END) OR 
+        IF( (UNSIGNED(address(addressWidth-1 DOWNTO 0))<INSTRUCTIONS_END) OR 
             (UNSIGNED(address(addressWidth-1 DOWNTO 0))>=DATA_STACK_START
-            AND UNSIGNED(address)<=DATA_STACK_END)
+            AND UNSIGNED(address)<DATA_STACK_END)
           ) THEN
             selRAM<='1';
+            selFLASH<='0';
+        ELSIF( (UNSIGNED(address(addressWidth-1 DOWNTO 0))>=FLASH_START) AND 
+              (UNSIGNED(address(addressWidth-1 DOWNTO 0))<FLASH_END)
+          ) THEN
+            selRAM<='0';
+            selFLASH<='1';  
         ELSE
-            selRAM<='0';  
+            selRAM<='0';
+            selFLASH<='0';
         END IF;
     END PROCESS;
     
-    selFLASH<='0';
     selGPIO<='0';
     selUART<='0';
 
