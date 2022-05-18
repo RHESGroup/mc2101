@@ -169,11 +169,21 @@ echo ""
 set IP=mc2101
 set IP_NAME="MC2101"
 
-vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/ssram/ssram_test.vhd  || goto error
+#peripheral ssram
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/ssram/ssram_fpga.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/ssram/ssram_controller.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/ssram/ssram_bus_wrap.vhd  || goto error
+#peripheral flash
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/flash/boot_code.vhd || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/flash/flash.vhd || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/flash/flash_controller.vhd || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/flash/flash_bus_wrap.vhd || goto error
+#master
+vcom -2008 -work work ${RTL_PATH}/hbus/hmaster/counter.vhd  || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hmaster/boot_loader.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hmaster/bus_sel_decoder.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hmaster/bus_master_if.vhd  || goto error
+#top level
 vcom -2008 -work work ${RTL_PATH}/hbus/hsystem.vhd  || goto error
 
 echo ""
