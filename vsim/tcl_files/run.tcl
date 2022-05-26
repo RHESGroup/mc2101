@@ -64,35 +64,11 @@ add wave -noupdate -group SSRAM -radix hexadecimal /tb_hsystem/system/slave_ram/
 add wave -noupdate -group SSRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/readMem
 add wave -noupdate -group SSRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/writeMem
 
-#hslave(2) FLASH signals
-add wave -noupdate -group FLASH -radix hexadecimal /tb_hsystem/system/slave_flash/controller/current_state
-add wave -noupdate -group FLASH -radix hexadecimal /tb_hsystem/system/slave_flash/memory/address
-add wave -noupdate -group FLASH -radix hexadecimal /tb_hsystem/system/slave_flash/memory/enable
-add wave -noupdate -group FLASH -radix hexadecimal /tb_hsystem/system/slave_flash/memory/dataOut
-
 #master interface  signals
-add wave -noupdate -group MASTERIF -radix hexadecimal /tb_hsystem/system/master/read
-add wave -noupdate -group MASTERIF -radix hexadecimal /tb_hsystem/system/master/write
 add wave -noupdate -group MASTERIF -radix hexadecimal /tb_hsystem/system/master/curr_bus_state
-add wave -noupdate -group MASTERIF -radix hexadecimal /tb_hsystem/system/master/curr_arb_state
-add wave -noupdate -group MASTERIF -radix hexadecimal /tb_hsystem/system/master/grant
-
-#bootloader signals
-add wave -noupdate -group BOOTL -radix hexadecimal /tb_hsystem/system/master/bootloader/current_state
-add wave -noupdate -group BOOTL -radix hexadecimal /tb_hsystem/system/master/blDataOut
-add wave -noupdate -group BOOTL -radix hexadecimal /tb_hsystem/system/master/blReadReq
-add wave -noupdate -group BOOTL -radix hexadecimal /tb_hsystem/system/master/blWriteReq
-add wave -noupdate -group BOOTL -radix hexadecimal /tb_hsystem/system/master/blAddr
-add wave -noupdate -group BOOTL -radix hexadecimal /tb_hsystem/system/master/boot_end
-add wave -noupdate -group BOOTL -radix hexadecimal /tb_hsystem/system/master/hrdata
-
-#core signals
 add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/coreOnInterrupt
-add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/coreMemReady
-add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/coreDout
 add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/coreReadReq
 add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/coreWriteReq
-add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/coreAddr
 add wave -noupdate -group CORE -radix hexadecimal /tb_hsystem/system/master/core/datapathAFTAB/registerFile/rData
 
 #run $var ns
