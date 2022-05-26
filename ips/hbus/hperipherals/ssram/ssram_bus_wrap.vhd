@@ -142,18 +142,14 @@ BEGIN
     
     --Viritual address to physical address
     --When haddr changes, in this module can assume two intervals:
-    --1) haddr<=0x00001000 :Instruction Memory--->phaddr=haddr(
+    --1) haddr<=0x00001000 :Instruction Memory--->phaddr=haddr
     --2) haddr>=0x00100000 :Data OR Stack
     PROCESS(haddr)
     BEGIN
         IF haddr(20)='1' THEN
             --r/w to stack or data
             phyaddr<='1' & haddr(PHSIZE-2 DOWNTO 0);
-        ELSIF haddr(20)='0' THEN
-            --r/w to iram
-            phyaddr<='0' & haddr(PHSIZE-2 DOWNTO 0);
         ELSE
-            --high impedence
             phyaddr<=haddr(PHSIZE-1 DOWNTO 0);
         END IF;
     END PROCESS;
