@@ -107,34 +107,6 @@ ARCHITECTURE behavior OF hsystem IS
     SIGNAL ssram_hready: STD_LOGIC;
     SIGNAL ssram_hresp:  STD_LOGIC;
     
-    COMPONENT flash_bus_wrap IS
-	GENERIC (
-		busDataWidth      : INTEGER := 8;
-		busAddressWidth   : INTEGER := 32
-	);  
-	PORT (
-	    --system signals
-		clk           : IN  STD_LOGIC;
-		rst           : IN  STD_LOGIC;
-		--master driven signals
-		htrans        : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
-		hselx         : IN  STD_LOGIC;
-		hwrite        : IN  STD_LOGIC;
-		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		haddr         : IN  STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
-		--slave driven signals
-		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		hready        : OUT STD_LOGIC;
-		hresp         : OUT STD_LOGIC
-	);
-    END COMPONENT;
-    
-    
-    
-    SIGNAL flash_hrdata: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-    SIGNAL flash_hready: STD_LOGIC;
-    SIGNAL flash_hresp:  STD_LOGIC;
-    
     --BUS INTERCONNECTION
     SIGNAL htrans: STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL hselram: STD_LOGIC;
@@ -190,32 +162,9 @@ BEGIN
 		hresp=>ssram_hresp
 	);
 	
-	slave_flash: flash_bus_wrap
-	GENERIC MAP(
-		busDataWidth=>busDataWidth,
-		busAddressWidth=>busAddressWidth
-	)  
-	PORT MAP(
-		clk=>sys_clk,
-		rst=>sys_rst,
-		htrans=>htrans,
-		hselx=>hselflash,
-		hwrite=>hwrite,
-		hwrdata=>hwrdata,
-		haddr=>haddr,
-		hrdata=>flash_hrdata,
-		hready=>flash_hready,
-		hresp=>flash_hresp
-	);
-	
-	--SLAVES MUX
-	hrdata<=flash_hrdata WHEN hselflash = '1' ELSE
-	        ssram_hrdata;
-	        
-	hready<=flash_hready WHEN hselflash = '1' ELSE
-	        ssram_hready;
-	        
-	hresp <=flash_hresp  WHEN hselflash = '1' ELSE
-	        ssram_hresp;
+	--SLAVES MUX (TODO)
+	hrdata<=ssram_hrdata;     
+	hready<=ssram_hready;      
+	hresp <=ssram_hresp;
 
 END behavior;
