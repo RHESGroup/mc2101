@@ -99,23 +99,18 @@ ARCHITECTURE behavior OF bus_master_if IS
 		interruptProcessing      : OUT STD_LOGIC
 	);
     END COMPONENT;
-
-    --stall the processor in fetch stage or load/store stage
-    SIGNAL coreMemReady: STD_LOGIC;
-    SIGNAL coreDout: STD_LOGIC_VECTOR (busDataWidth-1 DOWNTO 0);
+    
     --read request
     SIGNAL coreReadReq: STD_LOGIC;
     --write request
     SIGNAL coreWriteReq: STD_LOGIC;
-    SIGNAL coreAddr: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+    --core interrupted
     SIGNAL coreOnInterrupt : STD_LOGIC;
     --interrupts (TODO)
-    
     
     --decoder
     COMPONENT bus_sel_decoder IS
     GENERIC (
-        slavesCount  : INTEGER := 4;
         addressWidth : INTEGER := 32
     );
     PORT (
@@ -132,56 +127,9 @@ ARCHITECTURE behavior OF bus_master_if IS
     SIGNAL selGPIO: STD_LOGIC;
     SIGNAL selUART: STD_LOGIC;
     
-    --bootloader
-    COMPONENT boot_loader IS
-    GENERIC (
-		busDataWidth      : INTEGER := 8;
-		busAddressWidth   : INTEGER := 32;
-		--4Kb instruction memory
-		intrMemWidth      : INTEGER := 12
-	);
-    PORT (
-        --system signals
-        clk         : IN  STD_LOGIC;
-        rst         : IN  STD_LOGIC;
-        --reset event
-        rst_event   : IN  STD_LOGIC;
-        --(hready)
-        memReady    : IN  STD_LOGIC;
-        --(hread)
-		memDataIn   : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		--(hwrite)
-		memDataOut  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		--(read  request)
-		memRead     : OUT  STD_LOGIC;
-		--(write request)
-		memWrite    : OUT STD_LOGIC;
-		--(haddr)
-		memAddr     : OUT STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
-		--status signal (='1' when boot process is still on-going)
-		boot_end    : OUT STD_LOGIC
-    );
-    END COMPONENT;
-    
-    SIGNAL blDataOut: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-    SIGNAL blReadReq: STD_LOGIC;
-    SIGNAL blWriteReq: STD_LOGIC;
-    SIGNAL blAddr: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
-    SIGNAL boot_end: STD_LOGIC;
-    
     --htrans (BUS STATUS) controller
     TYPE BUS_STAT_TYPE IS (S_IDLE, S_READ, S_WRITE);
     SIGNAL curr_bus_state, next_bus_state: BUS_STAT_TYPE;
-    
-    --haddr branch for decoder
-    SIGNAL cc_haddr: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
-    
-    --read, write request from a master
-    SIGNAL read,write: STD_LOGIC;
-    --arbiter controller
-    TYPE ARB_STAT_TYPE IS (BL_GRANT, CORE_GRANT);
-    SIGNAL curr_arb_state, next_arb_state: ARB_STAT_TYPE;
-    SIGNAL grant: STD_LOGIC;
     
 BEGIN
 
@@ -189,21 +137,23 @@ BEGIN
     --TARGET PERIPHERAL SELECTION
     decoder: bus_sel_decoder
     GENERIC MAP(
-        slavesCount=>4,
         addressWidth=>busAddressWidth
     )
     PORT MAP(
-        address=>cc_haddr,
+        address=>haddr,
         selRAM =>selRAM,
         selFLASH=>selFLASH,
         selGPIO=>selGPIO,
         selUART=>selUART
     );
     
-    hselram<=selRAM AND (read OR write);
-    hselflash<=selFLASH AND (read OR write);
-	hselgpio<=selGPIO AND (read OR write);
-	hseluart<=selUART AND (read OR write);
+    hselram<=selRAM AND (coreReadReq OR coreWriteReq);
+    hselflash<=selFLASH AND (coreReadReq OR coreWriteReq);
+	hselgpio<=selGPIO AND (coreReadReq OR coreWriteReq);
+	hseluart<=selUART AND (coreReadReq OR coreWriteReq);
+	hwrite<='0' WHEN coreReadReq='1' ELSE
+	        '1' WHEN coreWriteReq='1' ELSE
+	        '0';
 	--######################################
 	
 	--######################################
@@ -215,12 +165,12 @@ BEGIN
 	(
 		clk=>clk,
 		rst=>rst,
-		memReady=>coreMemReady,
+		memReady=>hready,
 		memDataIn=>hrdata,
-		memDataOut=>coreDout,
+		memDataOut=>hwrdata,
 		memRead=>coreReadReq,
 		memWrite=>coreWriteReq,
-		memAddr=>coreAddr,
+		memAddr=>haddr,
 		machineExternalInterrupt=>'0',
 		machineTimerInterrupt=>'0',
 		machineSoftwareInterrupt=>'0',
@@ -231,71 +181,7 @@ BEGIN
 		interruptProcessing=>coreOnInterrupt
 	);
     --######################################
-    
-    --######################################
-    --BOOT LOADER
-    bootloader: boot_loader
-    GENERIC MAP(
-		busDataWidth=>busDataWidth,
-		busAddressWidth=>busAddressWidth,
-		intrMemWidth=>12
-	)
-    PORT MAP(
-        clk=>clk,
-        rst=>rst,
-        rst_event=>grant,
-        memReady=>hready,
-		memDataIn=>hrdata,
-		memDataOut=>blDataOut,
-		memRead=>blReadReq,
-		memWrite=>blWriteReq,
-		memAddr=>blAddr,
-		boot_end=>boot_end
-    ); 
-    --######################################
-	
-	--######################################
-	--BUS ARBITER
-	PROCESS(clk,rst)
-	BEGIN
-	    IF rst='1' THEN
-	        curr_arb_state<=BL_GRANT;
-	    ELSIF rising_edge(clk) THEN
-	        curr_arb_state<=next_arb_state;
-	    END IF;
-	END PROCESS;
-	
-	PROCESS(curr_arb_state, boot_end)
-	BEGIN
-	    CASE curr_arb_state IS
-	        WHEN BL_GRANT=>
-	            grant<='1';
-	            IF boot_end='1' THEN
-	                next_arb_state<=CORE_GRANT;
-	            ELSE
-	                next_arb_state<=BL_GRANT;
-	            END IF;
-	        WHEN CORE_GRANT=>
-	            grant<='0';
-	            next_arb_state<=CORE_GRANT;
-	    END CASE;
-	END PROCESS;
-	--######################################
-	
-	
-	--REQUEST MUX
-	read<=coreReadReq WHEN grant='0' ELSE blReadReq;
-	write<=coreWriteReq WHEN grant='0' ELSE blWriteReq;
-	--DISABLE CORE IF NOT GRANT
-	coreMemReady<=hready WHEN grant='0' ELSE '0';
-	--BUS REQUEST SIGNAL
-	hwrite<='0' WHEN read='1' ELSE
-	        '1' WHEN write='1' ELSE
-	        '0';
-	haddr<=coreAddr WHEN grant='0' ELSE blAddr;
-	hwrdata<=coreDout WHEN grant='0' ELSE blDataOut;
-	cc_haddr<=haddr;
-	
+  
 	--######################################
 	--BUS STATUS CONTROLLER
 	PROCESS(clk, rst)
@@ -307,28 +193,28 @@ BEGIN
 	    END IF;
 	END PROCESS;    
 	
-	PROCESS(hselram, hselflash, hselgpio, hseluart, curr_bus_state, read, write)
+	PROCESS(hselram, hselflash, hselgpio, hseluart, curr_bus_state, coreReadReq, coreWriteReq)
 	BEGIN
 	    CASE curr_bus_state IS
 	        WHEN S_IDLE=>
 	            htrans<="00";
-	            IF( read='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
+	            IF( coreReadReq='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
 	                next_bus_state<=S_READ;
-	            ELSIF( write='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
+	            ELSIF( coreWriteReq='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
 	                next_bus_state<=S_WRITE;
 	            ELSE
 	                next_bus_state<=S_IDLE;
 	            END IF;
 	        WHEN S_READ=>
 	            htrans<="01";
-	            IF read='1' THEN
+	            IF coreReadReq='1' THEN
 	                next_bus_state<=S_READ;
 	            ELSE
 	                next_bus_state<=S_IDLE;
 	            END IF;
 	        WHEN S_WRITE=>
 	            htrans<="10";
-	            IF write='1' THEN
+	            IF coreWriteReq='1' THEN
 	                next_bus_state<=S_WRITE;
 	            ELSE
 	                next_bus_state<=S_IDLE;
