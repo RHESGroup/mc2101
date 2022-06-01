@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		18 May 2022
+--	Date:		01 Jun 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -41,8 +41,9 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY hsystem IS
 	PORT(
-	    sys_clk: IN  STD_LOGIC;
-	    sys_rst: IN  STD_LOGIC
+	    sys_clk     : IN  STD_LOGIC;
+	    sys_rst     : IN  STD_LOGIC;
+	    gpio_pads   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0) 
 	);
 END hsystem;
 
@@ -76,7 +77,9 @@ ARCHITECTURE behavior OF hsystem IS
 		hselram       : OUT STD_LOGIC;
 		hselflash     : OUT STD_LOGIC;
 		hselgpio      : OUT STD_LOGIC;
-		hseluart      : OUT STD_LOGIC
+		hseluart      : OUT STD_LOGIC;
+		--interrupt signals
+		platInterrupts: IN  STD_LOGIC_VECTOR (15 DOWNTO 0)
 		);
     END COMPONENT;
     
@@ -103,9 +106,39 @@ ARCHITECTURE behavior OF hsystem IS
 	);
     END COMPONENT;
     
+    COMPONENT gpio_bus_wrap IS
+	GENERIC (
+		busDataWidth      : INTEGER := 8;
+		busAddressWidth   : INTEGER := 32
+	);  
+	PORT (
+	    --#BUS INTERFACE SIGNAL
+	    --system signals
+		clk           : IN  STD_LOGIC;
+		rst           : IN  STD_LOGIC;
+		--master driven signals
+		htrans        : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
+		hselx         : IN  STD_LOGIC;
+		hwrite        : IN  STD_LOGIC;
+		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		haddr         : IN  STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+		--slave driven signals
+		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		hready        : OUT STD_LOGIC;
+		hresp         : OUT STD_LOGIC;
+		--#EXTERNAL SIGNAL
+	    gpio_interrupt: OUT STD_LOGIC;
+	    gpio_pads     : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+	);
+    END COMPONENT;
+    
     SIGNAL ssram_hrdata: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
     SIGNAL ssram_hready: STD_LOGIC;
     SIGNAL ssram_hresp:  STD_LOGIC;
+    
+    SIGNAL gpio_hrdata: STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+    SIGNAL gpio_hready: STD_LOGIC;
+    SIGNAL gpio_hresp: STD_LOGIC;
     
     --BUS INTERCONNECTION
     SIGNAL htrans: STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -120,6 +153,9 @@ ARCHITECTURE behavior OF hsystem IS
     SIGNAL hresp: STD_LOGIC;
     SIGNAL hready: STD_LOGIC;
     
+    --INTERRUPTS
+    SIGNAL platInterrupts: STD_LOGIC_VECTOR (15 DOWNTO 0);
+    SIGNAL gpio_interrupt: STD_LOGIC;   
     
 BEGIN
 
@@ -141,7 +177,8 @@ BEGIN
 		hselram=>hselram,
 		hselflash=>hselflash,
 		hselgpio=>hselgpio,
-		hseluart=>hseluart
+		hseluart=>hseluart,
+		platInterrupts=>platInterrupts
     );
     
     slave_ram: ssram_bus_wrap
@@ -162,9 +199,56 @@ BEGIN
 		hresp=>ssram_hresp
 	);
 	
+	platInterrupts(0)<=gpio_interrupt;
+	platInterrupts(15 DOWNTO 1)<=(OTHERS=>'0');
+	
+	slave_gpio: gpio_bus_wrap
+	GENERIC MAP(
+		busDataWidth=>busDataWidth,
+		busAddressWidth=>busAddressWidth
+	) 
+	PORT MAP(
+		clk=>sys_clk,
+		rst=>sys_rst,
+		htrans=>htrans,
+		hselx=>hselgpio,
+		hwrite=>hwrite,
+		hwrdata=>hwrdata,
+		haddr=>haddr,
+		hrdata=>gpio_hrdata,
+		hready=>gpio_hready,
+		hresp=>gpio_hresp,
+	    gpio_interrupt=>gpio_interrupt,
+	    gpio_pads=>gpio_pads
+	);
+	
 	--SLAVES MUX (TODO)
-	hrdata<=ssram_hrdata;     
-	hready<=ssram_hready;      
-	hresp <=ssram_hresp;
+	hrdata<=ssram_hrdata WHEN hselram='1' ELSE
+	        gpio_hrdata WHEN hselgpio='1' ELSE
+	        ssram_hrdata;     
+	hready<=ssram_hready WHEN hselram='1' ELSE
+	        gpio_hready WHEN hselgpio='1' ELSE
+	        ssram_hready;      
+	hresp <=ssram_hresp  WHEN hselram='1' ELSE
+	        ssram_hresp WHEN hselgpio='1' ELSE
+	        ssram_hresp; 
 
 END behavior;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
