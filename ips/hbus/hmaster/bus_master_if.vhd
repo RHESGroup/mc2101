@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		17 May 2022
+--	Date:		01 Jun 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -68,7 +68,9 @@ ENTITY bus_master_if IS
 		hselram       : OUT STD_LOGIC;
 		hselflash     : OUT STD_LOGIC;
 		hselgpio      : OUT STD_LOGIC;
-		hseluart      : OUT STD_LOGIC
+		hseluart      : OUT STD_LOGIC;
+		--interrupt signals
+		platInterrupts: IN  STD_LOGIC_VECTOR (15 DOWNTO 0)
 		);
 END bus_master_if;
 
@@ -177,7 +179,7 @@ BEGIN
 		userExternalInterrupt=>'0',
 		userTimerInterrupt=>'0',
 		userSoftwareInterrupt=>'0',
-		platformInterruptSignals=>x"0000",
+		platformInterruptSignals=>platInterrupts,
 		interruptProcessing=>coreOnInterrupt
 	);
     --######################################
