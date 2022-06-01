@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		26 May 2022
+--	Date:		27 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -40,14 +40,11 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY gpio_pads_if IS   
-    GENERIC (
-        BUFFERSIZE: integer:=32
-    );
 	PORT (
-	    gpio_pins:  INOUT STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0);
-	    gpio_port_in : OUT STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0);
-	    gpio_pad_dir : IN STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0);
-	    gpio_port_out: IN STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0)
+	    gpio_pins:  INOUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    gpio_port_in : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    gpio_pad_dir : IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    gpio_port_out: IN STD_LOGIC_VECTOR( 31 DOWNTO 0)
 	);
 END gpio_pads_if;
 
@@ -56,17 +53,13 @@ BEGIN
 
     PROCESS(gpio_pad_dir, gpio_port_out, gpio_pins)
     BEGIN
-        FOR i IN 0 TO (BUFFERSIZE-1) LOOP
-            IF gpio_pad_dir(i) = '0' THEN
-                gpio_port_in(i)<=gpio_pins(i); --is this multiplexer needed?
+        FOR i IN 0 TO (31) LOOP
+            gpio_port_in(i)<=gpio_pins(i);
+            IF gpio_pad_dir(i) = '0' THEN               
                 gpio_pins(i)<='Z';
             ELSE
-                gpio_port_in(i)<='0'; --is this multiplexer needed?
                 gpio_pins(i)<=gpio_port_out(i);
             END IF;
-            --COMPATIBLE ONLY WITH VHDL 2008+
-            --gpio_port_in(i)<=gpio_pins(i) WHEN gpio_pad_dir(i) = '0' ELSE '0';
-            --gpio_pins(i)<=gpio_port_out(i) WHEN gpio_pad_dir(i) = '1' ELSE 'Z';
         END LOOP;
     END PROCESS;
     
