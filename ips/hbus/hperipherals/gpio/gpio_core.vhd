@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		26 May 2022
+--	Date:		27 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -64,7 +64,7 @@ ENTITY gpio_core IS
 		write         : IN  STD_LOGIC;
 		busDataOut    : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		interrupt     : OUT STD_LOGIC;
-	    gpio_in_async  : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
+	    gpio_in_async : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
 		gpio_out_sync : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		gpio_pad_dir  : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);
@@ -144,7 +144,7 @@ BEGIN
             ELSIF eff_addr = "100" THEN
                 --INTTYPE0
                 INTTYPE0<=busDataIn;
-            ELSIF eff_addr = "110" THEN
+            ELSIF eff_addr = "101" THEN
                 --INTTYPE1
                 INTTYPE1<=busDataIn;
             END IF;
@@ -207,7 +207,7 @@ BEGIN
             --deassert interrupt line
             interrupt<='0';
         --rise interrupt if there's one and if not yet pending and update status
-        ELSIF (NOT(interrupt)='1' AND (OR(interrupts)='1')) THEN
+        ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN
             interrupt<='1';
             INTSTATUS<=interrupts;
         END IF;
