@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		17 May 2022
+--	Date:		01 Jun 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -64,6 +64,8 @@ ARCHITECTURE behavior OF bus_sel_decoder IS
     CONSTANT DATA_START    : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00100000";
     CONSTANT DATA_END      : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00101000";
     --PERIPHERAL MEMORY MAP(TODO)
+    CONSTANT GPIO_START : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A100000";
+    CONSTANT GPIO_END   : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A101000";
     
 BEGIN
 
@@ -74,13 +76,19 @@ BEGIN
             AND UNSIGNED(address)<DATA_END)
           ) THEN
             selRAM<='1'; 
+            selGPIO<='0';
+        ELSIF( (UNSIGNED(address(addressWidth-1 DOWNTO 0))>=GPIO_START) AND 
+               (UNSIGNED(address(addressWidth-1 DOWNTO 0))<GPIO_END) 
+          ) THEN
+            selRAM<='0';
+            selGPIO<='1';
         ELSE
             selRAM<='0';
+            selGPIO<='0';
         END IF;
     END PROCESS;
     
     selFLASH<='0';
-    selGPIO<='0';
     selUART<='0';
 
 END behavior;
