@@ -44,20 +44,25 @@ ARCHITECTURE tb OF tb_hsystem IS
 
     COMPONENT hsystem IS
 	PORT(
-	    sys_clk: IN  STD_LOGIC;
-	    sys_rst: IN  STD_LOGIC
+	    sys_clk     : IN  STD_LOGIC;
+	    sys_rst     : IN  STD_LOGIC;
+	    gpio_pads   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0) 
 	);
     END COMPONENT;
+    
 
 	CONSTANT clk_period : TIME := 30 ns;
+	SIGNAL pads:  STD_LOGIC_VECTOR(31 DOWNTO 0);
 	SIGNAL clk, rst: STD_LOGIC;
+	
 
 BEGIN
 
     system: hsystem
 	PORT MAP(
 	    sys_clk=>clk,
-	    sys_rst=>rst
+	    sys_rst=>rst,
+	    gpio_pads=>pads
 	);
 
 	clk_process : PROCESS
