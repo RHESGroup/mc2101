@@ -4,7 +4,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     06 May, 2022  #
+#  Date:     02 Jun, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -173,6 +173,14 @@ set IP_NAME="MC2101"
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/ssram/ssram_fpga.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/ssram/ssram_controller.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/ssram/ssram_bus_wrap.vhd  || goto error
+
+#peripheral gpio
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio_pads_if.vhd   || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio_core.vhd  || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio.vhd   || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio_controller.vhd    || goto error
+vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio_bus_wrap.vhd  || goto error
+
 
 #master
 vcom -2008 -work work ${RTL_PATH}/hbus/hmaster/bus_sel_decoder.vhd  || goto error
