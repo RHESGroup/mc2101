@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		10 May 2022
+--	Date:		01 Jun 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -78,19 +78,16 @@ BEGIN
     
     PROCESS(readReq, writeReq, current_state)
     BEGIN
-        --memResponse is always 1 (no data integrity check or write protection mechanisms)
-        memResponse<='1';
+        --memResponse is always 0 (no data integrity check or write protection mechanisms)
+        memResponse<='0';
         CASE current_state IS
             WHEN IDLE=>
-                memResponse<='1';
                 memRead<='0';
                 memWrite<='0';
                 memReady<='1';
                 IF readReq= '1' THEN
                     next_state<=MEM_RD;
                     memRead<='1';
-                    --read operation is synchronous
-                    memReady<='0';
                 ELSIF writeReq='1' THEN
                     next_state<=MEM_WR;
                     memWrite<='1';
