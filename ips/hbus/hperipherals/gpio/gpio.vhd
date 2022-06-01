@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		26 May 2022
+--	Date:		27 May 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -77,14 +77,11 @@ ARCHITECTURE behavior OF gpio IS
     END COMPONENT;
     
     COMPONENT gpio_pads_if IS   
-    GENERIC (
-        BUFFERSIZE: integer:=32
-    );
 	PORT (
-	    gpio_pins:  INOUT STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0);
-	    gpio_port_in : OUT STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0);
-	    gpio_pad_dir : IN STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0);
-	    gpio_port_out: IN STD_LOGIC_VECTOR( BUFFERSIZE-1 DOWNTO 0)
+	    gpio_pins:  INOUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    gpio_port_in : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    gpio_pad_dir : IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    gpio_port_out: IN STD_LOGIC_VECTOR( 31 DOWNTO 0)
 	);
     END COMPONENT;
     
@@ -110,9 +107,6 @@ BEGIN
 	);
     
     pads: gpio_pads_if   
-    GENERIC MAP(
-        BUFFERSIZE=>32
-    )
 	PORT MAP(
 	    gpio_pins=>gpio_pads,
 	    gpio_port_in=>gpio_core_ins,
