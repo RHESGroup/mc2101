@@ -1,0 +1,8 @@
+vcom  -2008 ../gpio_core.vhd
+vcom  -2008 tb_gpio_core.vhd
+vcom  -2008 ../gpio_pads_if.vhd
+vcom  -2008 tb_gpio_pads_if.vhd
+vcom -2008 ../gpio_controller.vhd
+vcom -2008 tb_gpio_controller.vhd
+vcom  -2008 ../gpio.vhd
+vcom  -2008 tb_gpio.vhd

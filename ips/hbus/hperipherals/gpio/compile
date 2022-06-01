@@ -1,6 +1,0 @@
-vcom  gpio_core.vhd
-vcom  tb_gpio_core.vhd
-vcom  gpio_pads_if.vhd
-vcom  tb_gpio_pads_if.vhd
-vcom  gpio.vhd
-vcom  tb_gpio.vhd
