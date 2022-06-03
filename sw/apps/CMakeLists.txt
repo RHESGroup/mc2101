@@ -2,7 +2,7 @@
 #  Filename: CMakeSim.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     09 May, 2022  #
+#  Date:     03 Jun, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -62,12 +62,10 @@ macro(add_application NAME SOURCE_FILES)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
   set(SUBDIR ${ARG_SUBDIR})
 
-  # include_directories(
-  #   ${CMAKE_SOURCE_DIR}/libs/malloc_lib/inc
-  #   ${CMAKE_SOURCE_DIR}/libs/string_lib/inc
-  #   ${CMAKE_SOURCE_DIR}/libs/sys_lib/inc
-  #   ${CMAKE_SOURCE_DIR}/libs/bench_lib/inc
-  # )
+#include sys libraries
+  include_directories(
+     ${CMAKE_SOURCE_DIR}/libs/sys_lib/inc
+  )
 
   # if(${ARDUINO_LIB})
   #   include_directories(
@@ -118,8 +116,9 @@ macro(add_application NAME SOURCE_FILES)
   #   set(ARDUINO_SEP "")
   # endif()
 
-  # # link libraries
+  ## link libraries
   # target_link_libraries(${NAME}.elf ${ARG_LIBS} ${ARDUINO_SEP} ${ARDUINO_CORE} ${BEEBS_LIB_NAME} bench ${MATH_FNS_LIB} string sys m)
+  target_link_libraries(${NAME}.elf ${ARG_LIBS} sys)
 
   # this specifies the testbench to use for simulation
   if(ARG_TB)
@@ -183,9 +182,10 @@ macro(add_boot_code NAME SOURCE_FILES)
   # OVERWRITE linker file for boot code!
   set(CMAKE_EXE_LINKER_FLAGS "${BOOT_LINKER_FLAGS}")
 
-  # include_directories(
-  #   ${CMAKE_SOURCE_DIR}/libs/sys_lib/inc
-  # )
+#added sys libraries
+ include_directories(
+     ${CMAKE_SOURCE_DIR}/libs/sys_lib/inc
+ )
 
   add_executable(${NAME}.elf $<TARGET_OBJECTS:${BOOT_MODE}> ${SOURCE_FILES})  # Boot object substituted with ${BOOT_MODE}.  Simone Peraccini 29 Ottobre 2021
 
@@ -200,7 +200,7 @@ macro(add_boot_code NAME SOURCE_FILES)
   endif()
 
   # # link libraries
-  # target_link_libraries(${NAME}.elf sys)
+  target_link_libraries(${NAME}.elf sys)
 
 
   # this specifies the testbench to use for simulation
@@ -259,6 +259,9 @@ add_subdirectory(test_machine_user)
 add_subdirectory(test_asm_csr)
 #added luca
 add_subdirectory(test_bus_transfer)
+
+#added system libraries directory
+add_subdirectory(test_sys_lib)
 
 
 # if(${ARDUINO_LIB})

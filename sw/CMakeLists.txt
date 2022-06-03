@@ -2,7 +2,7 @@
 #  Filename: CMakeLists.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     09 May, 2022  #
+#  Date:     03 Jun, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -203,6 +203,11 @@ add_custom_target(gen_test_csr
 #  add_subdirectory(libs/beebs_lib)
 # endif()
 
+#sys libraries
+include_directories(libs/sys_lib/inc)
+add_subdirectory(libs/sys_lib)
+
+#applications
 add_subdirectory(apps)
 
 set( SUB_DIRS "test_add"
@@ -217,6 +222,7 @@ set( SUB_DIRS "test_add"
               #added luca
               "test_bus_transfer"
               ) 
+              
 
 set( CLEAN_TARGETS "")
 
