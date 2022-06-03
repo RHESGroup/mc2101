@@ -96,6 +96,7 @@ ARCHITECTURE behavior OF gpio_bus_wrap IS
     SIGNAL shiftDout : STD_LOGIC;
     SIGNAL shiftDin  : STD_LOGIC;
     SIGNAL latchAin  : STD_LOGIC;
+    SIGNAL clear     : STD_LOGIC;
     
     SIGNAL phy_addr  : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL align_bits: STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -113,6 +114,7 @@ ARCHITECTURE behavior OF gpio_bus_wrap IS
 	    shiftDin    :OUT STD_LOGIC;
 	    latchAin    :OUT STD_LOGIC;
 	    gpio_ready  :OUT STD_LOGIC;
+	    clear       :OUT STD_LOGIC;
 	    gpio_resp   :OUT STD_LOGIC
 	);
     END COMPONENT;
@@ -121,36 +123,42 @@ BEGIN
 
     PROCESS(clk, rst)
     BEGIN
-        IF rst='1' THEN
+        IF (rst='1')THEN
             dataREAD<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
             IF gpio_read = '1' THEN
                 dataREAD<=gpio_out;
-            ELSIF shiftDout = '1' THEN
-                dataREAD(31 DOWNTO 24)<=dataREAD(23 DOWNTO 16);
-                dataREAD(23 DOWNTO 16)<=dataREAD(15 DOWNTO 8);
-                dataREAD(15 DOWNTO 8)<=dataREAD(7 DOWNTO 0);
+            ELSIF shiftDout = '1' THEN  
+                dataREAD(23 DOWNTO 16)<=dataREAD(31 DOWNTO 24);
+                dataREAD(15 DOWNTO 8)<=dataREAD(23 DOWNTO 16);
+                dataREAD(7 DOWNTO 0)<=dataREAD(15 DOWNTO 8);
+            ELSIF ( rising_edge(clk) AND clear='1') THEN
+                dataREAD<=(OTHERS=>'0');
             END IF;
         END IF;
     END PROCESS;
     
+    hrdata<=dataREAD(7 DOWNTO 0);
+    
     PROCESS(clk, rst)
     BEGIN
-        IF rst='1' THEN
+        IF (rst='1')THEN
             dataWRITE<=(OTHERS=>'0');
         ELSIF ( rising_edge(clk) AND shiftDin='1' )THEN        
             dataWRITE(31 DOWNTO 24)<=hwrdata;
             dataWRITE(23 DOWNTO 16)<=dataWRITE(31 DOWNTO 24);
             dataWRITE(15 DOWNTO 8)<=dataWRITE(23 DOWNTO 16);
             dataWRITE(7 DOWNTO 0)<=dataWRITE(15 DOWNTO 8);
+        ELSIF ( rising_edge(clk) AND clear='1') THEN
+            dataWRITE<=(OTHERS=>'0');
         END IF;
     END PROCESS;
     
-    PROCESS(clk, rst)
+    PROCESS(clk, rst)--, latchAin)
     BEGIN
         IF rst='1' THEN
             addrLATCH<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) AND latchAin='1' THEN
+        ELSIF (rising_edge(clk) AND latchAin='1') THEN
             addrLATCH<=phy_addr;
         END IF;
     
@@ -183,7 +191,9 @@ BEGIN
 	    gpio_write  =>gpio_write,
 	    shiftDout   =>shiftDout,
 	    shiftDin    =>shiftDin,
+	    latchAin    =>latchAin,
 	    gpio_ready  =>hready,
+	    clear       =>clear,
 	    gpio_resp   =>hresp
 	);
 

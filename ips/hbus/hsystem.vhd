@@ -230,7 +230,7 @@ BEGIN
 	        gpio_hready WHEN hselgpio='1' ELSE
 	        ssram_hready;      
 	hresp <=ssram_hresp  WHEN hselram='1' ELSE
-	        ssram_hresp WHEN hselgpio='1' ELSE
+	        gpio_hresp WHEN hselgpio='1' ELSE
 	        ssram_hresp; 
 
 END behavior;

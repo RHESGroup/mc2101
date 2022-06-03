@@ -52,6 +52,7 @@ ENTITY gpio_controller IS
 	    shiftDin    :OUT STD_LOGIC;
 	    latchAin    :OUT STD_LOGIC;
 	    gpio_ready  :OUT STD_LOGIC;
+	    clear       :OUT STD_LOGIC;
 	    gpio_resp   :OUT STD_LOGIC
 	);
 END gpio_controller;
@@ -80,6 +81,7 @@ BEGIN
     BEGIN
         CASE current_state IS
             WHEN IDLE =>
+                clear<='0';
                 latchAin<='0';
                 gpio_read<='0';
 	            gpio_write<='0';
@@ -110,6 +112,7 @@ BEGIN
 	            END IF;
             
             WHEN MISAL=>
+                clear<='0';
                 latchAin<='0';
                 shiftDin<='0';
                 gpio_read<='0';
@@ -133,9 +136,11 @@ BEGIN
 	            IF readReq = '1' THEN
 	                next_state<=READ;
 	                shiftDout<='1';
+	                clear<='0';
 	            ELSE
 	                next_state<=IDLE;
 	                shiftDout<='0';
+	                clear<='1';
 	            END IF;
 	            
             WHEN WRITE=>
@@ -148,11 +153,13 @@ BEGIN
 	                next_state<=WRITE;
 	                shiftDin<='1';
 	                gpio_write<='0';
+	                clear<='0';
 	            ELSE
 	                next_state<=IDLE;
 	                gpio_write<='1';
 	                shiftDin<='0';
 	                gpio_ready<='0';
+	                clear<='1';
 	            END IF;
         END CASE;
     END PROCESS;
