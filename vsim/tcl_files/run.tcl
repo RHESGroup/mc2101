@@ -3,7 +3,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     09 May, 2022  #
+#  Date:     01 Jun, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -42,6 +42,7 @@ vsim -quiet work.tb_hsystem +nowarnTRAN +nowarnTSCALE +nowarnTFMPC -t 1ns -vopta
 #global signals
 add wave -noupdate -group GLOBALS -radix hexadecimal /tb_hsystem/clk
 add wave -noupdate -group GLOBALS -radix hexadecimal /tb_hsystem/rst
+add wave -noupdate -group GLOBALS -radix hexadecimal /tb_hsystem/pads
 
 #hbus signals
 add wave -noupdate -group HBUS -radix hexadecimal /tb_hsystem/system/hready
@@ -63,6 +64,28 @@ add wave -noupdate -group SSRAM -radix hexadecimal /tb_hsystem/system/slave_ram/
 add wave -noupdate -group SSRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/mem
 add wave -noupdate -group SSRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/readMem
 add wave -noupdate -group SSRAM -radix hexadecimal /tb_hsystem/system/slave_ram/memory/writeMem
+
+#hslave(2) GPIO signals
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/controller/current_state
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/address
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/dataREAD
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/dataWRITE
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/addrLATCH
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/latchAin
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/shiftDin
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/shiftDout
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/busDataIn
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/busDataOut
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/read
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/write
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/interrupt
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/PADDIR
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/PADIN
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/PADOUT
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/PADINTEN
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/INTTYPE0
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/INTTYPE1
+add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/INTSTATUS
 
 #master interface  signals
 add wave -noupdate -group MASTERIF -radix hexadecimal /tb_hsystem/system/master/curr_bus_state
