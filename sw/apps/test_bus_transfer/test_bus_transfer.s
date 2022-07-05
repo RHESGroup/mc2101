@@ -163,5 +163,35 @@ main:
     sh   x31,0(x1)
     addi x31,x31,0
     lh   x31,0(x1)
+    
+    #gpio test program
+    #set pad direction to all all outputs but pad(0)
+    addi x1,x0,0x1A1
+    slli x1,x1,20
+    addi x31,x0,1
+    sw x31,0(x1)
+    #disable all interrupts but pad(0)
+    addi x1,x1,0xC
+    sw x31,0(x1)
+    #read pad direction
+    addi x1,x0,0x1A1
+    slli x1,x1,20
+    lw x31,0(x1)
+    #crear last byte in pad direction(gpio access should always be on 4 bytes)
+    addi x31,x0,0
+    sb x31,0(x1)
+    #read last byte in pad direction(gpio access should always be on 4 bytes)
+    lb x31,0(x31)
+    #try misaligned write access on GPIO (bad usage of gpio, this operation should be ignored)
+    addi x1,x1,1
+    addi x31,x31,1
+    sw x31,0(x1)
+    #try misaligned read access on GPIO (bad usage of gpio, this operation should be ignored)
+    lw x31,0(x1)
 
 stop: j stop
+
+
+
+
+
