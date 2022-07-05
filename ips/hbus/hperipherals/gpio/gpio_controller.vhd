@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		01 Jun 2022
+--	Date:		06 Jun 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -91,6 +91,7 @@ BEGIN
 	            shiftDin<='0';
 	            IF readReq = '1'  THEN
 	                IF addr_base="00" THEN
+	                    latchAin<='1';
 	                    gpio_read<='1';
 	                    gpio_ready<='0';
 	                    next_state<=READ;

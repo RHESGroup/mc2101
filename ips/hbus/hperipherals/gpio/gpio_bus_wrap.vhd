@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		01 Jun 2022
+--	Date:		06 Jun 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -98,6 +98,7 @@ ARCHITECTURE behavior OF gpio_bus_wrap IS
     SIGNAL latchAin  : STD_LOGIC;
     SIGNAL clear     : STD_LOGIC;
     
+    SIGNAL addr      : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL phy_addr  : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL align_bits: STD_LOGIC_VECTOR(1 DOWNTO 0);
     
@@ -161,17 +162,19 @@ BEGIN
         ELSIF (rising_edge(clk) AND latchAin='1') THEN
             addrLATCH<=phy_addr;
         END IF;
-    
     END PROCESS;
     
     phy_addr<=haddr(4 DOWNTO 0);
     align_bits<=haddr(1 DOWNTO 0);
     
+    addr<=addrLATCH WHEN gpio_write='1' ELSE
+          phy_addr;
+    
     periph_gpio: gpio  
 	PORT MAP(
 		clk           =>clk,
 		rst           =>rst,
-		address       =>addrLATCH,
+		address       =>addr,
 		busDataIn     =>dataWRITE,
 		read          =>gpio_read,
 		write         =>gpio_write,
