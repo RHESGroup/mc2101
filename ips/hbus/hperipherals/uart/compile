@@ -1,0 +1,10 @@
+vcom -2008 uart_rx_core.vhd
+vcom -2008 ./tb/tb_uart_rx_core.vhd
+vcom -2008 uart_tx_core.vhd
+vcom -2008 ./tb/tb_uart_tx_core.vhd
+vcom -2008 fifo.vhd
+vcom -2008 ./tb/tb_fifo.vhd
+vcom -2008 ./uart_interrupt.vhd
+vcom -2008 ./tb/tb_uart_interrupt.vhd
+vcom -2008 uart.vhd
+vcom -2008 ./tb/tb_uart.vhd
