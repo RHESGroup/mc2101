@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 Jul 2022
+--	Date:		19 Jul 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -54,7 +54,7 @@ ENTITY uart_interrupt IS
 		clk                 : IN  STD_LOGIC;
 		rst                 : IN  STD_LOGIC;
 		--input signals
-		IER                 : IN  STD_LOGIC_VECTOR(7 DOWNTO 0); --Interrupt Enable Register TODO: only last 3 bits are used..
+		IER                 : IN  STD_LOGIC_VECTOR(2 DOWNTO 0); --Interrupt Enable Register: RLS, THRe, DR enables
 		rx_fifo_trigger_lv  : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --Receiver fifo trigger level
 		rx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in rx fifo
 		tx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in tx fifo
