@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		08 Jul 2022
+--	Date:		17 Jul 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -54,7 +54,6 @@ ENTITY uart_tx_core IS
 		tx_data_i       : IN  STD_LOGIC_VECTOR(7 DOWNTO 0); --data to be transmitted
 		tx_valid        : IN  STD_LOGIC; --some data is ready to be transmitted
 		--output signals signals
-		tx_busy         : OUT STD_LOGIC; --transmitter is sending TODO: unused
 		tx_ready        : OUT STD_LOGIC; --transmitter ready for next data
 		tx_out          : OUT STD_LOGIC --TX line
 	);
@@ -93,9 +92,6 @@ ARCHITECTURE behavior OF uart_tx_core IS
     SIGNAL sample_data_in: STD_LOGIC; 
     
 BEGIN
-
-    --busy signal 
-    tx_busy <= '0' WHEN current_state = S_IDLE ELSE '1';
 
     --parity value computation 
     parity_value <= reg_tx_data(7) XOR 
