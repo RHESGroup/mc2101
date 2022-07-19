@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		12 Jul 2022
+--	Date:		17 Jul 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -80,14 +80,11 @@ ARCHITECTURE behavior of uart IS
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
 		error_clear     : IN  STD_LOGIC; --signals that the processor handled a bad situation
-		rx_ready        : IN  STD_LOGIC; --FIFO status --TODO not used (overrun error instead)
 		rx_in_async     : IN  STD_LOGIC; --RX line
 		--output signals signals
-		line_error      : OUT STD_LOGIC; --parity error OR break interrupt OR frame error  --TODO not used in top level
 		break_interrupt : OUT STD_LOGIC; --break interrupt
 		frame_error     : OUT STD_LOGIC; --frame error
 		parity_error    : OUT STD_LOGIC; --parity error
-		rx_busy         : OUT STD_LOGIC; --receiver is not in IDLE state (so it's sampling the RX line) --TODO not used in top level
 		rx_data_buffer  : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --registered data
 		rx_valid        : OUT STD_LOGIC --data correctly sampled
 	);
@@ -109,7 +106,6 @@ ARCHITECTURE behavior of uart IS
 		tx_data_i       : IN  STD_LOGIC_VECTOR(7 DOWNTO 0); --data to be transmitted
 		tx_valid        : IN  STD_LOGIC; --some data is ready to be transmitted
 		--output signals signals
-		tx_busy         : OUT STD_LOGIC; --transmitter is sending TODO: unused
 		tx_ready        : OUT STD_LOGIC; --transmitter ready for next data
 		tx_out          : OUT STD_LOGIC --TX line
 	);
@@ -127,7 +123,7 @@ ARCHITECTURE behavior of uart IS
 		clk                 : IN  STD_LOGIC;
 		rst                 : IN  STD_LOGIC;
 		--input signals
-		IER                 : IN  STD_LOGIC_VECTOR(7 DOWNTO 0); --Interrupt Enable Register TODO: only last 3 bits are used..
+		IER                 : IN  STD_LOGIC_VECTOR(2 DOWNTO 0); --Interrupt Enable Register: RLS, THRe, DR enables
 		rx_fifo_trigger_lv  : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --Receiver fifo trigger level
 		rx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in rx fifo
 		tx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in tx fifo
@@ -195,7 +191,7 @@ ARCHITECTURE behavior of uart IS
     --Receiver signals (some of them are coming from the FIFO)
     SIGNAL rx_fifo_empty: STD_LOGIC;
     SIGNAL rx_parity_error: STD_LOGIC;
-    SIGNAL rx_overrun_error: STD_LOGIC;
+    SIGNAL rx_overrun_error_clear: STD_LOGIC;
     SIGNAL rx_framing_error: STD_LOGIC;
     SIGNAL rx_break_interrupt: STD_LOGIC;
     SIGNAL rx_fifo_full: STD_LOGIC;
@@ -245,13 +241,10 @@ BEGIN
 		data_width=>current_regfile(LCR)(1 DOWNTO 0),
 		stop_bits=>current_regfile(LCR)(2),
 		error_clear=>'0',
-		rx_ready=>'0',
 		rx_in_async=>uart_rx,
-		line_error=> OPEN,
 		break_interrupt=>rx_break_interrupt,
 		frame_error=>rx_framing_error,
 		parity_error=>rx_parity_error,
-		rx_busy=> OPEN,
 		rx_data_buffer=>rx_data_i,
 		rx_valid=>rx_finished
 	);
@@ -294,7 +287,6 @@ BEGIN
 		stop_bits=>current_regfile(LCR)(2),
 		tx_data_i=>tx_fifo_data_out,
 		tx_valid=>NOT(tx_fifo_empty),
-		tx_busy=>OPEN,
 		tx_ready=>tx_ready,
 		tx_out=>uart_tx
 	);
@@ -328,7 +320,7 @@ BEGIN
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
-		IER=>current_regfile(IER),
+		IER=>current_regfile(IER)(2 DOWNTO 0),
 		rx_fifo_trigger_lv=>current_regfile(FCR)(7 DOWNTO 6),
 		rx_elements=>rx_elements,
 		tx_elements=>tx_elements,
@@ -345,7 +337,12 @@ BEGIN
     BEGIN
         next_regfile<=current_regfile;     
         next_regfile(LSR)(0)<=NOT(rx_fifo_empty); --LSR's Data Ready
-        next_regfile(LSR)(1)<=(rx_fifo_full AND rx_finished);  --overrun error TODO: overrun error is different if FIFO is disabled
+        --overrun error update --TODO: overrun is different if fifo is disabled
+        IF rx_overrun_error_clear='1' THEN
+            next_regfile(LSR)(1)<='0';
+        ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN
+            next_regfile(LSR)(1)<='1';
+        END IF;
         next_regfile(LSR)(2)<=rx_fifo_data_out(8); --LSR's parity error
         next_regfile(LSR)(3)<=rx_fifo_data_out(9); --LSR's framing error
         next_regfile(LSR)(4)<=rx_fifo_data_out(10); --LSR's break error
@@ -415,6 +412,7 @@ BEGIN
         busDataOut<=rx_data_i;
         clear_int<='0';
         rx_read_request<='0';
+        rx_overrun_error_clear<='0';
         IF read='1' THEN
             CASE TO_INTEGER(UNSIGNED(address)) IS
                 WHEN RHR => --RHR or DLL
@@ -454,6 +452,7 @@ BEGIN
                     
                 WHEN LSR =>
                     busDataOut<=current_regfile(LSR);
+                    rx_overrun_error_clear<='1';
                     --clear the RLS interrupt if active
                     IF ISR_code="0110" THEN
                         clear_int<='1';
