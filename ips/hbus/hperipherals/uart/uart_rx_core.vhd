@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 Jul 2022
+--	Date:		17 Jul 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -51,26 +51,23 @@ ENTITY uart_rx_core IS
 		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
-		error_clear     : IN  STD_LOGIC; --signals that the processor handled a bad situation
-		rx_ready        : IN  STD_LOGIC; --FIFO status --TODO not used (overrun error instead)
 		rx_in_async     : IN  STD_LOGIC; --RX line
-		--output signals signals
-		line_error      : OUT STD_LOGIC; --parity error OR break interrupt OR frame error  --TODO not used in top level
+		--output signals
 		break_interrupt : OUT STD_LOGIC; --break interrupt
 		frame_error     : OUT STD_LOGIC; --frame error
 		parity_error    : OUT STD_LOGIC; --parity error
-		rx_busy         : OUT STD_LOGIC; --receiver is not in IDLE state (so it's sampling the RX line)  --TODO not used in top level
 		rx_data_buffer  : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --registered data
 		rx_valid        : OUT STD_LOGIC --data correctly sampled
 	);
 END uart_rx_core;
 
---TODO: error_clearunused, better code, check BI
+--TODO: check if BI are correct with respect to UART 16550 specifications
 
 ARCHITECTURE behavior OF uart_rx_core IS
 
     --flag used to detect the falling edge of the start bit
     SIGNAL rx_line_fall: STD_LOGIC;
+    
     --cascade of 3 FF used to synchronize the async RX input line
     SIGNAL rx_line_sync: STD_LOGIC_VECTOR(2 DOWNTO 0);
     
@@ -90,16 +87,23 @@ ARCHITECTURE behavior OF uart_rx_core IS
     
     --shift register
     SIGNAL current_data, next_data: STD_LOGIC_VECTOR(7 DOWNTO 0);
+    
     --frame data bit counter
     SIGNAL current_data_bit, next_data_bit: STD_LOGIC_VECTOR(2 DOWNTO 0);
+    
     --number of data bits to be sampled
     SIGNAL target_data_bits: STD_LOGIC_VECTOR(2 DOWNTO 0);
+    
     --parity signal
     SIGNAL parity_value: STD_LOGIC;
+    
     --parity error (LATCH), parity error is hold until stop bit asserts rx_valid
     SIGNAL parity_bit_received: STD_LOGIC;
+    
+    --signals used to capture and clear of parity bit
     SIGNAL clear_parity_bit_received: STD_LOGIC;
     SIGNAL sample_parity_bit_received: STD_LOGIC;
+    
     --used to enable baudrate generator
     SIGNAL baudgen: STD_LOGIC;
     
@@ -126,10 +130,8 @@ BEGIN
     --falling edge detector
     rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1));
     
-    --busy signal 
-    rx_busy <= '0' WHEN current_state = S_IDLE ELSE '1';
     
-    --baudrate generator (assert sample signal [like a delta] at sampling window)
+    --baudrate generator (assert sample signal [like a delta] at half of the bit frame)
     PROCESS(clk, rst)
     BEGIN
         IF (rst='1' OR baudgen='0') THEN
@@ -307,7 +309,6 @@ BEGIN
                                 sample='1' AND
                                 current_data = "00000000" 
                            ELSE '0';
-    
-    line_error <= parity_error OR break_interrupt OR frame_error;     
+        
     
 END behavior;
