@@ -60,7 +60,6 @@ ENTITY uart_interrupt IS
 		tx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in tx fifo
 		rx_line_error       : IN  STD_LOGIC; --Parity error or Break error or Overrun error or frame error in rx line
 		interrupt_clear     : IN  STD_LOGIC; --bit used to clear interrup line
-		rx_data_ready       : IN  STD_LOGIC; --new data received
 		char_timeout        : IN  STD_LOGIC; --no data has been received and no data has been read from receiver fifo during a certain time
 		--output signals signals
 		interrupt           : OUT STD_LOGIC;
@@ -150,7 +149,7 @@ BEGIN
         IF (rx_line_error='1' AND RX_LINE_int_enable='1') THEN
             --receiver line status interrupt
             next_iic_register<="0110";
-        ELSIF (DR_int_enable='1' AND (rx_data_ready='1' OR rx_trigger_reached='1')) THEN
+        ELSIF (DR_int_enable='1' AND rx_trigger_reached='1') THEN
             --receiver data ready interrupt
             next_iic_register<="0100";
         ELSIF (DR_int_enable='1' AND char_timeout='1') THEN
