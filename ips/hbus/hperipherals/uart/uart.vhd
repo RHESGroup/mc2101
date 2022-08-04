@@ -79,7 +79,6 @@ ARCHITECTURE behavior of uart IS
 		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
-		error_clear     : IN  STD_LOGIC; --signals that the processor handled a bad situation
 		rx_in_async     : IN  STD_LOGIC; --RX line
 		--output signals signals
 		break_interrupt : OUT STD_LOGIC; --break interrupt
@@ -129,7 +128,6 @@ ARCHITECTURE behavior of uart IS
 		tx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in tx fifo
 		rx_line_error       : IN  STD_LOGIC; --Parity error or Break error or Overrun error or frame error in rx line
 		interrupt_clear     : IN  STD_LOGIC; --bit used to clear interrup line
-		rx_data_ready       : IN  STD_LOGIC; --new data received
 		char_timeout        : IN  STD_LOGIC; --no data has been received and no data has been read from receiver fifo during a certain time
 		--output signals signals
 		interrupt           : OUT STD_LOGIC;
@@ -203,9 +201,15 @@ ARCHITECTURE behavior of uart IS
     SIGNAL rx_fifo_data_out: STD_LOGIC_VECTOR(DATA_WIDTH + DATA_ERRORS -1 DOWNTO 0);
     SIGNAL rx_line_error: STD_LOGIC;  
     
+    --Timeout counters
+    SIGNAL baud_counter: UNSIGNED(15 DOWNTO 0);
+    SIGNAL timeout_counter: UNSIGNED(5 DOWNTO 0);
+    SIGNAL rx_char_timeout: STD_LOGIC;
+    SIGNAL clear_cnt: STD_LOGIC;
+    
     --TODO
     SIGNAL rx_fifo_error: STD_LOGIC;
-    SIGNAL rx_char_timeout: STD_LOGIC; --single baudrate generator should be used
+    
     
     --Transmitter signals (some of them are coming from the FIFO)
     SIGNAL tx_fifo_empty: STD_LOGIC;
@@ -240,7 +244,6 @@ BEGIN
 		parity_type=>current_regfile(LCR)(4), 
 		data_width=>current_regfile(LCR)(1 DOWNTO 0),
 		stop_bits=>current_regfile(LCR)(2),
-		error_clear=>'0',
 		rx_in_async=>uart_rx,
 		break_interrupt=>rx_break_interrupt,
 		frame_error=>rx_framing_error,
@@ -326,7 +329,6 @@ BEGIN
 		tx_elements=>tx_elements,
 		rx_line_error=>rx_line_error,
 		interrupt_clear=>(clear_int OR clear_thr),
-		rx_data_ready=>NOT(rx_fifo_empty),
 		char_timeout=>'0',
 		interrupt=> interrupt,
 		interrupt_isr_code=>ISR_code
@@ -463,5 +465,38 @@ BEGIN
             END CASE;
         END IF;
     END PROCESS;
+    
+    --Receiver transmission timeout
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            baud_counter<=(OTHERS=>'0');
+        ELSIF rising_edge(clk) THEN
+            IF clear_cnt='1' THEN
+                baud_counter<=(OTHERS=>'0');
+            ELSE
+                baud_counter<=baud_counter+1;
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            timeout_counter<=(OTHERS=>'0');
+        ELSIF rising_edge(clk) THEN
+            IF (rx_fifo_empty='1' OR rx_read_request='1' OR rx_finished='1') THEN
+                clear_cnt<='1';
+                timeout_counter<=(OTHERS=>'0');
+            ELSIF (rx_fifo_empty='0' AND baud_counter=UNSIGNED(divisor) AND timeout_counter(5)='0') THEN
+                timeout_counter<=timeout_counter+1;
+                clear_cnt<='1';
+            ELSE
+                clear_cnt<='0';
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    rx_char_timeout<=timeout_counter(5);
 
 END behavior;

@@ -235,6 +235,22 @@ BEGIN
         WAIT UNTIL rising_edge(clk);
         mock_TRANSMITTER(rx_data_buffer, data_w, RX, parity_t, parity_en, stop);
         WAIT UNTIL rising_edge(clk);
+        
+        --Set trigger level to 14
+        address<="010";
+        write<='1';
+        busDataIn<="11000000";
+        WAIT UNTIL rising_edge(clk);
+        --Enable interrupt data ready
+        address<="001";
+        write<='1';
+        busDataIn<="00000001";
+        WAIT UNTIL rising_edge(clk);
+        write<='0';
+        --Interrupt should not rise because trigger level is not reached
+        --Interrupt should rise when timeout
+        WAIT FOR c_BIT_PERIOD*8*4;
+        
         mock_TRANSMITTER(rx_data_buffer, data_w, RX, parity_t, parity_en, stop);
         WAIT UNTIL rising_edge(clk);
         mock_TRANSMITTER(rx_data_buffer, data_w, RX, parity_t, parity_en, stop);
@@ -251,6 +267,10 @@ BEGIN
         WAIT UNTIL rising_edge(clk);
         mock_TRANSMITTER(rx_data_buffer, data_w, RX, parity_t, parity_en, stop);
         WAIT UNTIL rising_edge(clk);
+        
+        --Receiver trigger levl should rise now a data ready interrupt
+        --And because of the higher priority, also the interruot code should change
+        
         mock_TRANSMITTER(rx_data_buffer, data_w, RX, parity_t, parity_en, stop);
         WAIT UNTIL rising_edge(clk);
         mock_TRANSMITTER(rx_data_buffer, data_w, RX, parity_t, parity_en, stop);
