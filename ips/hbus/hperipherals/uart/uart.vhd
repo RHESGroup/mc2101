@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		17 Jul 2022
+--	Date:		19 Jul 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -159,21 +159,6 @@ ARCHITECTURE behavior of uart IS
 		fifo_full       : OUT STD_LOGIC --is fifo full
 	);
     END COMPONENT;
-
-    --Register File addresses encoding
-    CONSTANT RHR: INTEGER:=0;   --VIRTUAL REGISTER (NOT PHYSICALLY IN THE REGISER FILE)
-    CONSTANT THR: INTEGER:=0;   --VIRTUAL REGISTER (NOT PHYSICALLY IN THE REGISER FILE)
-    CONSTANT IER: INTEGER:=1;
-    CONSTANT ISR: INTEGER:=2;   --VIRTUAL REGISTER (..)
-    CONSTANT FCR: INTEGER:=2;
-    CONSTANT LCR: INTEGER:=3;
-    CONSTANT MCR: INTEGER:=4;   --UNUSED
-    CONSTANT LSR: INTEGER:=5;
-    CONSTANT MSR: INTEGER:=6;   --UNUSED
-    CONSTANT SPR: INTEGER:=7;   --UNUSED
-    CONSTANT DLL: INTEGER:=0;
-    CONSTANT DLM: INTEGER:=1;
-    CONSTANT PSD: INTEGER:=5;   --NOT IMPLEMENTED
     
     --FIFOs CONFIGURATION
     CONSTANT DATA_WIDTH: INTEGER:= 8;
@@ -181,25 +166,66 @@ ARCHITECTURE behavior of uart IS
     CONSTANT LOG_FIFO_D: INTEGER:=4;
     CONSTANT DATA_ERRORS: INTEGER:=3; --(parity + framing + break are saved foreach received frame)
 
-    --Register File
-    --TODO: inefficient! registers should be separated..
-    TYPE UART_REG_FILE IS ARRAY (0 TO 9) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL current_regfile, next_regfile: UART_REG_FILE;
+    --Register file signals
+    --Interrupt enable register
+    SIGNAL reg_IER: STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL read_IER: STD_LOGIC;
+    SIGNAL write_IER: STD_LOGIC;
     
-    --Receiver signals (some of them are coming from the FIFO)
-    SIGNAL rx_fifo_empty: STD_LOGIC;
+    --Fifo control register
+    SIGNAL reg_FCR: STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SIGNAL write_FCR: STD_LOGIC;
+    
+    --Line control register
+    SIGNAL reg_LCR: STD_LOGIC_VECTOR(4 DOWNTO 0);
+    SIGNAL read_LCR: STD_LOGIC;
+    SIGNAL write_LCR: STD_LOGIC;
+    
+    --Line status register
+    SIGNAL reg_LSR: STD_LOGIC_VECTOR(6 DOWNTO 0);
+    SIGNAL read_LSR: STD_LOGIC;
+    
+    --Divisor lsb
+    SIGNAL reg_DLL: STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL read_DLL: STD_LOGIC;
+    SIGNAL write_DLL: STD_LOGIC;
+    
+    --Divisor msb
+    SIGNAL reg_DLM: STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL read_DLM: STD_LOGIC;
+    SIGNAL write_DLM: STD_LOGIC;
+    
+    --Transmitter holding register
+    SIGNAL write_THR: STD_LOGIC;
+    
+    --Receiver holding register
+    SIGNAL read_RHR: STD_LOGIC;
+    
+    --Interrupt status register
+    SIGNAL read_ISR: STD_LOGIC;
+    
+    --Divisor (DLL + DLM)
+    SIGNAL divisor: STD_LOGIC_VECTOR(15 DOWNTO 0);
+    
+    --Receiver signals
     SIGNAL rx_parity_error: STD_LOGIC;
-    SIGNAL rx_overrun_error_clear: STD_LOGIC;
     SIGNAL rx_framing_error: STD_LOGIC;
     SIGNAL rx_break_interrupt: STD_LOGIC;
-    SIGNAL rx_fifo_full: STD_LOGIC;
-    SIGNAL rx_elements: STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);
     SIGNAL rx_data_i: STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL rx_read_request: STD_LOGIC;
-    SIGNAL rx_finished: STD_LOGIC;
     SIGNAL rx_frame: STD_LOGIC_VECTOR(DATA_WIDTH + DATA_ERRORS -1 DOWNTO 0); --entire receiver frame is saved into FIFO to be analyzed by the interrupt controller when data is read from FIFO
-    SIGNAL rx_fifo_data_out: STD_LOGIC_VECTOR(DATA_WIDTH + DATA_ERRORS -1 DOWNTO 0);
-    SIGNAL rx_line_error: STD_LOGIC;  
+    SIGNAL rx_finished: STD_LOGIC;
+    SIGNAL rx_elements: STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);
+	SIGNAL rx_fifo_data_out: STD_LOGIC_VECTOR(DATA_WIDTH + DATA_ERRORS -1 DOWNTO 0);
+	SIGNAL rx_fifo_empty: STD_LOGIC;
+	SIGNAL rx_fifo_full: STD_LOGIC;
+	SIGNAL rx_line_error: STD_LOGIC;
+    
+    --Transmitter signals
+    SIGNAL tx_fifo_data_out: STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL tx_fifo_empty: STD_LOGIC;
+    SIGNAL tx_ready: STD_LOGIC;
+    SIGNAL tx_elements: STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);
+    SIGNAL tx_fifo_full : STD_LOGIC;
     
     --Timeout counters
     SIGNAL baud_counter: UNSIGNED(15 DOWNTO 0);
@@ -207,32 +233,11 @@ ARCHITECTURE behavior of uart IS
     SIGNAL rx_char_timeout: STD_LOGIC;
     SIGNAL clear_cnt: STD_LOGIC;
     
-    --TODO
-    SIGNAL rx_fifo_error: STD_LOGIC;
-    
-    
-    --Transmitter signals (some of them are coming from the FIFO)
-    SIGNAL tx_fifo_empty: STD_LOGIC;
-    SIGNAL tx_elements: STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);
-    SIGNAL tx_fifo_full: STD_LOGIC;
-    SIGNAL tx_ready: STD_LOGIC;
-    SIGNAL tx_write_request: STD_LOGIC;
-    SIGNAL tx_fifo_data_out: STD_LOGIC_VECTOR(7 DOWNTO 0);
-    
     --Interrupt signals
-    --TODO check interrupt clearing correctness
     SIGNAL clear_int: STD_LOGIC;
-    SIGNAL clear_thr: STD_LOGIC;
     SIGNAL ISR_code: STD_LOGIC_VECTOR(3 DOWNTO 0);
-    
-    --Divisor (DLL + DLM)
-    SIGNAL divisor: STD_LOGIC_VECTOR(15 DOWNTO 0);
-     
 
 BEGIN
-
-    --DIVISOR (DLL + DLM)
-    divisor<=current_regfile(DLM+8) & current_regfile(DLL+8);
 
     --RECEIVER
     U_RX: uart_rx_core  
@@ -240,10 +245,10 @@ BEGIN
 		clk=>clk,
 		rst=>rst,
 		divisor=>divisor,
-		parity_bit_en=>current_regfile(LCR)(3),
-		parity_type=>current_regfile(LCR)(4), 
-		data_width=>current_regfile(LCR)(1 DOWNTO 0),
-		stop_bits=>current_regfile(LCR)(2),
+		parity_bit_en=>reg_LCR(3),
+		parity_type=>reg_LCR(4), 
+		data_width=>reg_LCR(1 DOWNTO 0),
+		stop_bits=>reg_LCR(2),
 		rx_in_async=>uart_rx,
 		break_interrupt=>rx_break_interrupt,
 		frame_error=>rx_framing_error,
@@ -251,9 +256,6 @@ BEGIN
 		rx_data_buffer=>rx_data_i,
 		rx_valid=>rx_finished
 	);
-	
-	--Receiver frame as a concatenation (ERRORS + DATA)
-	rx_frame<=rx_break_interrupt & rx_framing_error & rx_parity_error & rx_data_i;
 	
 	--RECEIVER FIFO
 	U_RX_FIFO: fifo 
@@ -265,9 +267,9 @@ BEGIN
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
-		clear=>current_regfile(FCR)(1),
+		clear=>reg_FCR(0),
 		data_in=>rx_frame,
-		read_request=>rx_read_request,
+		read_request=>read_RHR,
 		write_request=>rx_finished,
 		elements=>rx_elements,
 		data_out=>rx_fifo_data_out,
@@ -275,22 +277,16 @@ BEGIN
 		fifo_full=>rx_fifo_full
 	);
 	
-	--Receiver Line Error (used by interrupt controller) (Overrun error included)
-	rx_line_error<=rx_fifo_data_out(10) OR 
-	               rx_fifo_data_out(9)  OR 
-	               rx_fifo_data_out(8)  OR 
-	               current_regfile(LSR)(1);
-	
 	--TRANSMITTER
 	U_TX: uart_tx_core 
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
 		divisor=>divisor,
-		parity_bit_en=>current_regfile(LCR)(3),
-		parity_type=>current_regfile(LCR)(4),
-		data_width=>current_regfile(LCR)(1 DOWNTO 0),
-		stop_bits=>current_regfile(LCR)(2),
+		parity_bit_en=>reg_LCR(3),
+		parity_type=>reg_LCR(4),
+		data_width=>reg_LCR(1 DOWNTO 0),
+		stop_bits=>reg_LCR(2),
 		tx_data_i=>tx_fifo_data_out,
 		tx_valid=>NOT(tx_fifo_empty),
 		tx_ready=>tx_ready,
@@ -307,10 +303,10 @@ BEGIN
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
-		clear=>current_regfile(FCR)(2),
+		clear=>reg_FCR(1),
 		data_in=>busDataIn,
 		read_request=>tx_ready,
-		write_request=>tx_write_request,
+		write_request=>write_THR,
 		elements=>tx_elements,
 		data_out=>tx_fifo_data_out,
 		fifo_empty=>tx_fifo_empty,
@@ -326,149 +322,157 @@ BEGIN
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
-		IER=>current_regfile(IER)(2 DOWNTO 0),
-		rx_fifo_trigger_lv=>current_regfile(FCR)(7 DOWNTO 6),
+		IER=>reg_IER(2 DOWNTO 0),
+		rx_fifo_trigger_lv=>reg_FCR(3 DOWNTO 2),
 		rx_elements=>rx_elements,
 		tx_elements=>tx_elements,
 		rx_line_error=>rx_line_error,
-		interrupt_clear=>(clear_int OR clear_thr),
+		interrupt_clear=>clear_int,
 		char_timeout=>rx_char_timeout,
-		interrupt=> interrupt,
+		interrupt=>interrupt,
 		interrupt_isr_code=>ISR_code
 	);
 
-    --Register write combinatorial update logic
-    PROCESS(ALL)
-    BEGIN
-        next_regfile<=current_regfile;     
-        next_regfile(LSR)(0)<=NOT(rx_fifo_empty); --LSR's Data Ready
-        --overrun error update --TODO: overrun is different if fifo is disabled
-        IF rx_overrun_error_clear='1' THEN
-            next_regfile(LSR)(1)<='0';
-        ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN
-            next_regfile(LSR)(1)<='1';
-        END IF;
-        next_regfile(LSR)(2)<=rx_fifo_data_out(8); --LSR's parity error
-        next_regfile(LSR)(3)<=rx_fifo_data_out(9); --LSR's framing error
-        next_regfile(LSR)(4)<=rx_fifo_data_out(10); --LSR's break error
-        next_regfile(LSR)(5)<=tx_fifo_empty; --LSR's transmitter fifo empty
-        next_regfile(LSR)(6)<=tx_ready AND tx_fifo_empty; --LSR's transmitter ready to send and fifo empty
-        next_regfile(LSR)(7)<=rx_fifo_error; --LSR's fifo data error
-        tx_write_request<='0';
-        clear_thr<='0';
-        IF write='1' THEN
-            CASE TO_INTEGER(UNSIGNED(address)) IS
-                WHEN THR  => --THR OR DLL
-                    IF current_regfile(LCR)(7) = '1' THEN
-                        --we want to write to DLL register
-                        next_regfile(DLL + 8)<=busDataIn;
-                    ELSE
-                        --we want to write to THR register (write to tx FIFO)
-                        tx_write_request<='1'; 
-                        --clear THR interrupt if pending
-                        IF ISR_code="0010" THEN
-                            clear_thr<='1';
-                        END IF;
-                    END IF;
-                
-                WHEN IER => --IER OR DLM
-                    IF current_regfile(LCR)(7) = '1' THEN
-                        --we want to write to DLM register
-                        next_regfile(DLM + 8)<=busDataIn;
-                    ELSE
-                        --we want to write to IER register
-                        next_regfile(IER)<=busDataIn;
-                    END IF;
-                    
-                WHEN FCR =>
-                    next_regfile(FCR)(1)<=busDataIn(1);
-                    next_regfile(FCR)(2)<=busDataIn(2);
-                    next_regfile(FCR)(6)<=busDataIn(6);
-                    next_regfile(FCR)(7)<=busDataIn(7);
-                
-                WHEN LCR =>
-                    next_regfile(LCR)<=busDataIn;
-                
-                WHEN OTHERS => NULL;
-            END CASE;
-        END IF;
-    END PROCESS;
-
-    --Register write sequential update
+    --DIVISOR (DLL + DLM)
+    divisor<=reg_DLM & reg_DLL;
+    
+    --Receiver Line Error (used by interrupt controller) (Overrun error included)
+	rx_line_error<=rx_fifo_data_out(10) OR 
+	               rx_fifo_data_out(9)  OR 
+	               rx_fifo_data_out(8)  OR 
+	               reg_LSR(1);
+    
+    --Receiver frame as a concatenation (ERRORS + DATA)
+	rx_frame<=rx_break_interrupt & rx_framing_error & rx_parity_error & rx_data_i;
+    
+    --IER register 
+    read_IER<='1' WHEN read='1' AND address="000" ELSE '0';
+    write_IER<='1' WHEN write='1' AND address="000" ELSE '0';
+    
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            current_regfile(IER)<=(OTHERS=>'0');
-            current_regfile(ISR)<=X"01";
-            current_regfile(FCR)<=(OTHERS=>'0');
-            current_regfile(LCR)<=(OTHERS=>'0');
-            current_regfile(MCR)<=(OTHERS=>'0');
-            current_regfile(LSR)<=X"60";
-            current_regfile(DLL+8)<=X"01";
-            current_regfile(DLM+8)<=X"01";
+            reg_IER<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
-            current_regfile<=next_regfile;
+            IF write_IER='1' THEN
+                reg_IER<=busDataIn(2 DOWNTO 0);
+            END IF;
         END IF;
     END PROCESS;
     
-    --Register Read logic
-    PROCESS(ALL)
+    --FCR register 
+    write_FCR<='1' WHEN write='1' AND address="010" ELSE '0';
+    
+    PROCESS(clk, rst)
     BEGIN
-        busDataOut<=rx_data_i;
-        clear_int<='0';
-        rx_read_request<='0';
-        rx_overrun_error_clear<='0';
-        IF read='1' THEN
-            CASE TO_INTEGER(UNSIGNED(address)) IS
-                WHEN RHR => --RHR or DLL
-                    IF current_regfile(LCR)(7) = '1' THEN
-                        --we want to read the DLL register
-                        busDataOut<=current_regfile(DLL+8);
-                    ELSE
-                        --we want to read the THR register (read the tx FIFO)
-                        rx_read_request<='1'; 
-                        --clear RDReady interrupt if pending
-                        IF ISR_code="0100" THEN
-                            clear_int<='1';
-                        END IF;
-                        busDataOut<=rx_data_i;
-                    END IF;
-                    
-                WHEN IER => --IER OR DLM
-                    IF current_regfile(LCR)(7) = '1' THEN
-                        --we want to read the DLM register
-                        busDataOut<=current_regfile(DLM+8);
-                    ELSE
-                        --we want to read the IER register
-                        busDataOut<=current_regfile(IER);
-                        
-                    END IF;
-                    
-                WHEN ISR =>
-                    --ISR is virtual, (just the IID code from the Interrupt controller is used)
-                    busDataOut<="0000" & ISR_code;
-                    --clear THR Empty interrupt if pending
-                    IF ISR_code="0010" THEN
-                        clear_int<='1';
-                    END IF;
-                    
-                WHEN LCR =>
-                    busDataOut<=current_regfile(LCR);
-                    
-                WHEN LSR =>
-                    busDataOut<=current_regfile(LSR);
-                    rx_overrun_error_clear<='1';
-                    --clear the RLS interrupt if active
-                    IF ISR_code="0110" THEN
-                        clear_int<='1';
-                    END IF;
-                    
-                WHEN OTHERS => NULL;
-                    
-            END CASE;
+        IF rst='1' THEN
+            reg_FCR<=(OTHERS=>'0');
+        ELSIF rising_edge(clk) THEN
+            IF write_FCR='1' THEN
+                reg_FCR<=busDataIn(3 DOWNTO 0);
+            END IF;
         END IF;
     END PROCESS;
     
+    --LCR register
+    read_LCR<='1' WHEN read='1' AND address="011" ELSE '0';
+    write_LCR<='1' WHEN write='1' AND address="011" ELSE '0';
+    
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            reg_LCR<=(OTHERS=>'0');
+        ELSIF rising_edge(clk) THEN
+            IF write_LCR='1' THEN
+                reg_LCR<=busDataIn(4 DOWNTO 0);
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    --LSR register
+    read_LSR<='1' WHEN read='1' AND address="100" ELSE '0';
+    
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            reg_LSR<="1100000";
+        ELSIF rising_edge(clk) THEN
+            --LSR's Data Ready
+            reg_LSR(0)<=NOT(rx_fifo_empty); 
+            --LSR's overrun error
+            IF read_LSR='1' THEN
+                reg_LSR(1)<='0';
+            ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN
+                reg_LSR(1)<='1';
+            END IF;
+            --LSR's parity error
+            reg_LSR(2)<=rx_fifo_data_out(8);
+            --LSR's framing error
+            reg_LSR(3)<=rx_fifo_data_out(9);
+            --LSR's break error
+            reg_LSR(4)<=rx_fifo_data_out(10);
+            --LSR's transmitter fifo empty
+            reg_LSR(5)<=tx_fifo_empty;
+            --LSR's transmitter ready to send and fifo empty
+            reg_LSR(6)<=tx_ready AND tx_fifo_empty;    
+        END IF; 
+    END PROCESS;
+    
+    --DLL register 
+    read_DLL<='1' WHEN read='1' AND address="101" ELSE '0';
+    write_DLL<='1' WHEN write='1' AND address="101" ELSE '0';
+    
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            reg_DLL<=X"01";
+        ELSIF rising_edge(clk) THEN
+            IF write_DLL='1' THEN
+                reg_DLL<=busDataIn(7 DOWNTO 0);
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    --DLM register 
+    read_DLM<='1' WHEN read='1' AND address="110" ELSE '0';
+    write_DLM<='1' WHEN write='1' AND address="110" ELSE '0';
+    
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            reg_DLM<=X"01";
+        ELSIF rising_edge(clk) THEN
+            IF write_DLM='1' THEN
+                reg_DLM<=busDataIn(7 DOWNTO 0);
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    --THR register
+    write_THR<='1' WHEN write='1' AND address="111" ELSE '0';
+    
+    --RHR register
+    read_RHR<='1' WHEN read='1' AND address="111" ELSE '0';
+    
+    --ISR register
+    read_ISR<='1' WHEN read='1' AND address="001" ELSE '0';
+    
+    --busDataOut update 
+    busDataOut<="00000" & reg_IER WHEN read_IER='1' ELSE
+                "0000" & ISR_code WHEN read_ISR='1' ELSE
+                "000" & reg_LCR WHEN read_LCR='1' ELSE
+                '0' & reg_LSR WHEN read_LSR='1' ELSE
+                reg_DLL WHEN read_DLL='1' ELSE
+                reg_DLM WHEN read_DLM='1' ELSE
+                rx_data_i;
+                
+    --Interrupt clear process
+    clear_int<='1' WHEN ISR_code="0110" AND read_LSR='1' ELSE
+               '1' WHEN ISR_code="0100" AND read_RHR='1' ELSE
+               '1' WHEN ISR_code="1100" AND read_RHR='1' ELSE
+               '1' WHEN ISR_code="0010" AND (write_THR='1' OR read_ISR='1') ELSE
+               '0';
+                
     --Receiver transmission timeout
     PROCESS(clk, rst)
     BEGIN
@@ -488,7 +492,7 @@ BEGIN
         IF rst='1' THEN
             timeout_counter<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
-            IF (rx_fifo_empty='1' OR rx_read_request='1' OR rx_finished='1') THEN
+            IF (rx_fifo_empty='1' OR read_RHR='1' OR rx_finished='1') THEN
                 clear_cnt<='1';
                 timeout_counter<=(OTHERS=>'0');
             ELSIF (rx_fifo_empty='0' AND baud_counter=UNSIGNED(divisor) AND timeout_counter(5)='0') THEN
@@ -501,5 +505,5 @@ BEGIN
     END PROCESS;
     
     rx_char_timeout<=timeout_counter(5);
-
+    
 END behavior;

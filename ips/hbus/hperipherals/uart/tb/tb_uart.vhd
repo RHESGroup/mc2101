@@ -128,20 +128,15 @@ BEGIN
         rst<='1';
         WAIT FOR 30 ns;
         rst<='0';
-        WAIT FOR 4 ns;
+        WAIT FOR 47 ns;
         --setup baudrate
-        --1) set DLAB bit
-        WAIT UNTIL rising_edge(clk);
-        address<="011";
-        busDataIn<="10000000";
-        write<='1';
-        WAIT UNTIL rising_edge(clk);
         --2) set DLL
-        address<="000";
+        address<="101";
+        write<='1';
         busDataIn<=c_DIVISOR(7 DOWNTO 0);
         WAIT UNTIL rising_edge(clk);
         --3) set DLM
-        address<="001";
+        address<="110";
         busDataIn<=c_DIVISOR(15 DOWNTO 8);
         WAIT UNTIL rising_edge(clk);
         write<='0';
@@ -218,7 +213,7 @@ BEGIN
         mock_TRANSMITTER(rx_data_buffer, data_w, RX, parity_t, parity_en, stop);
         WAIT UNTIL rising_edge(clk);
         --Read the FIFO to check data correctly received
-        address<="000";
+        address<="111";
         read<='1';
         WAIT UNTIL rising_edge(clk);
         read<='0';
@@ -239,10 +234,10 @@ BEGIN
         --Set trigger level to 14
         address<="010";
         write<='1';
-        busDataIn<="11000000";
+        busDataIn<="00001100";
         WAIT UNTIL rising_edge(clk);
         --Enable interrupt data ready
-        address<="001";
+        address<="000";
         write<='1';
         busDataIn<="00000001";
         WAIT UNTIL rising_edge(clk);
@@ -281,7 +276,7 @@ BEGIN
         WAIT UNTIL rising_edge(clk);
         --clean the fifo by acting on FCR's Rx FIFO Reset
         address<="010";
-        busDataIn<="00000010";
+        busDataIn<="00000001";
         write<='1';
         WAIT UNTIL rising_edge(clk);
         write<='0';
