@@ -275,8 +275,11 @@ BEGIN
 		fifo_full=>rx_fifo_full
 	);
 	
-	--Receiver Line Error (used by interrupt controller)
-	rx_line_error<=rx_fifo_data_out(10) OR rx_fifo_data_out(9) OR rx_fifo_data_out(8);
+	--Receiver Line Error (used by interrupt controller) (Overrun error included)
+	rx_line_error<=rx_fifo_data_out(10) OR 
+	               rx_fifo_data_out(9)  OR 
+	               rx_fifo_data_out(8)  OR 
+	               current_regfile(LSR)(1);
 	
 	--TRANSMITTER
 	U_TX: uart_tx_core 
@@ -329,7 +332,7 @@ BEGIN
 		tx_elements=>tx_elements,
 		rx_line_error=>rx_line_error,
 		interrupt_clear=>(clear_int OR clear_thr),
-		char_timeout=>'0',
+		char_timeout=>rx_char_timeout,
 		interrupt=> interrupt,
 		interrupt_isr_code=>ISR_code
 	);
