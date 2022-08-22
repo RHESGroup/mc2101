@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		19 Jul 2022
+--	Date:		19 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -40,9 +40,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
 --TODO: this uart has been designed starting from the standard UART 16550
---      some functionality are not included in this current version, for compatibility reason
---      i left the original register file so that is possible to extend this peropheral by 
---      by adding other features
+--      some functionality are not included in this current version
 --      FEATURES NOT INCLUDED: DMA, MODEM, PRESCALER DIVISION FACTOR are not currently implememnted
 --      see: http://caro.su/msx/ocm_de1/16550.pdf    
 
