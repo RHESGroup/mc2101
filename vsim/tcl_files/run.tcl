@@ -3,7 +3,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     01 Jun, 2022  #
+#  Date:     22 Aug, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -86,6 +86,27 @@ add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/
 add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/INTTYPE0
 add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/INTTYPE1
 add wave -noupdate -group GPIO -radix hexadecimal /tb_hsystem/system/slave_gpio/periph_gpio/core/INTSTATUS
+
+#hslave(3) UART signals
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_ctrl/current_state
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_ctrl/chip_select 
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/address
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/busDataIn
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/busDataOut
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/read
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/write
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/uart_rx
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/uart_tx
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/interrupt
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/reg_IER 
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/U_IN_CTRL/interrupt_isr_code
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/reg_FCR
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/reg_LCR
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/reg_LSR
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/reg_DLL
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/reg_DLM
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/rx_frame 
+add wave -noupdate -group UART -radix hexadecimal /tb_hsystem/system/slave_uart/uart_periph/tx_fifo_data_out
 
 #master interface  signals
 add wave -noupdate -group MASTERIF -radix hexadecimal /tb_hsystem/system/master/curr_bus_state
