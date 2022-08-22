@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		01 Jun 2022
+--	Date:		19 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -63,9 +63,11 @@ ARCHITECTURE behavior OF bus_sel_decoder IS
     --DATA RAM
     CONSTANT DATA_START    : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00100000";
     CONSTANT DATA_END      : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00101000";
-    --PERIPHERAL MEMORY MAP(TODO)
+    --PERIPHERAL MEMORY MAP
     CONSTANT GPIO_START : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A100000";
     CONSTANT GPIO_END   : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A101000";
+    CONSTANT UART_START : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A101000";
+    CONSTANT UART_END   : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A102000";
     
 BEGIN
 
@@ -77,18 +79,26 @@ BEGIN
           ) THEN
             selRAM<='1'; 
             selGPIO<='0';
+            selUART<='0';
         ELSIF( (UNSIGNED(address(addressWidth-1 DOWNTO 0))>=GPIO_START) AND 
                (UNSIGNED(address(addressWidth-1 DOWNTO 0))<GPIO_END) 
           ) THEN
             selRAM<='0';
             selGPIO<='1';
+            selUART<='0';
+        ELSIF( (UNSIGNED(address(addressWidth-1 DOWNTO 0))>=UART_START) AND 
+               (UNSIGNED(address(addressWidth-1 DOWNTO 0))<UART_END)
+          ) THEN
+            selRAM<='0';
+            selGPIO<='0';
+            selUART<='1';
         ELSE
             selRAM<='0';
             selGPIO<='0';
+            selUART<='0';
         END IF;
     END PROCESS;
     
     selFLASH<='0';
-    selUART<='0';
 
 END behavior;

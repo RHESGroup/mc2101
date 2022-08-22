@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		01 Jun 2022
+--	Date:		19 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -41,9 +41,8 @@ USE IEEE.NUMERIC_STD.ALL;
 
 --CURRENTLY SUPPORTED SLAVES
 --SSRAM --> (hselram)
---PERIPHERALS
-    --GPIO  (TODO) -->(hselgpio)
-    --UART  (TODO) -->(hseluart)
+--GPIO  --> (hselgpio)
+--UART  --> (hseluart)
 
 
 ENTITY bus_master_if IS

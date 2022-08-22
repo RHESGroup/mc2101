@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		06 May 2022
+--	Date:		21 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -46,14 +46,17 @@ ARCHITECTURE tb OF tb_hsystem IS
 	PORT(
 	    sys_clk     : IN  STD_LOGIC;
 	    sys_rst     : IN  STD_LOGIC;
-	    gpio_pads   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0) 
+	    gpio_pads   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+	    uart_rx     : IN  STD_LOGIC;
+	    uart_tx     : OUT std_logic 
 	);
     END COMPONENT;
     
 
-	CONSTANT clk_period : TIME := 30 ns;
+	CONSTANT clk_period : TIME := 10 ns;
 	SIGNAL pads:  STD_LOGIC_VECTOR(31 DOWNTO 0);
 	SIGNAL clk, rst: STD_LOGIC;
+	SIGNAL RX,TX: STD_LOGIC;
 	
 
 BEGIN
@@ -62,7 +65,9 @@ BEGIN
 	PORT MAP(
 	    sys_clk=>clk,
 	    sys_rst=>rst,
-	    gpio_pads=>pads
+	    gpio_pads=>pads,
+	    uart_rx=>RX,
+	    uart_tx=>TX
 	);
 
 	clk_process : PROCESS
