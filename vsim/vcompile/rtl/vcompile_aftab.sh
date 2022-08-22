@@ -4,7 +4,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     02 Jun, 2022  #
+#  Date:     21 Aug, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -180,6 +180,15 @@ vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio_core.vhd  || goto 
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio.vhd   || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio_controller.vhd    || goto error
 vcom -2008 -work work ${RTL_PATH}/hbus/hperipherals/gpio/gpio_bus_wrap.vhd  || goto error
+
+#peripheral uart
+vcom  -2008 -work work ${RTL_PATH}/hbus/hperipherals/uart/uart_rx_core.vhd || goto error
+vcom  -2008 -work work ${RTL_PATH}/hbus/hperipherals/uart/uart_tx_core.vhd || goto error
+vcom  -2008 -work work ${RTL_PATH}/hbus/hperipherals/uart/fifo.vhd || goto error
+vcom  -2008 -work work ${RTL_PATH}/hbus/hperipherals/uart/uart_interrupt.vhd || goto error
+vcom  -2008 -work work ${RTL_PATH}/hbus/hperipherals/uart/uart.vhd || goto error
+vcom  -2008 -work work ${RTL_PATH}/hbus/hperipherals/uart/uart_controller.vhd || goto error
+vcom  -2008 -work work ${RTL_PATH}/hbus/hperipherals/uart/uart_bus_wrap.vhd || goto error
 
 
 #master
