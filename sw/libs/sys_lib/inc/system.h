@@ -1,7 +1,7 @@
 /**
  * @file  system.h
  * @version 1.0 
- * @date 02 Jun, 2022
+ * @date 21 Aug, 2022
  * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran 
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
@@ -23,9 +23,14 @@
  * @brief Memory map of the mc2021 microcontroller, definitions of the overall system 
  *
  */
+
+#include <stdint.h>
  
 #ifndef  _MC2101_H
 #define  _MC2101_H
+
+/**SOC clk frequency Hz*/
+#define SOC_CLK_FREQ 100000000
 
 /**
  * @defgroup SOC memory map
@@ -59,7 +64,7 @@
  /** 8 bit register pointer*/
  #define REGP8(x)                     ((volatile uint8_t *)(x))
  /** 8 bit register value*/
- #define REG8(x)                      (*((volatile uint8_t *))(x))
+ #define REG8(x)                      (*((volatile uint8_t *)(x)))
  
  /** @} */
 
