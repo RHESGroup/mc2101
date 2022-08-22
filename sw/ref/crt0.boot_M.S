@@ -2,7 +2,7 @@
 #  Filename: crt0.boot_M.S  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     08 April, 2022  #
+#  Date:     21 Aug, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -220,6 +220,24 @@ external_interrupt_signal_handler:
 default_exc_handler:  
   j default_exc_handler # To infinite loop
   
+//PERiPHERALS EXTERNAL INTERRUPTS HANDLERS (added by Luca)
+  
+/* ============== [GPIO Interrupt handler] ============== */
+ISR_GPIO_ASM:
+  addi x2, x2, -EXCEPTION_STACK_SIZE
+  sw x1, 0x44(x2)
+  jal x1, store_regs
+  la x1, end_except
+  jal x0, ISR_GPIO
+  
+/* ============== [UART Interrupt handler] ============== */
+ISR_UART_ASM:
+  addi x2, x2, -EXCEPTION_STACK_SIZE
+  sw x1, 0x44(x2)
+  jal x1, store_regs
+  la x1, end_except
+  jal x0, ISR_UART
+  
 /* =================================================== [ exceptions ] === */
 /* This section has to be down here, since we have to disable rvc for it  */
 
@@ -288,9 +306,9 @@ default_exc_handler:
          # reserved                               [0xC0]
   .endr
   .org 0xC4
-  jal x0, external_interrupt_signal_handler
+  jal x0, ISR_GPIO_ASM
   .org 0xC8
-  jal x0, external_interrupt_signal_handler
+  jal x0, ISR_UART_ASM
   .org 0xCC
   jal x0, external_interrupt_signal_handler
   .org 0xD0
