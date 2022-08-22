@@ -165,4 +165,9 @@ int get_pin_irq_type(int pinnumber);
  */
 int get_gpio_irq_status(void);
 
+/**
+ * @brief gpio Interrupt handler (weak procedure)
+ */
+ void ISR_GPIO(void);
+
  #endif

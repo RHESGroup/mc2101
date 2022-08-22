@@ -114,6 +114,12 @@ int get_gpio_irq_status(void)
 {
     return REG32(INTSTATUS);
 }
+
+__attribute__ ((weak))
+void ISR_GPIO(void)
+{
+   while(1);
+}
  
  
  
