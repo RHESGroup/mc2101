@@ -2,7 +2,7 @@
 #  Filename: CMakeSim.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     03 Jun, 2022  #
+#  Date:     23 Aug, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -118,7 +118,7 @@ macro(add_application NAME SOURCE_FILES)
 
   ## link libraries
   # target_link_libraries(${NAME}.elf ${ARG_LIBS} ${ARDUINO_SEP} ${ARDUINO_CORE} ${BEEBS_LIB_NAME} bench ${MATH_FNS_LIB} string sys m)
-  target_link_libraries(${NAME}.elf ${ARG_LIBS} sys)
+  target_link_libraries(${NAME}.elf ${ARG_LIBS} sys string)
 
   # this specifies the testbench to use for simulation
   if(ARG_TB)
@@ -263,6 +263,8 @@ add_subdirectory(test_bus_transfer)
 #added system libraries directory
 add_subdirectory(test_sys_lib)
 
+#added string library and printf
+add_subdirectory(test_string_lib)
 
 # if(${ARDUINO_LIB})
 #   add_subdirectory(Arduino_tests)

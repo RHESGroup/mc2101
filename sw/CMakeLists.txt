@@ -2,7 +2,7 @@
 #  Filename: CMakeLists.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     03 Jun, 2022  #
+#  Date:     23 Aug, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -206,6 +206,8 @@ add_custom_target(gen_test_csr
 #sys libraries
 include_directories(libs/sys_lib/inc)
 add_subdirectory(libs/sys_lib)
+include_directories(libs/string_lib/inc)
+add_subdirectory(libs/string_lib)
 
 #applications
 add_subdirectory(apps)
