@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		10 May 2022
+--	Date:		31 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -81,12 +81,15 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
 	);
     END COMPONENT;
     
+    --CURRENT SELECTION: SIMULATION
+    FOR memory: ssram_fpga USE ENTITY WORK.ssram_fpga(behavior_SIM);
+    
     SIGNAL readMem: STD_LOGIC;
     SIGNAL writeMem: STD_LOGIC;
     SIGNAL dataOut: STD_LOGIC_VECTOR (busDataWidth -1 DOWNTO 0);
     SIGNAL ready: STD_LOGIC;
-    --The actual physical size of the ram is 2**13
-    CONSTANT PHSIZE: integer:=13;
+    --The actual physical size of the ram is 2**14 (16 KB)
+    CONSTANT PHSIZE: integer:=14;
     SIGNAL phyaddr: STD_LOGIC_VECTOR(PHSIZE-1 DOWNTO 0);
     
     --controller
@@ -141,9 +144,6 @@ BEGIN
     hrdata   <= dataOut;
     
     --Viritual address to physical address
-    --When haddr changes, in this module can assume two intervals:
-    --1) haddr<=0x00001000 :Instruction Memory--->phaddr=haddr
-    --2) haddr>=0x00100000 :Data OR Stack
     PROCESS(haddr)
     BEGIN
         IF haddr(20)='1' THEN
