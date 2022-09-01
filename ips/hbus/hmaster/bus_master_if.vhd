@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		19 Aug 2022
+--	Date:		31 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -132,7 +132,12 @@ ARCHITECTURE behavior OF bus_master_if IS
     TYPE BUS_STAT_TYPE IS (S_IDLE, S_READ, S_WRITE);
     SIGNAL curr_bus_state, next_bus_state: BUS_STAT_TYPE;
     
+    SIGNAL haddr_cpy: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+    
 BEGIN
+
+    --modified to be compatible with older version of Quartus
+    haddr_cpy<=haddr;
 
     --######################################
     --TARGET PERIPHERAL SELECTION
@@ -141,7 +146,7 @@ BEGIN
         addressWidth=>busAddressWidth
     )
     PORT MAP(
-        address=>haddr,
+        address=>haddr_cpy,
         selRAM =>selRAM,
         selFLASH=>selFLASH,
         selGPIO=>selGPIO,
