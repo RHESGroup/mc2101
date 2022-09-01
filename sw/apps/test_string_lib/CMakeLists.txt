@@ -34,3 +34,4 @@
 # 
 # **************************************************************************************
 add_subdirectory(hello_world)
+add_subdirectory(simple_scan)
