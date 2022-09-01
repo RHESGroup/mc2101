@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		17 Jul 2022
+--	Date:		1 Sep 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -171,6 +171,7 @@ BEGIN
         start_bit<='0';
         next_data<=current_data;
         next_data_bit<=current_data_bit;
+        next_state<=current_state;
         rx_valid<='0';
         baudgen<='0';
         clear_parity_bit_received<='0';
