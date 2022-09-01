@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		27 May 2022
+--	Date:		31 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -207,7 +207,8 @@ BEGIN
             --deassert interrupt line
             interrupt<='0';
         --rise interrupt if there's one and if not yet pending and update status
-        ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN
+        --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN (not synthesizable by older version of Quartus)
+          ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND interrupts/=x"00000000")) THEN
             interrupt<='1';
             INTSTATUS<=interrupts;
         END IF;
