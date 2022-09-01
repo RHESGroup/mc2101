@@ -2,7 +2,7 @@
 *  Filename: link.common.ld  #
 *  Project:  CNL_RISC-V
 *  Version:  1.0
-*  Date:     01 July, 2021  #
+*  Date:     30 Aug, 2022  #
 *
 * Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 *
@@ -40,10 +40,10 @@ __DYNAMIC  =  0;
 
 MEMORY
 {
-    /*tuned segments dimension to allow simulations, modified Gianluca Roascio 1/07/2021*/
-    instrram    : ORIGIN = 0x00000000, LENGTH = 0x1000 /* 4 K */
-    dataram     : ORIGIN = 0x00100000, LENGTH = 0x600 /* 1.5 K*/
-    stack       : ORIGIN = 0x00100600, LENGTH = 0xA00 /*2.5 K*/
+    /*memory is extendedfrom 8K to 16K because of printf and scanf, modified Luca 30/08/2022*/
+    instrram    : ORIGIN = 0x00000000, LENGTH = 0x2000 /* 8 K */
+    dataram     : ORIGIN = 0x00100000, LENGTH = 0x1000 /* 4 K*/
+    stack       : ORIGIN = 0x00101000, LENGTH = 0x1000 /* 4 K*/
 }
 
 /* Stack information variables */
