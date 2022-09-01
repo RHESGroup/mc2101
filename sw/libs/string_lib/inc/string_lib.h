@@ -28,4 +28,7 @@ int printf(const char *format, ...);
 void * memset (void *dest, int val, size_t len);
 int putchar(int s);
 
+/**scanf function added by Luca */
+int scanf(const char *format, ...);
+
 #endif
