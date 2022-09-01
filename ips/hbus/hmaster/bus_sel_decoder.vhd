@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		19 Aug 2022
+--	Date:		30 Aug 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -57,12 +57,12 @@ END bus_sel_decoder;
 ARCHITECTURE behavior OF bus_sel_decoder IS
 
     --SSRAM MEMORY MAP
-    --INSTRUCTION RAM
+    --INSTRUCTION RAM (8 KB)
     CONSTANT INSTRUCTIONS_START  : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00000000";
-    CONSTANT INSTRUCTIONS_END    : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00001000";
-    --DATA RAM
+    CONSTANT INSTRUCTIONS_END    : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00002000";
+    --DATA RAM (4 KB) + STACK (4 KB)
     CONSTANT DATA_START    : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00100000";
-    CONSTANT DATA_END      : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00101000";
+    CONSTANT DATA_END      : UNSIGNED(addressWidth-1 DOWNTO 0):=x"00102000";
     --PERIPHERAL MEMORY MAP
     CONSTANT GPIO_START : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A100000";
     CONSTANT GPIO_END   : UNSIGNED(addressWidth-1 DOWNTO 0):=x"1A101000";
