@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		21 Aug 2022
+--	Date:		1 Sep 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -42,7 +42,7 @@ USE IEEE.NUMERIC_STD.ALL;
 ENTITY hsystem IS
 	PORT(
 	    sys_clk     : IN  STD_LOGIC;
-	    sys_rst     : IN  STD_LOGIC;
+	    sys_rst_n   : IN  STD_LOGIC;
 	    gpio_pads   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 	    uart_rx     : IN  STD_LOGIC;
 	    uart_tx     : OUT std_logic 
@@ -199,7 +199,7 @@ BEGIN
 	) 
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>sys_rst,
+		rst=>NOT(sys_rst_n),
 		hready=>hready,
 		hresp=>hresp,
 		hrdata=>hrdata,
@@ -221,7 +221,7 @@ BEGIN
 	)  
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>sys_rst,
+		rst=>NOT(sys_rst_n),
 		htrans=>htrans,
 		hselx=>hselram,
 		hwrite=>hwrite,
@@ -243,7 +243,7 @@ BEGIN
 	) 
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>sys_rst,
+		rst=>NOT(sys_rst_n),
 		htrans=>htrans,
 		hselx=>hselgpio,
 		hwrite=>hwrite,
@@ -263,7 +263,7 @@ BEGIN
 	)
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>sys_rst,
+		rst=>NOT(sys_rst_n),
 		htrans=>htrans,
 		hselx=>hseluart,
 		hwrite=>hwrite,
@@ -292,21 +292,4 @@ BEGIN
 	        ssram_hresp; 
 
 END behavior;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
