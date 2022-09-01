@@ -4,7 +4,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     06 May, 2022  #
+#  Date:     1 Sep, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -45,10 +45,10 @@ if (! $?AFTAB_PATH ) then
 endif
 
 # setenv MSIM_LIBS_PATH ${VSIM_PATH}/modelsim_libs
-
-#setenv IPS_PATH       ${AFTAB_PATH}/ips/
-#changed luca, rtl is now in ips
-setenv RTL_PATH       ${AFTAB_PATH}/ips/
+#changed luca, aftab is now in ips
+setenv IPS_PATH       ${AFTAB_PATH}/ips/
+#added luca, mc2101 rtl is now in rtl
+setenv RTL_PATH    ${AFTAB_PATH}/rtl
 setenv TB_PATH        ${AFTAB_PATH}/tb
 
 clear
