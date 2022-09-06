@@ -1,7 +1,7 @@
 /**
  * @file  qscanf.c
  * @version 1.0 
- * @date 1 Sep, 2022
+ * @date 5 Sep, 2022
  * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran 
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
@@ -42,11 +42,17 @@
 #define FF  '\f'
 #define CR  '\r'
 
-static int atoi(char *str)
+
+static int atoi(char *str, int sign)
 {
     register int res = 0;
-    for (int i = 0; str[i] != '\0'; i++)
-        res = res * 10 + str[i] - '0';
+    for (int i = sign; str[i] != '\0'; i++){
+        //res=res*10 + str[i]-'0';
+        res = (res<<3) + (res<<1);
+        res +=  str[i] - '0';
+    }
+    if (sign) 
+        res = -res;
     return res;
 }
 
@@ -55,12 +61,14 @@ static int atoi(char *str)
 static void scans(char *buffer)
 {
     register char chread;
-    for(int i=0; i<SCAN_STR_MAX; i++)
+    register int i;
+    for(i=0; i<SCAN_STR_MAX-1; i++)
     {
         chread=uart_getchar();
         if(chread==CR)  break;
         buffer[i]=chread;
     }
+    buffer[i]='\0';
 }
 
 static void scani(int *i)
@@ -74,7 +82,11 @@ static void scani(int *i)
         scan_buf[j]=chread;
     }
     scan_buf[j]='\0';
-    *i=atoi(scan_buf);
+    if (scan_buf[0]=='-')  
+        j=1;
+    else 
+        j=0;
+    *i=atoi(scan_buf,j);
 }
 
 //simple scanf function, pattern recognized: '%d' '%s' '%c' '%u'
