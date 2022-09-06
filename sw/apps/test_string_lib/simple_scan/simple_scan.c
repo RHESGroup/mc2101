@@ -1,7 +1,7 @@
 /**
  * @file  simple_scan.c
  * @version 1.0 
- * @date 1 Sept, 2022
+ * @date 6 Sep, 2022
  * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran 
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
@@ -29,8 +29,12 @@
 
 void init_io(void)
 {
-    //init stdio to uart @115200 KHz
-    uart_set_cfg(3,0,0,0,867);
+    //init stdio to uart @9600 KHz
+    uart_set_cfg(WORD_LENGTH_8,
+                 STOP_BIT_LENGTH_1,
+                 PARITY_OFF,
+                 PARITY_ODD,
+                 UART_DIV_BR_9600);
 }
 
 int main(void)
