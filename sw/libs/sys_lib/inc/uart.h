@@ -1,7 +1,7 @@
 /**
  * @file  uart.h
  * @version 1.0 
- * @date 21 Aug, 2022
+ * @date 6 Sep, 2022
  * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran 
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
@@ -118,7 +118,38 @@
  #define UART_FIFO_DEPTH           16
  
  /** @} */
+ 
+ /**
+ * @defgroup UART configuration defines
+ * @{
+ */
+ 
+ #define WORD_LENGTH_5             0x0
+ #define WORD_LENGTH_6             0x1
+ #define WORD_LENGTH_7             0x2
+ #define WORD_LENGTH_8             0x3
+ #define STOP_BIT_LENGTH_1         0x0
+ #define STOP_BIT_LENGTH_2         0x1
+ #define PARITY_ON                 0x1
+ #define PARITY_OFF                0x0
+ #define PARITY_EVEN               0x1
+ #define PARITY_ODD                0x0
 
+ /** @} */
+ 
+ /**
+ * @defgroup UART divisor values for standard baudrates (50MHz clock reference)
+ * @{
+ */
+ 
+ #define UART_DIV_BR_1200          41666
+ #define UART_DIV_BR_9600          5207
+ #define UART_DIV_BR_19200         2603
+ #define UART_DIV_BR_57600         867
+ #define UART_DIV_BR_115200        433
+ 
+ /** @} */
+ 
  
  /**
  * @brief used for peripheral configuration, set LCR bits
