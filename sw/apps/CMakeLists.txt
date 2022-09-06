@@ -2,7 +2,7 @@
 #  Filename: CMakeSim.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     23 Aug, 2022  #
+#  Date:     1 Sep, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -265,6 +265,9 @@ add_subdirectory(test_sys_lib)
 
 #added string library and printf
 add_subdirectory(test_string_lib)
+
+#added board test programs
+add_subdirectory(test_mc2101)
 
 # if(${ARDUINO_LIB})
 #   add_subdirectory(Arduino_tests)
