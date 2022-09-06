@@ -1,0 +1,153 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "uart_tx",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[0]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[1]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[2]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[3]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[4]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[5]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[6]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[7]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[8]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[9]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[10]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[11]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[12]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[13]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[14]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[15]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[16]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[17]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[18]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[19]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[20]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[21]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[22]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[23]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[24]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[25]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[26]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[27]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[28]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[29]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[30]",
+					"strict" : false
+				},
+				{
+					"name" : "gpio_pads[31]",
+					"strict" : false
+				},
+				{
+					"name" : "sys_clk",
+					"strict" : false
+				},
+				{
+					"name" : "sys_rst_n",
+					"strict" : false
+				},
+				{
+					"name" : "uart_rx",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,788 @@
+Timing Analyzer report for mc2101
+Tue Sep  6 16:13:53 2022
+Quartus Prime Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Timing Analyzer Summary
+  3. Parallel Compilation
+  4. SDC File List
+  5. Clocks
+  6. Fmax Summary
+  7. Timing Closure Recommendations
+  8. Setup Summary
+  9. Hold Summary
+ 10. Recovery Summary
+ 11. Removal Summary
+ 12. Minimum Pulse Width Summary
+ 13. Metastability Summary
+ 14. Board Trace Model Assignments
+ 15. Input Transition Times
+ 16. Signal Integrity Metrics (Slow 1100mv 85c Model)
+ 17. Setup Transfers
+ 18. Hold Transfers
+ 19. Recovery Transfers
+ 20. Removal Transfers
+ 21. Report TCCS
+ 22. Report RSKM
+ 23. Unconstrained Paths Summary
+ 24. Clock Status Summary
+ 25. Unconstrained Input Ports
+ 26. Unconstrained Output Ports
+ 27. Unconstrained Input Ports
+ 28. Unconstrained Output Ports
+ 29. Timing Analyzer Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2021  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+
+
+
++-----------------------------------------------------------------------------+
+; Timing Analyzer Summary                                                     ;
++-----------------------+-----------------------------------------------------+
+; Quartus Prime Version ; Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition ;
+; Timing Analyzer       ; Legacy Timing Analyzer                              ;
+; Revision Name         ; mc2101                                              ;
+; Device Family         ; Cyclone V                                           ;
+; Device Name           ; 5CSEMA5F31C6                                        ;
+; Timing Models         ; Final                                               ;
+; Delay Model           ; Slow 1100mV 85C Model                               ;
+; Rise/Fall Delays      ; Enabled                                             ;
++-----------------------+-----------------------------------------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 4           ;
+; Maximum allowed            ; 4           ;
+;                            ;             ;
+; Average used               ; 1.61        ;
+; Maximum used               ; 4           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processor 2            ;  20.7%      ;
+;     Processor 3            ;  20.1%      ;
+;     Processor 4            ;  19.7%      ;
++----------------------------+-------------+
+
+
++---------------------------------------------------+
+; SDC File List                                     ;
++---------------+--------+--------------------------+
+; SDC File Path ; Status ; Read at                  ;
++---------------+--------+--------------------------+
+; mc2101.sdc    ; OK     ; Tue Sep  6 16:13:51 2022 ;
++---------------+--------+--------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Clocks                                                                                                                                                                              ;
++------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-------------+
+; Clock Name ; Type ; Period ; Frequency ; Rise  ; Fall   ; Duty Cycle ; Divide by ; Multiply by ; Phase ; Offset ; Edge List ; Edge Shift ; Inverted ; Master ; Source ; Targets     ;
++------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-------------+
+; sys_clk    ; Base ; 20.000 ; 50.0 MHz  ; 0.000 ; 10.000 ;            ;           ;             ;       ;        ;           ;            ;          ;        ;        ; { sys_clk } ;
++------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-------------+
+
+
++------------------------------------------------+
+; Fmax Summary                                   ;
++----------+-----------------+------------+------+
+; Fmax     ; Restricted Fmax ; Clock Name ; Note ;
++----------+-----------------+------------+------+
+; 62.4 MHz ; 62.4 MHz        ; sys_clk    ;      ;
++----------+-----------------+------------+------+
+This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
+
+
+----------------------------------
+; Timing Closure Recommendations ;
+----------------------------------
+HTML report is unavailable in plain text report export.
+
+
++---------------------------------+
+; Setup Summary                   ;
++---------+-------+---------------+
+; Clock   ; Slack ; End Point TNS ;
++---------+-------+---------------+
+; sys_clk ; 1.987 ; 0.000         ;
++---------+-------+---------------+
+
+
++---------------------------------+
+; Hold Summary                    ;
++---------+-------+---------------+
+; Clock   ; Slack ; End Point TNS ;
++---------+-------+---------------+
+; sys_clk ; 0.329 ; 0.000         ;
++---------+-------+---------------+
+
+
++----------------------------------+
+; Recovery Summary                 ;
++---------+--------+---------------+
+; Clock   ; Slack  ; End Point TNS ;
++---------+--------+---------------+
+; sys_clk ; 16.629 ; 0.000         ;
++---------+--------+---------------+
+
+
++---------------------------------+
+; Removal Summary                 ;
++---------+-------+---------------+
+; Clock   ; Slack ; End Point TNS ;
++---------+-------+---------------+
+; sys_clk ; 0.830 ; 0.000         ;
++---------+-------+---------------+
+
+
++---------------------------------+
+; Minimum Pulse Width Summary     ;
++---------+-------+---------------+
+; Clock   ; Slack ; End Point TNS ;
++---------+-------+---------------+
+; sys_clk ; 8.873 ; 0.000         ;
++---------+-------+---------------+
+
+
+-------------------------
+; Metastability Summary ;
+-------------------------
+The design MTBF is not calculated because there are no specified synchronizers in the design.
+Number of Synchronizer Chains Found: 33
+Shortest Synchronizer Chain: 2 Registers
+Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+Worst Case Available Settling Time: 29.502 ns
+
+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Board Trace Model Assignments                                                                                                                                                                                                                                                                                                                                                                                    ;
++---------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+; Pin           ; I/O Standard ; Near Tline Length ; Near Tline L per Length ; Near Tline C per Length ; Near Series R ; Near Differential R ; Near Pull-up R ; Near Pull-down R ; Near C ; Far Tline Length ; Far Tline L per Length ; Far Tline C per Length ; Far Series R ; Far Pull-up R ; Far Pull-down R ; Far C ; Termination Voltage ; Far Differential R ; EBD File Name ; EBD Signal Name ; EBD Far-end ;
++---------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+; uart_tx       ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[0]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[1]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[2]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[3]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[4]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[5]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[6]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[7]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[8]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[9]  ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[10] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[11] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[12] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[13] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[14] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[15] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[16] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[17] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[18] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[19] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[20] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[21] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[22] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[23] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[24] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[25] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[26] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[27] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[28] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[29] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[30] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gpio_pads[31] ; 2.5 V        ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
++---------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+
+
++------------------------------------------------------------------+
+; Input Transition Times                                           ;
++---------------+--------------+-----------------+-----------------+
+; Pin           ; I/O Standard ; 10-90 Rise Time ; 90-10 Fall Time ;
++---------------+--------------+-----------------+-----------------+
+; gpio_pads[0]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[1]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[2]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[3]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[4]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[5]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[6]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[7]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[8]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[9]  ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[10] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[11] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[12] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[13] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[14] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[15] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[16] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[17] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[18] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[19] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[20] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[21] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[22] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[23] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[24] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[25] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[26] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[27] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[28] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[29] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[30] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; gpio_pads[31] ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; sys_clk       ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; sys_rst_n     ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
+; uart_rx       ; 2.5 V        ; 2000 ps         ; 2000 ps         ;
++---------------+--------------+-----------------+-----------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Signal Integrity Metrics (Slow 1100mv 85c Model)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; Pin           ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; uart_tx       ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[0]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[1]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[2]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.0374 V           ; 0.189 V                              ; 0.158 V                              ; 4.66e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.0374 V          ; 0.189 V                             ; 0.158 V                             ; 4.66e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[3]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[4]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[5]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[6]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.0374 V           ; 0.189 V                              ; 0.158 V                              ; 4.66e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.0374 V          ; 0.189 V                             ; 0.158 V                             ; 4.66e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[7]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[8]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[9]  ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[10] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[11] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[12] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[13] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[14] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[15] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[16] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[17] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[18] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[19] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[20] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[21] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[22] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[23] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[24] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[25] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[26] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[27] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[28] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[29] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[30] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.0374 V           ; 0.189 V                              ; 0.158 V                              ; 4.66e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.0374 V          ; 0.189 V                             ; 0.158 V                             ; 4.66e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[31] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
++---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+
+
++-------------------------------------------------------------------+
+; Setup Transfers                                                   ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; sys_clk    ; sys_clk  ; 39745763 ; 102      ; 17465    ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Hold Transfers                                                    ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; sys_clk    ; sys_clk  ; 39745763 ; 102      ; 17465    ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Recovery Transfers                                                ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; sys_clk    ; sys_clk  ; 359      ; 0        ; 0        ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Removal Transfers                                                 ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; sys_clk    ; sys_clk  ; 359      ; 0        ; 0        ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
+---------------
+; Report TCCS ;
+---------------
+No dedicated SERDES Transmitter circuitry present in device or used in design
+
+
+---------------
+; Report RSKM ;
+---------------
+No non-DPA dedicated SERDES Receiver circuitry present in device or used in design
+
+
++------------------------------------------------+
+; Unconstrained Paths Summary                    ;
++---------------------------------+-------+------+
+; Property                        ; Setup ; Hold ;
++---------------------------------+-------+------+
+; Illegal Clocks                  ; 0     ; 0    ;
+; Unconstrained Clocks            ; 0     ; 0    ;
+; Unconstrained Input Ports       ; 34    ; 34   ;
+; Unconstrained Input Port Paths  ; 3438  ; 3438 ;
+; Unconstrained Output Ports      ; 33    ; 33   ;
+; Unconstrained Output Port Paths ; 76    ; 76   ;
++---------------------------------+-------+------+
+
+
++----------------------------------------+
+; Clock Status Summary                   ;
++---------+---------+------+-------------+
+; Target  ; Clock   ; Type ; Status      ;
++---------+---------+------+-------------+
+; sys_clk ; sys_clk ; Base ; Constrained ;
++---------+---------+------+-------------+
+
+
++------------------------------------------------------------------------------------------------------+
+; Unconstrained Input Ports                                                                            ;
++---------------+--------------------------------------------------------------------------------------+
+; Input Port    ; Comment                                                                              ;
++---------------+--------------------------------------------------------------------------------------+
+; gpio_pads[0]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[1]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[2]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[3]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[4]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[5]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[6]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[7]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[8]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[9]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[10] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[11] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[12] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[13] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[14] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[15] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[16] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[17] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[18] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[19] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[20] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[21] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[22] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[23] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[24] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[25] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[26] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[27] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[28] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[29] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[30] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[31] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; sys_rst_n     ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; uart_rx       ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
++---------------+--------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------+
+; Unconstrained Output Ports                                                                            ;
++---------------+---------------------------------------------------------------------------------------+
+; Output Port   ; Comment                                                                               ;
++---------------+---------------------------------------------------------------------------------------+
+; gpio_pads[0]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[1]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[2]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[3]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[4]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[5]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[6]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[7]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[8]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[9]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[10] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[11] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[12] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[13] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[14] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[15] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[16] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[17] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[18] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[19] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[20] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[21] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[22] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[23] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[24] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[25] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[26] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[27] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[28] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[29] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[30] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[31] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; uart_tx       ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
++---------------+---------------------------------------------------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------+
+; Unconstrained Input Ports                                                                            ;
++---------------+--------------------------------------------------------------------------------------+
+; Input Port    ; Comment                                                                              ;
++---------------+--------------------------------------------------------------------------------------+
+; gpio_pads[0]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[1]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[2]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[3]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[4]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[5]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[6]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[7]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[8]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[9]  ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[10] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[11] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[12] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[13] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[14] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[15] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[16] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[17] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[18] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[19] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[20] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[21] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[22] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[23] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[24] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[25] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[26] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[27] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[28] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[29] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[30] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[31] ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; sys_rst_n     ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; uart_rx       ; No input delay, min/max delays, false-path exceptions, or max skew assignments found ;
++---------------+--------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------+
+; Unconstrained Output Ports                                                                            ;
++---------------+---------------------------------------------------------------------------------------+
+; Output Port   ; Comment                                                                               ;
++---------------+---------------------------------------------------------------------------------------+
+; gpio_pads[0]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[1]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[2]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[3]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[4]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[5]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[6]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[7]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[8]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[9]  ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[10] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[11] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[12] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[13] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[14] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[15] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[16] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[17] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[18] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[19] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[20] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[21] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[22] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[23] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[24] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[25] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[26] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[27] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[28] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[29] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[30] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; gpio_pads[31] ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
+; uart_tx       ; No output delay, min/max delays, false-path exceptions, or max skew assignments found ;
++---------------+---------------------------------------------------------------------------------------+
+
+
++--------------------------+
+; Timing Analyzer Messages ;
++--------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Timing Analyzer
+    Info: Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition
+    Info: Copyright (C) 2021  Intel Corporation. All rights reserved.
+    Info: Your use of Intel Corporation's design tools, logic functions 
+    Info: and other software and tools, and any partner logic 
+    Info: functions, and any output files from any of the foregoing 
+    Info: (including device programming or simulation files), and any 
+    Info: associated documentation or information are expressly subject 
+    Info: to the terms and conditions of the Intel Program License 
+    Info: Subscription Agreement, the Intel Quartus Prime License Agreement,
+    Info: the Intel FPGA IP License Agreement, or other applicable license
+    Info: agreement, including, without limitation, that your use is for
+    Info: the sole purpose of programming logic devices manufactured by
+    Info: Intel and sold by Intel or its authorized distributors.  Please
+    Info: refer to the applicable agreement for further details, at
+    Info: https://fpgasoftware.intel.com/eula.
+    Info: Processing started: Tue Sep  6 16:13:48 2022
+Info: Command: quartus_sta --sdc=mc2101.sdc --do_report_timing mc2101 --model=slow
+Info: qsta_default_script.tcl version: #1
+Info: Using timing model slow
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
+Info (21076): High junction temperature operating condition is not set. Assuming a default value of '85'.
+Info (21076): Low junction temperature operating condition is not set. Assuming a default value of '0'.
+Info (332104): Reading SDC File: 'mc2101.sdc'
+Info (332143): No user constrained clock uncertainty found in the design. Calling "derive_clock_uncertainty"
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
+Info (332146): Worst-case setup slack is 1.987
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     1.987               0.000 sys_clk 
+Info (332146): Worst-case hold slack is 0.329
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.329               0.000 sys_clk 
+Info (332146): Worst-case recovery slack is 16.629
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    16.629               0.000 sys_clk 
+Info (332146): Worst-case removal slack is 0.830
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.830               0.000 sys_clk 
+Info (332146): Worst-case minimum pulse width slack is 8.873
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     8.873               0.000 sys_clk 
+Info (332114): Report Metastability: Found 33 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 33
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 29.502 ns
+    Info (332114): 
+Info (332115): Report Timing: Found 1 setup paths (0 violated).  Worst case slack is 1.987
+    Info (332115): -to_clock [get_clocks {sys_clk}]
+    Info (332115): -setup
+    Info (332115): -stdout
+Info (332115): Path #1: Setup slack is 1.987 
+    Info (332115): ===================================================================
+    Info (332115): From Node    : core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_dawu:dawu|aftab_dawu_datapath:Datapath|aftab_register:addrReg|outReg[7]
+    Info (332115): To Node      : ssram_bus_wrap:SRAM|ssram_fpga:memory|altsyncram:mem_rtl_0|altsyncram_pso1:auto_generated|ram_block1a14~CLOCK1_ENABLE1_0
+    Info (332115): Launch Clock : sys_clk
+    Info (332115): Latch Clock  : sys_clk (INVERTED)
+    Info (332115): 
+    Info (332115): Data Arrival Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):      0.000      0.000           launch edge time
+    Info (332115):      3.928      3.928  R        clock network delay
+    Info (332115):      3.928      0.000     uTco  core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_dawu:dawu|aftab_dawu_datapath:Datapath|aftab_register:addrReg|outReg[7]
+    Info (332115):      3.928      0.000 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|addrReg|outReg[7]|q
+    Info (332115):      4.891      0.963 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:8:HA|o_carry|datab
+    Info (332115):      5.371      0.480 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:8:HA|o_carry|combout
+    Info (332115):      5.570      0.199 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:13:HA|o_carry|datae
+    Info (332115):      5.826      0.256 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:13:HA|o_carry|combout
+    Info (332115):      6.046      0.220 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:18:HA|o_carry|dataf
+    Info (332115):      6.117      0.071 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:18:HA|o_carry|combout
+    Info (332115):      6.900      0.783 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:23:HA|o_carry|dataf
+    Info (332115):      6.974      0.074 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:23:HA|o_carry|combout
+    Info (332115):      7.259      0.285 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:26:HA|o_sum|dataa
+    Info (332115):      7.724      0.465 FR  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:26:HA|o_sum|combout
+    Info (332115):      8.152      0.428 RR    IC  AFTAB|core|memAddr[26]~5|dataf
+    Info (332115):      8.229      0.077 RR  CELL  AFTAB|core|memAddr[26]~5|combout
+    Info (332115):      8.672      0.443 RR    IC  AFTAB|selRAM~2|dataa
+    Info (332115):      9.179      0.507 RF  CELL  AFTAB|selRAM~2|combout
+    Info (332115):      9.391      0.212 FF    IC  SRAM|controller|next_state.MEM_RD~0|dataf
+    Info (332115):      9.466      0.075 FF  CELL  SRAM|controller|next_state.MEM_RD~0|combout
+    Info (332115):     10.727      1.261 FF    IC  SRAM|memory|mem_rtl_0|auto_generated|ram_block1a14|ena1
+    Info (332115):     10.947      0.220 FR  CELL  ssram_bus_wrap:SRAM|ssram_fpga:memory|altsyncram:mem_rtl_0|altsyncram_pso1:auto_generated|ram_block1a14~CLOCK1_ENABLE1_0
+    Info (332115): 
+    Info (332115): Data Required Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):     10.000     10.000           latch edge time
+    Info (332115):     13.064      3.064  F        clock network delay
+    Info (332115):     13.104      0.040           clock pessimism removed
+    Info (332115):     12.934     -0.170           clock uncertainty
+    Info (332115):     12.934      0.000     uTsu  ssram_bus_wrap:SRAM|ssram_fpga:memory|altsyncram:mem_rtl_0|altsyncram_pso1:auto_generated|ram_block1a14~CLOCK1_ENABLE1_0
+    Info (332115): 
+    Info (332115): Data Arrival Time  :    10.947
+    Info (332115): Data Required Time :    12.934
+    Info (332115): Slack              :     1.987 
+    Info (332115): ===================================================================
+    Info (332115): 
+Info (332115): Report Timing: Found 1 hold paths (0 violated).  Worst case slack is 0.329
+    Info (332115): -to_clock [get_clocks {sys_clk}]
+    Info (332115): -hold
+    Info (332115): -stdout
+Info (332115): Path #1: Hold slack is 0.329 
+    Info (332115): ===================================================================
+    Info (332115): From Node    : ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_0
+    Info (332115): To Node      : ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_1
+    Info (332115): Launch Clock : sys_clk
+    Info (332115): Latch Clock  : sys_clk
+    Info (332115): 
+    Info (332115): Data Arrival Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):      0.000      0.000           launch edge time
+    Info (332115):      3.463      3.463  R        clock network delay
+    Info (332115):      3.463      0.000     uTco  ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_0
+    Info (332115):      3.463      0.000 FF  CELL  SRAM|controller|current_state.state_bit_0|q
+    Info (332115):      3.754      0.291 FF    IC  SRAM|controller|current_state.state_bit_1~0|dataf
+    Info (332115):      3.806      0.052 FR  CELL  SRAM|controller|current_state.state_bit_1~0|combout
+    Info (332115):      3.806      0.000 RR    IC  SRAM|controller|current_state.state_bit_1|d
+    Info (332115):      3.861      0.055 RR  CELL  ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_1
+    Info (332115): 
+    Info (332115): Data Required Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):      0.000      0.000           latch edge time
+    Info (332115):      3.913      3.913  R        clock network delay
+    Info (332115):      3.532     -0.381           clock pessimism removed
+    Info (332115):      3.532      0.000           clock uncertainty
+    Info (332115):      3.532      0.000      uTh  ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_1
+    Info (332115): 
+    Info (332115): Data Arrival Time  :     3.861
+    Info (332115): Data Required Time :     3.532
+    Info (332115): Slack              :     0.329 
+    Info (332115): ===================================================================
+    Info (332115): 
+Info (332115): Report Timing: Found 1 recovery paths (0 violated).  Worst case slack is 16.629
+    Info (332115): -to_clock [get_clocks {sys_clk}]
+    Info (332115): -recovery
+    Info (332115): -stdout
+Info (332115): Path #1: Recovery slack is 16.629 
+    Info (332115): ===================================================================
+    Info (332115): From Node    : uart_bus_wrap:UART|uart:uart_periph|reg_FCR[1]
+    Info (332115): To Node      : uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[2][5]
+    Info (332115): Launch Clock : sys_clk
+    Info (332115): Latch Clock  : sys_clk
+    Info (332115): 
+    Info (332115): Data Arrival Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):      0.000      0.000           launch edge time
+    Info (332115):      3.932      3.932  R        clock network delay
+    Info (332115):      3.932      0.000     uTco  uart_bus_wrap:UART|uart:uart_periph|reg_FCR[1]
+    Info (332115):      3.932      0.000 FF  CELL  UART|uart_periph|reg_FCR[1]|q
+    Info (332115):      3.932      0.000 FF    IC  UART|uart_periph|U_TX_FIFO|process_0~3|datae
+    Info (332115):      4.455      0.523 FF  CELL  UART|uart_periph|U_TX_FIFO|process_0~3|combout
+    Info (332115):      6.533      2.078 FF    IC  UART|uart_periph|U_TX_FIFO|QUEUE[2][5]|clrn
+    Info (332115):      7.009      0.476 FR  CELL  uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[2][5]
+    Info (332115): 
+    Info (332115): Data Required Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):     20.000     20.000           latch edge time
+    Info (332115):     23.444      3.444  R        clock network delay
+    Info (332115):     23.808      0.364           clock pessimism removed
+    Info (332115):     23.638     -0.170           clock uncertainty
+    Info (332115):     23.638      0.000     uTsu  uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[2][5]
+    Info (332115): 
+    Info (332115): Data Arrival Time  :     7.009
+    Info (332115): Data Required Time :    23.638
+    Info (332115): Slack              :    16.629 
+    Info (332115): ===================================================================
+    Info (332115): 
+Info (332115): Report Timing: Found 1 removal paths (0 violated).  Worst case slack is 0.830
+    Info (332115): -to_clock [get_clocks {sys_clk}]
+    Info (332115): -removal
+    Info (332115): -stdout
+Info (332115): Path #1: Removal slack is 0.830 
+    Info (332115): ===================================================================
+    Info (332115): From Node    : uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|current_state.state_bit_0
+    Info (332115): To Node      : uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|sample
+    Info (332115): Launch Clock : sys_clk
+    Info (332115): Latch Clock  : sys_clk
+    Info (332115): 
+    Info (332115): Data Arrival Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):      0.000      0.000           launch edge time
+    Info (332115):      3.474      3.474  R        clock network delay
+    Info (332115):      3.474      0.000     uTco  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|current_state.state_bit_0
+    Info (332115):      3.474      0.000 RR  CELL  UART|uart_periph|U_RX|current_state.state_bit_0|q
+    Info (332115):      3.742      0.268 RR    IC  UART|uart_periph|U_RX|process_1~0|dataf
+    Info (332115):      3.799      0.057 RF  CELL  UART|uart_periph|U_RX|process_1~0|combout
+    Info (332115):      3.954      0.155 FF    IC  UART|uart_periph|U_RX|sample|clrn
+    Info (332115):      4.378      0.424 FR  CELL  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|sample
+    Info (332115): 
+    Info (332115): Data Required Path:
+    Info (332115): 
+    Info (332115): Total (ns)  Incr (ns)     Type  Element
+    Info (332115): ==========  ========= ==  ====  ===================================
+    Info (332115):      0.000      0.000           latch edge time
+    Info (332115):      3.929      3.929  R        clock network delay
+    Info (332115):      3.548     -0.381           clock pessimism removed
+    Info (332115):      3.548      0.000           clock uncertainty
+    Info (332115):      3.548      0.000      uTh  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|sample
+    Info (332115): 
+    Info (332115): Data Arrival Time  :     4.378
+    Info (332115): Data Required Time :     3.548
+    Info (332115): Slack              :     0.830 
+    Info (332115): ===================================================================
+    Info (332115): 
+Info (332102): Design is not fully constrained for setup requirements
+Info (332102): Design is not fully constrained for hold requirements
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 741 megabytes
+    Info: Processing ended: Tue Sep  6 16:13:53 2022
+    Info: Elapsed time: 00:00:05
+    Info: Total CPU time (on all processors): 00:00:06
+
+
