@@ -3,8 +3,9 @@
 set project_name "mc2101"
 set make_assignment 1
 set close_project 0
-set RTL "rtl"
-set IPS "ips/aftab"
+set RTL "../rtl"
+set IPS "../ips/aftab"
+set FPGA_IPS "./ips/altera_mem_16384x8_dp"
 set SDC_FILE "mc2101.sdc"
 
 #ips components (AFTAB)
@@ -56,6 +57,12 @@ set SRC_IPS_COMPONENTS " \
     $IPS/aftab_datapath/aftab_datapath.vhd \
     $IPS/aftab_controller.vhd \
     $IPS/aftab_core.vhd"
+    
+#fpga ips
+set FPGA_IPS_COMPONENTS " \
+    $FPGA_IPS/altera_mem_16384x8_dp.vhd \
+    $FPGA_IPS/altera_mem_mc2101_controller.vhd \
+    $FPGA_IPS/altera_mem_mc2101_bus_wrap.vhd"
  
 #rtl components  
 set SRC_RTL_COMPONENTS " \
@@ -64,10 +71,6 @@ set SRC_RTL_COMPONENTS " \
     $RTL/gpio/gpio.vhd \
     $RTL/gpio/gpio_controller.vhd \
     $RTL/gpio/gpio_bus_wrap.vhd \
-    $RTL/ssram/program.vhd \
-    $RTL/ssram/ssram_fpga.vhd \
-    $RTL/ssram/ssram_controller.vhd \
-    $RTL/ssram/ssram_bus_wrap.vhd \
     $RTL/uart/uart_tx_core.vhd \
     $RTL/uart/uart_rx_core.vhd \
     $RTL/uart/fifo.vhd \
@@ -80,6 +83,13 @@ set SRC_RTL_COMPONENTS " \
     
 #check if some source files are missing
 foreach f $SRC_IPS_COMPONENTS {
+    if {[file exists $f]==0} {
+        puts "Source file $f doesn't exist!"
+        exit 1
+    }
+}
+
+foreach f $FPGA_IPS_COMPONENTS {
     if {[file exists $f]==0} {
         puts "Source file $f doesn't exist!"
         exit 1
@@ -132,6 +142,9 @@ if {$make_assignment} {
     
     #add vhdl design files
     foreach f $SRC_IPS_COMPONENTS {
+        set_global_assignment -name VHDL_FILE $f -hdl_version VHDL_2008
+    }  
+    foreach f $FPGA_IPS_COMPONENTS {
         set_global_assignment -name VHDL_FILE $f -hdl_version VHDL_2008
     }
     foreach f $SRC_RTL_COMPONENTS {
