@@ -5,7 +5,7 @@ PROGRAMMER=$(which quartus_pgm)
 
 JTAG_CFG=$(which jtagconfig)
 
-DEVICE=$(sudo $(JTAG_CFG) | grep DE-SoC | cut -d' ' -f3)
+DEVICE=$(sudo $JTAG_CFG | grep DE-SoC | cut -d' ' -f3)
 
 if [ -z "$DEVICE" ]
 then
