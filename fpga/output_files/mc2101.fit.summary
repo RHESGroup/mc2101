@@ -1,12 +1,12 @@
-Fitter Status : Successful - Tue Sep  6 16:13:45 2022
+Fitter Status : Successful - Wed Sep  7 17:42:10 2022
 Quartus Prime Version : 21.1.0 Build 842 10/21/2021 SJ Lite Edition
 Revision Name : mc2101
 Top-level Entity Name : mc2101
 Family : Cyclone V
 Device : 5CSEMA5F31C6
 Timing Models : Final
-Logic utilization (in ALMs) : 2,622 / 32,070 ( 8 % )
-Total registers : 3406
+Logic utilization (in ALMs) : 2,660 / 32,070 ( 8 % )
+Total registers : 3402
 Total pins : 36 / 457 ( 8 % )
 Total virtual pins : 0
 Total block memory bits : 131,072 / 4,065,280 ( 3 % )

@@ -153,7 +153,7 @@ RESERVED_INPUT               : AB13      :        :                   :         
 VCCIO3B                      : AB14      : power  :                   : 2.5V    : 3B        :                
 RESERVED_INPUT               : AB15      :        :                   :         : 3B        :                
 VCC_AUX                      : AB16      : power  :                   : 2.5V    :           :                
-gpio_pads[25]                : AB17      : bidir  : 2.5 V             :         : 4A        : N              
+RESERVED_INPUT               : AB17      :        :                   :         : 4A        :                
 VCCPD3B4A                    : AB18      : power  :                   : 2.5V    : 3B, 4A    :                
 GND                          : AB19      : gnd    :                   :         :           :                
 VCCPD3B4A                    : AB20      : power  :                   : 2.5V    : 3B, 4A    :                
@@ -184,7 +184,7 @@ RESERVED_INPUT               : AC14      :        :                   :         
 VCCPD3B4A                    : AC15      : power  :                   : 2.5V    : 3B, 4A    :                
 GND                          : AC16      : gnd    :                   :         :           :                
 VCCPD3B4A                    : AC17      : power  :                   : 2.5V    : 3B, 4A    :                
-gpio_pads[27]                : AC18      : bidir  : 2.5 V             :         : 4A        : N              
+RESERVED_INPUT               : AC18      :        :                   :         : 4A        :                
 VCCPD3B4A                    : AC19      : power  :                   : 2.5V    : 3B, 4A    :                
 RESERVED_INPUT               : AC20      :        :                   :         : 4A        :                
 VCCIO4A                      : AC21      : power  :                   : 2.5V    : 4A        :                
@@ -242,8 +242,8 @@ gpio_pads[9]                 : AE12      : bidir  : 2.5 V             :         
 RESERVED_INPUT               : AE13      :        :                   :         : 3B        :                
 RESERVED_INPUT               : AE14      :        :                   :         : 3B        :                
 VCCIO3B                      : AE15      : power  :                   : 2.5V    : 3B        :                
-gpio_pads[30]                : AE16      : bidir  : 2.5 V             :         : 4A        : N              
-RESERVED_INPUT               : AE17      :        :                   :         : 4A        :                
+gpio_pads[25]                : AE16      : bidir  : 2.5 V             :         : 4A        : N              
+gpio_pads[23]                : AE17      : bidir  : 2.5 V             :         : 4A        : N              
 RESERVED_INPUT               : AE18      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AE19      :        :                   :         : 4A        :                
 GND                          : AE20      : gnd    :                   :         :           :                
@@ -272,10 +272,10 @@ GND                          : AF12      : gnd    :                   :         
 RESERVED_INPUT               : AF13      :        :                   :         : 3B        :                
 sys_clk                      : AF14      : input  : 2.5 V             :         : 3B        : Y              
 RESERVED_INPUT               : AF15      :        :                   :         : 3B        :                
-RESERVED_INPUT               : AF16      :        :                   :         : 4A        :                
+gpio_pads[30]                : AF16      : bidir  : 2.5 V             :         : 4A        : N              
 GND                          : AF17      : gnd    :                   :         :           :                
 RESERVED_INPUT               : AF18      :        :                   :         : 4A        :                
-gpio_pads[26]                : AF19      : bidir  : 2.5 V             :         : 4A        : N              
+RESERVED_INPUT               : AF19      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AF20      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AF21      :        :                   :         : 4A        :                
 VCCIO4A                      : AF22      : power  :                   : 2.5V    : 4A        :                
@@ -303,11 +303,11 @@ RESERVED_INPUT               : AG13      :        :                   :         
 GND                          : AG14      : gnd    :                   :         :           :                
 RESERVED_INPUT               : AG15      :        :                   :         : 3B        :                
 RESERVED_INPUT               : AG16      :        :                   :         : 4A        :                
-RESERVED_INPUT               : AG17      :        :                   :         : 4A        :                
+gpio_pads[29]                : AG17      : bidir  : 2.5 V             :         : 4A        : N              
 RESERVED_INPUT               : AG18      :        :                   :         : 4A        :                
 VCCIO4A                      : AG19      : power  :                   : 2.5V    : 4A        :                
-gpio_pads[23]                : AG20      : bidir  : 2.5 V             :         : 4A        : N              
-RESERVED_INPUT               : AG21      :        :                   :         : 4A        :                
+RESERVED_INPUT               : AG20      :        :                   :         : 4A        :                
+gpio_pads[26]                : AG21      : bidir  : 2.5 V             :         : 4A        : N              
 RESERVED_INPUT               : AG22      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AG23      :        :                   :         : 4A        :                
 GND                          : AG24      : gnd    :                   :         :           :                
@@ -333,10 +333,10 @@ RESERVED_INPUT               : AH13      :        :                   :         
 RESERVED_INPUT               : AH14      :        :                   :         : 3B        :                
 RESERVED_INPUT               : AH15      :        :                   :         : 3B        :                
 VCCIO4A                      : AH16      : power  :                   : 2.5V    : 4A        :                
-RESERVED_INPUT               : AH17      :        :                   :         : 4A        :                
-gpio_pads[24]                : AH18      : bidir  : 2.5 V             :         : 4A        : N              
+gpio_pads[27]                : AH17      : bidir  : 2.5 V             :         : 4A        : N              
+RESERVED_INPUT               : AH18      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AH19      :        :                   :         : 4A        :                
-gpio_pads[28]                : AH20      : bidir  : 2.5 V             :         : 4A        : N              
+gpio_pads[24]                : AH20      : bidir  : 2.5 V             :         : 4A        : N              
 GND                          : AH21      : gnd    :                   :         :           :                
 RESERVED_INPUT               : AH22      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AH23      :        :                   :         : 4A        :                
@@ -365,9 +365,9 @@ VREFB3BN0                    : AJ15      : power  :                   :         
 RESERVED_INPUT               : AJ16      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AJ17      :        :                   :         : 4A        :                
 GND                          : AJ18      : gnd    :                   :         :           :                
-RESERVED_INPUT               : AJ19      :        :                   :         : 4A        :                
+gpio_pads[28]                : AJ19      : bidir  : 2.5 V             :         : 4A        : N              
 RESERVED_INPUT               : AJ20      :        :                   :         : 4A        :                
-gpio_pads[31]                : AJ21      : bidir  : 2.5 V             :         : 4A        : N              
+RESERVED_INPUT               : AJ21      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AJ22      :        :                   :         : 4A        :                
 VCCIO4A                      : AJ23      : power  :                   : 2.5V    : 4A        :                
 RESERVED_INPUT               : AJ24      :        :                   :         : 4A        :                
@@ -391,10 +391,10 @@ RESERVED_INPUT               : AK12      :        :                   :         
 RESERVED_INPUT               : AK13      :        :                   :         : 3B        :                
 RESERVED_INPUT               : AK14      :        :                   :         : 3B        :                
 GND                          : AK15      : gnd    :                   :         :           :                
-RESERVED_INPUT               : AK16      :        :                   :         : 4A        :                
+gpio_pads[31]                : AK16      : bidir  : 2.5 V             :         : 4A        : N              
 VREFB4AN0                    : AK17      : power  :                   :         : 4A        :                
 RESERVED_INPUT               : AK18      :        :                   :         : 4A        :                
-gpio_pads[29]                : AK19      : bidir  : 2.5 V             :         : 4A        : N              
+RESERVED_INPUT               : AK19      :        :                   :         : 4A        :                
 VCCIO4A                      : AK20      : power  :                   : 2.5V    : 4A        :                
 RESERVED_INPUT               : AK21      :        :                   :         : 4A        :                
 RESERVED_INPUT               : AK22      :        :                   :         : 4A        :                

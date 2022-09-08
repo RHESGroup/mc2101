@@ -1,5 +1,5 @@
 Assembler report for mc2101
-Tue Sep  6 16:14:04 2022
+Thu Sep  8 10:00:47 2022
 Quartus Prime Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition
 
 
@@ -38,7 +38,7 @@ https://fpgasoftware.intel.com/eula.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Tue Sep  6 16:14:04 2022 ;
+; Assembler Status      ; Successful - Thu Sep  8 10:00:47 2022 ;
 ; Revision Name         ; mc2101                                ;
 ; Top-level Entity Name ; mc2101                                ;
 ; Family                ; Cyclone V                             ;
@@ -94,8 +94,8 @@ https://fpgasoftware.intel.com/eula.
 +----------------+---------------------+
 ; Option         ; Setting             ;
 +----------------+---------------------+
-; JTAG usercode  ; 0x0161B328          ;
-; Checksum       ; 0x0161B328          ;
+; JTAG usercode  ; 0x0160C3F7          ;
+; Checksum       ; 0x0160C3F7          ;
 +----------------+---------------------+
 
 
@@ -119,13 +119,13 @@ Info: Running Quartus Prime Assembler
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Tue Sep  6 16:13:54 2022
+    Info: Processing started: Thu Sep  8 10:00:37 2022
 Info: Command: quartus_asm --read_settings_files=on --write_settings_files=off mc2101
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (115030): Assembler is generating device programming files
 Info: Quartus Prime Assembler was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 548 megabytes
-    Info: Processing ended: Tue Sep  6 16:14:04 2022
+    Info: Peak virtual memory: 567 megabytes
+    Info: Processing ended: Thu Sep  8 10:00:47 2022
     Info: Elapsed time: 00:00:10
     Info: Total CPU time (on all processors): 00:00:10
 

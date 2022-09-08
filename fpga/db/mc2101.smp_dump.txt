@@ -30,7 +30,7 @@ current_state.MISAL 0 1
 current_state.READ 1 1 
 current_state.WRITE 1 0 
 
-State Machine - |mc2101|ssram_bus_wrap:SRAM|ssram_controller:controller|current_state
+State Machine - |mc2101|ssram_bus_wrap:SRAM|altera_mem_mc2101_controller:controller|current_state
 Name current_state.state_bit_1 current_state.state_bit_0 
 current_state.IDLE 0 0 
 current_state.MEM_WR 0 1 

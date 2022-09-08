@@ -1,5 +1,5 @@
 Timing Analyzer report for mc2101
-Tue Sep  6 16:13:53 2022
+Wed Sep  7 17:42:18 2022
 Quartus Prime Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition
 
 
@@ -80,14 +80,14 @@ https://fpgasoftware.intel.com/eula.
 ; Number detected on machine ; 4           ;
 ; Maximum allowed            ; 4           ;
 ;                            ;             ;
-; Average used               ; 1.61        ;
+; Average used               ; 1.64        ;
 ; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;  20.7%      ;
-;     Processor 3            ;  20.1%      ;
-;     Processor 4            ;  19.7%      ;
+;     Processor 2            ;  22.9%      ;
+;     Processor 3            ;  22.1%      ;
+;     Processor 4            ;  18.7%      ;
 +----------------------------+-------------+
 
 
@@ -96,7 +96,7 @@ https://fpgasoftware.intel.com/eula.
 +---------------+--------+--------------------------+
 ; SDC File Path ; Status ; Read at                  ;
 +---------------+--------+--------------------------+
-; mc2101.sdc    ; OK     ; Tue Sep  6 16:13:51 2022 ;
+; mc2101.sdc    ; OK     ; Wed Sep  7 17:42:16 2022 ;
 +---------------+--------+--------------------------+
 
 
@@ -109,13 +109,13 @@ https://fpgasoftware.intel.com/eula.
 +------------+------+--------+-----------+-------+--------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-------------+
 
 
-+------------------------------------------------+
-; Fmax Summary                                   ;
-+----------+-----------------+------------+------+
-; Fmax     ; Restricted Fmax ; Clock Name ; Note ;
-+----------+-----------------+------------+------+
-; 62.4 MHz ; 62.4 MHz        ; sys_clk    ;      ;
-+----------+-----------------+------------+------+
++-------------------------------------------------+
+; Fmax Summary                                    ;
++-----------+-----------------+------------+------+
+; Fmax      ; Restricted Fmax ; Clock Name ; Note ;
++-----------+-----------------+------------+------+
+; 58.51 MHz ; 58.51 MHz       ; sys_clk    ;      ;
++-----------+-----------------+------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
 
@@ -130,7 +130,7 @@ HTML report is unavailable in plain text report export.
 +---------+-------+---------------+
 ; Clock   ; Slack ; End Point TNS ;
 +---------+-------+---------------+
-; sys_clk ; 1.987 ; 0.000         ;
+; sys_clk ; 1.455 ; 0.000         ;
 +---------+-------+---------------+
 
 
@@ -139,7 +139,7 @@ HTML report is unavailable in plain text report export.
 +---------+-------+---------------+
 ; Clock   ; Slack ; End Point TNS ;
 +---------+-------+---------------+
-; sys_clk ; 0.329 ; 0.000         ;
+; sys_clk ; 0.311 ; 0.000         ;
 +---------+-------+---------------+
 
 
@@ -148,7 +148,7 @@ HTML report is unavailable in plain text report export.
 +---------+--------+---------------+
 ; Clock   ; Slack  ; End Point TNS ;
 +---------+--------+---------------+
-; sys_clk ; 16.629 ; 0.000         ;
+; sys_clk ; 16.834 ; 0.000         ;
 +---------+--------+---------------+
 
 
@@ -157,7 +157,7 @@ HTML report is unavailable in plain text report export.
 +---------+-------+---------------+
 ; Clock   ; Slack ; End Point TNS ;
 +---------+-------+---------------+
-; sys_clk ; 0.830 ; 0.000         ;
+; sys_clk ; 0.964 ; 0.000         ;
 +---------+-------+---------------+
 
 
@@ -177,7 +177,7 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 33
 Shortest Synchronizer Chain: 2 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 29.502 ns
+Worst Case Available Settling Time: 29.707 ns
 
 
 
@@ -295,14 +295,14 @@ Worst Case Available Settling Time: 29.502 ns
 ; gpio_pads[20] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
 ; gpio_pads[21] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
 ; gpio_pads[22] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
-; gpio_pads[23] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
-; gpio_pads[24] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
-; gpio_pads[25] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[23] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[24] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[25] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.0374 V           ; 0.189 V                              ; 0.158 V                              ; 4.66e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.0374 V          ; 0.189 V                             ; 0.158 V                             ; 4.66e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
 ; gpio_pads[26] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
-; gpio_pads[27] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.96e-05 V                   ; 2.38 V              ; -0.0306 V           ; 0.23 V                               ; 0.206 V                              ; 4.83e-10 s                  ; 5.01e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.96e-05 V                  ; 2.38 V             ; -0.0306 V          ; 0.23 V                              ; 0.206 V                             ; 4.83e-10 s                 ; 5.01e-10 s                 ; No                        ; Yes                       ;
-; gpio_pads[28] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.49e-05 V                   ; 2.34 V              ; -0.0118 V           ; 0.182 V                              ; 0.051 V                              ; 4.81e-10 s                  ; 4.83e-10 s                  ; Yes                        ; Yes                        ; 2.32 V                      ; 3.49e-05 V                  ; 2.34 V             ; -0.0118 V          ; 0.182 V                             ; 0.051 V                             ; 4.81e-10 s                 ; 4.83e-10 s                 ; Yes                       ; Yes                       ;
+; gpio_pads[27] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.0374 V           ; 0.189 V                              ; 0.158 V                              ; 4.66e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.0374 V          ; 0.189 V                             ; 0.158 V                             ; 4.66e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[28] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.0374 V           ; 0.189 V                              ; 0.158 V                              ; 4.66e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.0374 V          ; 0.189 V                             ; 0.158 V                             ; 4.66e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
 ; gpio_pads[29] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
-; gpio_pads[30] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.0374 V           ; 0.189 V                              ; 0.158 V                              ; 4.66e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.0374 V          ; 0.189 V                             ; 0.158 V                             ; 4.66e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
+; gpio_pads[30] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
 ; gpio_pads[31] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 3.88e-05 V                   ; 2.39 V              ; -0.037 V            ; 0.188 V                              ; 0.158 V                              ; 4.67e-10 s                  ; 4.67e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 3.88e-05 V                  ; 2.39 V             ; -0.037 V           ; 0.188 V                             ; 0.158 V                             ; 4.67e-10 s                 ; 4.67e-10 s                 ; No                        ; Yes                       ;
 +---------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
 
@@ -312,7 +312,7 @@ Worst Case Available Settling Time: 29.502 ns
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; sys_clk    ; sys_clk  ; 39745763 ; 102      ; 17465    ; 0        ;
+; sys_clk    ; sys_clk  ; 37474220 ; 118      ; 18761    ; 0        ;
 +------------+----------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -322,7 +322,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; sys_clk    ; sys_clk  ; 39745763 ; 102      ; 17465    ; 0        ;
+; sys_clk    ; sys_clk  ; 37474220 ; 118      ; 18761    ; 0        ;
 +------------+----------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -332,7 +332,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; sys_clk    ; sys_clk  ; 359      ; 0        ; 0        ; 0        ;
+; sys_clk    ; sys_clk  ; 395      ; 0        ; 0        ; 0        ;
 +------------+----------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -342,7 +342,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; sys_clk    ; sys_clk  ; 359      ; 0        ; 0        ; 0        ;
+; sys_clk    ; sys_clk  ; 395      ; 0        ; 0        ; 0        ;
 +------------+----------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -367,9 +367,9 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 ; Illegal Clocks                  ; 0     ; 0    ;
 ; Unconstrained Clocks            ; 0     ; 0    ;
 ; Unconstrained Input Ports       ; 34    ; 34   ;
-; Unconstrained Input Port Paths  ; 3438  ; 3438 ;
+; Unconstrained Input Port Paths  ; 3434  ; 3434 ;
 ; Unconstrained Output Ports      ; 33    ; 33   ;
-; Unconstrained Output Port Paths ; 76    ; 76   ;
+; Unconstrained Output Port Paths ; 77    ; 77   ;
 +---------------------------------+-------+------+
 
 
@@ -568,7 +568,7 @@ Info: Running Quartus Prime Timing Analyzer
     Info: Intel and sold by Intel or its authorized distributors.  Please
     Info: refer to the applicable agreement for further details, at
     Info: https://fpgasoftware.intel.com/eula.
-    Info: Processing started: Tue Sep  6 16:13:48 2022
+    Info: Processing started: Wed Sep  7 17:42:14 2022
 Info: Command: quartus_sta --sdc=mc2101.sdc --do_report_timing mc2101 --model=slow
 Info: qsta_default_script.tcl version: #1
 Info: Using timing model slow
@@ -580,22 +580,22 @@ Info (332104): Reading SDC File: 'mc2101.sdc'
 Info (332143): No user constrained clock uncertainty found in the design. Calling "derive_clock_uncertainty"
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
 Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
-Info (332146): Worst-case setup slack is 1.987
+Info (332146): Worst-case setup slack is 1.455
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     1.987               0.000 sys_clk 
-Info (332146): Worst-case hold slack is 0.329
+    Info (332119):     1.455               0.000 sys_clk 
+Info (332146): Worst-case hold slack is 0.311
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.329               0.000 sys_clk 
-Info (332146): Worst-case recovery slack is 16.629
+    Info (332119):     0.311               0.000 sys_clk 
+Info (332146): Worst-case recovery slack is 16.834
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    16.629               0.000 sys_clk 
-Info (332146): Worst-case removal slack is 0.830
+    Info (332119):    16.834               0.000 sys_clk 
+Info (332146): Worst-case removal slack is 0.964
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.830               0.000 sys_clk 
+    Info (332119):     0.964               0.000 sys_clk 
 Info (332146): Worst-case minimum pulse width slack is 8.873
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
@@ -605,16 +605,16 @@ Info (332114): Report Metastability: Found 33 synchronizer chains.
     Info (332114): Number of Synchronizer Chains Found: 33
     Info (332114): Shortest Synchronizer Chain: 2 Registers
     Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 29.502 ns
+    Info (332114): Worst Case Available Settling Time: 29.707 ns
     Info (332114): 
-Info (332115): Report Timing: Found 1 setup paths (0 violated).  Worst case slack is 1.987
+Info (332115): Report Timing: Found 1 setup paths (0 violated).  Worst case slack is 1.455
     Info (332115): -to_clock [get_clocks {sys_clk}]
     Info (332115): -setup
     Info (332115): -stdout
-Info (332115): Path #1: Setup slack is 1.987 
+Info (332115): Path #1: Setup slack is 1.455 
     Info (332115): ===================================================================
-    Info (332115): From Node    : core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_dawu:dawu|aftab_dawu_datapath:Datapath|aftab_register:addrReg|outReg[7]
-    Info (332115): To Node      : ssram_bus_wrap:SRAM|ssram_fpga:memory|altsyncram:mem_rtl_0|altsyncram_pso1:auto_generated|ram_block1a14~CLOCK1_ENABLE1_0
+    Info (332115): From Node    : core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_dawu:dawu|aftab_dawu_datapath:Datapath|aftab_register:addrReg|outReg[1]
+    Info (332115): To Node      : ssram_bus_wrap:SRAM|altera_mem_16384x8_dp:altera_memory_2p|altsyncram:altsyncram_component|altsyncram_2334:auto_generated|ram_block1a4~CLOCK1_ENABLE1_0
     Info (332115): Launch Clock : sys_clk
     Info (332115): Latch Clock  : sys_clk (INVERTED)
     Info (332115): 
@@ -624,50 +624,50 @@ Info (332115): Path #1: Setup slack is 1.987
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):      0.000      0.000           launch edge time
     Info (332115):      3.928      3.928  R        clock network delay
-    Info (332115):      3.928      0.000     uTco  core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_dawu:dawu|aftab_dawu_datapath:Datapath|aftab_register:addrReg|outReg[7]
-    Info (332115):      3.928      0.000 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|addrReg|outReg[7]|q
-    Info (332115):      4.891      0.963 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:8:HA|o_carry|datab
-    Info (332115):      5.371      0.480 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:8:HA|o_carry|combout
-    Info (332115):      5.570      0.199 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:13:HA|o_carry|datae
-    Info (332115):      5.826      0.256 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:13:HA|o_carry|combout
-    Info (332115):      6.046      0.220 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:18:HA|o_carry|dataf
-    Info (332115):      6.117      0.071 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:18:HA|o_carry|combout
-    Info (332115):      6.900      0.783 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:23:HA|o_carry|dataf
-    Info (332115):      6.974      0.074 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:23:HA|o_carry|combout
-    Info (332115):      7.259      0.285 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:26:HA|o_sum|dataa
-    Info (332115):      7.724      0.465 FR  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:26:HA|o_sum|combout
-    Info (332115):      8.152      0.428 RR    IC  AFTAB|core|memAddr[26]~5|dataf
-    Info (332115):      8.229      0.077 RR  CELL  AFTAB|core|memAddr[26]~5|combout
-    Info (332115):      8.672      0.443 RR    IC  AFTAB|selRAM~2|dataa
-    Info (332115):      9.179      0.507 RF  CELL  AFTAB|selRAM~2|combout
-    Info (332115):      9.391      0.212 FF    IC  SRAM|controller|next_state.MEM_RD~0|dataf
-    Info (332115):      9.466      0.075 FF  CELL  SRAM|controller|next_state.MEM_RD~0|combout
-    Info (332115):     10.727      1.261 FF    IC  SRAM|memory|mem_rtl_0|auto_generated|ram_block1a14|ena1
-    Info (332115):     10.947      0.220 FR  CELL  ssram_bus_wrap:SRAM|ssram_fpga:memory|altsyncram:mem_rtl_0|altsyncram_pso1:auto_generated|ram_block1a14~CLOCK1_ENABLE1_0
+    Info (332115):      3.928      0.000     uTco  core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_dawu:dawu|aftab_dawu_datapath:Datapath|aftab_register:addrReg|outReg[1]
+    Info (332115):      3.928      0.000 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|addrReg|outReg[1]|q
+    Info (332115):      4.645      0.717 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:3:HA|o_carry|datab
+    Info (332115):      5.125      0.480 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:3:HA|o_carry|combout
+    Info (332115):      5.346      0.221 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:8:HA|o_carry|datad
+    Info (332115):      5.782      0.436 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:8:HA|o_carry|combout
+    Info (332115):      6.155      0.373 FF    IC  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:13:HA|o_carry|dataf
+    Info (332115):      6.229      0.074 FF  CELL  AFTAB|core|datapathAFTAB|dawu|Datapath|Adder|\GEN_HalfAdder:13:HA|o_carry|combout
+    Info (332115):      6.400      0.171 FF    IC  AFTAB|LessThan5~2|dataa
+    Info (332115):      6.883      0.483 FR  CELL  AFTAB|LessThan5~2|combout
+    Info (332115):      7.489      0.606 RR    IC  AFTAB|LessThan5~3|datab
+    Info (332115):      7.982      0.493 RF  CELL  AFTAB|LessThan5~3|combout
+    Info (332115):      8.342      0.360 FF    IC  AFTAB|selRAM~1|dataa
+    Info (332115):      8.818      0.476 FF  CELL  AFTAB|selRAM~1|combout
+    Info (332115):      9.027      0.209 FF    IC  AFTAB|selRAM~2|datad
+    Info (332115):      9.521      0.494 FF  CELL  AFTAB|selRAM~2|combout
+    Info (332115):      9.730      0.209 FF    IC  SRAM|altera_memory_2p|altsyncram_component|auto_generated|rden_decode_b|eq_node[0]|datad
+    Info (332115):     10.219      0.489 FF  CELL  SRAM|altera_memory_2p|altsyncram_component|auto_generated|rden_decode_b|eq_node[0]|combout
+    Info (332115):     11.553      1.334 FF    IC  SRAM|altera_memory_2p|altsyncram_component|auto_generated|ram_block1a4|ena1
+    Info (332115):     11.773      0.220 FR  CELL  ssram_bus_wrap:SRAM|altera_mem_16384x8_dp:altera_memory_2p|altsyncram:altsyncram_component|altsyncram_2334:auto_generated|ram_block1a4~CLOCK1_ENABLE1_0
     Info (332115): 
     Info (332115): Data Required Path:
     Info (332115): 
     Info (332115): Total (ns)  Incr (ns)     Type  Element
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):     10.000     10.000           latch edge time
-    Info (332115):     13.064      3.064  F        clock network delay
-    Info (332115):     13.104      0.040           clock pessimism removed
-    Info (332115):     12.934     -0.170           clock uncertainty
-    Info (332115):     12.934      0.000     uTsu  ssram_bus_wrap:SRAM|ssram_fpga:memory|altsyncram:mem_rtl_0|altsyncram_pso1:auto_generated|ram_block1a14~CLOCK1_ENABLE1_0
+    Info (332115):     13.041      3.041  F        clock network delay
+    Info (332115):     13.398      0.357           clock pessimism removed
+    Info (332115):     13.228     -0.170           clock uncertainty
+    Info (332115):     13.228      0.000     uTsu  ssram_bus_wrap:SRAM|altera_mem_16384x8_dp:altera_memory_2p|altsyncram:altsyncram_component|altsyncram_2334:auto_generated|ram_block1a4~CLOCK1_ENABLE1_0
     Info (332115): 
-    Info (332115): Data Arrival Time  :    10.947
-    Info (332115): Data Required Time :    12.934
-    Info (332115): Slack              :     1.987 
+    Info (332115): Data Arrival Time  :    11.773
+    Info (332115): Data Required Time :    13.228
+    Info (332115): Slack              :     1.455 
     Info (332115): ===================================================================
     Info (332115): 
-Info (332115): Report Timing: Found 1 hold paths (0 violated).  Worst case slack is 0.329
+Info (332115): Report Timing: Found 1 hold paths (0 violated).  Worst case slack is 0.311
     Info (332115): -to_clock [get_clocks {sys_clk}]
     Info (332115): -hold
     Info (332115): -stdout
-Info (332115): Path #1: Hold slack is 0.329 
+Info (332115): Path #1: Hold slack is 0.311 
     Info (332115): ===================================================================
-    Info (332115): From Node    : ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_0
-    Info (332115): To Node      : ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_1
+    Info (332115): From Node    : core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_register:regADR|outReg[28]
+    Info (332115): To Node      : core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_daru:daru|aftab_daru_datapath:DataPath|aftab_register:addrReg|outReg[28]
     Info (332115): Launch Clock : sys_clk
     Info (332115): Latch Clock  : sys_clk
     Info (332115): 
@@ -676,37 +676,37 @@ Info (332115): Path #1: Hold slack is 0.329
     Info (332115): Total (ns)  Incr (ns)     Type  Element
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):      0.000      0.000           launch edge time
-    Info (332115):      3.463      3.463  R        clock network delay
-    Info (332115):      3.463      0.000     uTco  ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_0
-    Info (332115):      3.463      0.000 FF  CELL  SRAM|controller|current_state.state_bit_0|q
-    Info (332115):      3.754      0.291 FF    IC  SRAM|controller|current_state.state_bit_1~0|dataf
-    Info (332115):      3.806      0.052 FR  CELL  SRAM|controller|current_state.state_bit_1~0|combout
-    Info (332115):      3.806      0.000 RR    IC  SRAM|controller|current_state.state_bit_1|d
-    Info (332115):      3.861      0.055 RR  CELL  ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_1
+    Info (332115):      3.458      3.458  R        clock network delay
+    Info (332115):      3.458      0.000     uTco  core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_register:regADR|outReg[28]
+    Info (332115):      3.458      0.000 FF  CELL  AFTAB|core|datapathAFTAB|regADR|outReg[28]|q
+    Info (332115):      3.759      0.301 FF    IC  AFTAB|core|datapathAFTAB|mux3|w[28]~31|dataf
+    Info (332115):      3.805      0.046 FF  CELL  AFTAB|core|datapathAFTAB|mux3|w[28]~31|combout
+    Info (332115):      3.805      0.000 FF    IC  AFTAB|core|datapathAFTAB|daru|DataPath|addrReg|outReg[28]|d
+    Info (332115):      3.863      0.058 FF  CELL  core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_daru:daru|aftab_daru_datapath:DataPath|aftab_register:addrReg|outReg[28]
     Info (332115): 
     Info (332115): Data Required Path:
     Info (332115): 
     Info (332115): Total (ns)  Incr (ns)     Type  Element
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):      0.000      0.000           latch edge time
-    Info (332115):      3.913      3.913  R        clock network delay
-    Info (332115):      3.532     -0.381           clock pessimism removed
-    Info (332115):      3.532      0.000           clock uncertainty
-    Info (332115):      3.532      0.000      uTh  ssram_bus_wrap:SRAM|ssram_controller:controller|current_state.state_bit_1
+    Info (332115):      3.933      3.933  R        clock network delay
+    Info (332115):      3.552     -0.381           clock pessimism removed
+    Info (332115):      3.552      0.000           clock uncertainty
+    Info (332115):      3.552      0.000      uTh  core_bus_wrap:AFTAB|aftab_core:core|aftab_datapath:datapathAFTAB|aftab_daru:daru|aftab_daru_datapath:DataPath|aftab_register:addrReg|outReg[28]
     Info (332115): 
-    Info (332115): Data Arrival Time  :     3.861
-    Info (332115): Data Required Time :     3.532
-    Info (332115): Slack              :     0.329 
+    Info (332115): Data Arrival Time  :     3.863
+    Info (332115): Data Required Time :     3.552
+    Info (332115): Slack              :     0.311 
     Info (332115): ===================================================================
     Info (332115): 
-Info (332115): Report Timing: Found 1 recovery paths (0 violated).  Worst case slack is 16.629
+Info (332115): Report Timing: Found 1 recovery paths (0 violated).  Worst case slack is 16.834
     Info (332115): -to_clock [get_clocks {sys_clk}]
     Info (332115): -recovery
     Info (332115): -stdout
-Info (332115): Path #1: Recovery slack is 16.629 
+Info (332115): Path #1: Recovery slack is 16.834 
     Info (332115): ===================================================================
     Info (332115): From Node    : uart_bus_wrap:UART|uart:uart_periph|reg_FCR[1]
-    Info (332115): To Node      : uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[2][5]
+    Info (332115): To Node      : uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[10][2]
     Info (332115): Launch Clock : sys_clk
     Info (332115): Latch Clock  : sys_clk
     Info (332115): 
@@ -715,37 +715,37 @@ Info (332115): Path #1: Recovery slack is 16.629
     Info (332115): Total (ns)  Incr (ns)     Type  Element
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):      0.000      0.000           launch edge time
-    Info (332115):      3.932      3.932  R        clock network delay
-    Info (332115):      3.932      0.000     uTco  uart_bus_wrap:UART|uart:uart_periph|reg_FCR[1]
-    Info (332115):      3.932      0.000 FF  CELL  UART|uart_periph|reg_FCR[1]|q
-    Info (332115):      3.932      0.000 FF    IC  UART|uart_periph|U_TX_FIFO|process_0~3|datae
-    Info (332115):      4.455      0.523 FF  CELL  UART|uart_periph|U_TX_FIFO|process_0~3|combout
-    Info (332115):      6.533      2.078 FF    IC  UART|uart_periph|U_TX_FIFO|QUEUE[2][5]|clrn
-    Info (332115):      7.009      0.476 FR  CELL  uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[2][5]
+    Info (332115):      3.916      3.916  R        clock network delay
+    Info (332115):      3.916      0.000     uTco  uart_bus_wrap:UART|uart:uart_periph|reg_FCR[1]
+    Info (332115):      3.916      0.000 FF  CELL  UART|uart_periph|reg_FCR[1]|q
+    Info (332115):      3.916      0.000 FF    IC  UART|uart_periph|U_TX_FIFO|process_0~3|datae
+    Info (332115):      4.351      0.435 FF  CELL  UART|uart_periph|U_TX_FIFO|process_0~3|combout
+    Info (332115):      6.331      1.980 FF    IC  UART|uart_periph|U_TX_FIFO|QUEUE[10][2]|clrn
+    Info (332115):      6.799      0.468 FR  CELL  uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[10][2]
     Info (332115): 
     Info (332115): Data Required Path:
     Info (332115): 
     Info (332115): Total (ns)  Incr (ns)     Type  Element
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):     20.000     20.000           latch edge time
-    Info (332115):     23.444      3.444  R        clock network delay
-    Info (332115):     23.808      0.364           clock pessimism removed
-    Info (332115):     23.638     -0.170           clock uncertainty
-    Info (332115):     23.638      0.000     uTsu  uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[2][5]
+    Info (332115):     23.439      3.439  R        clock network delay
+    Info (332115):     23.803      0.364           clock pessimism removed
+    Info (332115):     23.633     -0.170           clock uncertainty
+    Info (332115):     23.633      0.000     uTsu  uart_bus_wrap:UART|uart:uart_periph|fifo:U_TX_FIFO|QUEUE[10][2]
     Info (332115): 
-    Info (332115): Data Arrival Time  :     7.009
-    Info (332115): Data Required Time :    23.638
-    Info (332115): Slack              :    16.629 
+    Info (332115): Data Arrival Time  :     6.799
+    Info (332115): Data Required Time :    23.633
+    Info (332115): Slack              :    16.834 
     Info (332115): ===================================================================
     Info (332115): 
-Info (332115): Report Timing: Found 1 removal paths (0 violated).  Worst case slack is 0.830
+Info (332115): Report Timing: Found 1 removal paths (0 violated).  Worst case slack is 0.964
     Info (332115): -to_clock [get_clocks {sys_clk}]
     Info (332115): -removal
     Info (332115): -stdout
-Info (332115): Path #1: Removal slack is 0.830 
+Info (332115): Path #1: Removal slack is 0.964 
     Info (332115): ===================================================================
-    Info (332115): From Node    : uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|current_state.state_bit_0
-    Info (332115): To Node      : uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|sample
+    Info (332115): From Node    : uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|current_state.state_bit_1~DUPLICATE
+    Info (332115): To Node      : uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|count[11]~DUPLICATE
     Info (332115): Launch Clock : sys_clk
     Info (332115): Latch Clock  : sys_clk
     Info (332115): 
@@ -754,35 +754,35 @@ Info (332115): Path #1: Removal slack is 0.830
     Info (332115): Total (ns)  Incr (ns)     Type  Element
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):      0.000      0.000           launch edge time
-    Info (332115):      3.474      3.474  R        clock network delay
-    Info (332115):      3.474      0.000     uTco  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|current_state.state_bit_0
-    Info (332115):      3.474      0.000 RR  CELL  UART|uart_periph|U_RX|current_state.state_bit_0|q
-    Info (332115):      3.742      0.268 RR    IC  UART|uart_periph|U_RX|process_1~0|dataf
-    Info (332115):      3.799      0.057 RF  CELL  UART|uart_periph|U_RX|process_1~0|combout
-    Info (332115):      3.954      0.155 FF    IC  UART|uart_periph|U_RX|sample|clrn
-    Info (332115):      4.378      0.424 FR  CELL  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|sample
+    Info (332115):      3.460      3.460  R        clock network delay
+    Info (332115):      3.460      0.000     uTco  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|current_state.state_bit_1~DUPLICATE
+    Info (332115):      3.460      0.000 RR  CELL  UART|uart_periph|U_RX|current_state.state_bit_1~DUPLICATE|q
+    Info (332115):      3.758      0.298 RR    IC  UART|uart_periph|U_RX|process_1~0|dataf
+    Info (332115):      3.813      0.055 RF  CELL  UART|uart_periph|U_RX|process_1~0|combout
+    Info (332115):      4.074      0.261 FF    IC  UART|uart_periph|U_RX|count[11]~DUPLICATE|clrn
+    Info (332115):      4.498      0.424 FR  CELL  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|count[11]~DUPLICATE
     Info (332115): 
     Info (332115): Data Required Path:
     Info (332115): 
     Info (332115): Total (ns)  Incr (ns)     Type  Element
     Info (332115): ==========  ========= ==  ====  ===================================
     Info (332115):      0.000      0.000           latch edge time
-    Info (332115):      3.929      3.929  R        clock network delay
-    Info (332115):      3.548     -0.381           clock pessimism removed
-    Info (332115):      3.548      0.000           clock uncertainty
-    Info (332115):      3.548      0.000      uTh  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|sample
+    Info (332115):      3.915      3.915  R        clock network delay
+    Info (332115):      3.534     -0.381           clock pessimism removed
+    Info (332115):      3.534      0.000           clock uncertainty
+    Info (332115):      3.534      0.000      uTh  uart_bus_wrap:UART|uart:uart_periph|uart_rx_core:U_RX|count[11]~DUPLICATE
     Info (332115): 
-    Info (332115): Data Arrival Time  :     4.378
-    Info (332115): Data Required Time :     3.548
-    Info (332115): Slack              :     0.830 
+    Info (332115): Data Arrival Time  :     4.498
+    Info (332115): Data Required Time :     3.534
+    Info (332115): Slack              :     0.964 
     Info (332115): ===================================================================
     Info (332115): 
 Info (332102): Design is not fully constrained for setup requirements
 Info (332102): Design is not fully constrained for hold requirements
 Info: Quartus Prime Timing Analyzer was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 741 megabytes
-    Info: Processing ended: Tue Sep  6 16:13:53 2022
-    Info: Elapsed time: 00:00:05
+    Info: Peak virtual memory: 737 megabytes
+    Info: Processing ended: Wed Sep  7 17:42:18 2022
+    Info: Elapsed time: 00:00:04
     Info: Total CPU time (on all processors): 00:00:06
 
 

@@ -1,5 +1,5 @@
 Flow report for mc2101
-Tue Sep  6 16:14:04 2022
+Thu Sep  8 10:00:47 2022
 Quartus Prime Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition
 
 
@@ -41,15 +41,15 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +---------------------------------+---------------------------------------------+
-; Flow Status                     ; Successful - Tue Sep  6 16:14:04 2022       ;
+; Flow Status                     ; Successful - Thu Sep  8 10:00:47 2022       ;
 ; Quartus Prime Version           ; 21.1.0 Build 842 10/21/2021 SJ Lite Edition ;
 ; Revision Name                   ; mc2101                                      ;
 ; Top-level Entity Name           ; mc2101                                      ;
 ; Family                          ; Cyclone V                                   ;
 ; Device                          ; 5CSEMA5F31C6                                ;
 ; Timing Models                   ; Final                                       ;
-; Logic utilization (in ALMs)     ; 2,622 / 32,070 ( 8 % )                      ;
-; Total registers                 ; 3406                                        ;
+; Logic utilization (in ALMs)     ; 2,660 / 32,070 ( 8 % )                      ;
+; Total registers                 ; 3402                                        ;
 ; Total pins                      ; 36 / 457 ( 8 % )                            ;
 ; Total virtual pins              ; 0                                           ;
 ; Total block memory bits         ; 131,072 / 4,065,280 ( 3 % )                 ;
@@ -68,7 +68,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 09/06/2022 16:09:38 ;
+; Start date & time ; 09/07/2022 17:38:27 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; mc2101              ;
 +-------------------+---------------------+
@@ -79,7 +79,7 @@ https://fpgasoftware.intel.com/eula.
 +--------------------------+--------------------------------+---------------+-------------+------------+
 ; Assignment Name          ; Value                          ; Default Value ; Entity Name ; Section Id ;
 +--------------------------+--------------------------------+---------------+-------------+------------+
-; COMPILER_SIGNATURE_ID    ; 90520732458721.166248057857514 ; --            ; --          ; --         ;
+; COMPILER_SIGNATURE_ID    ; 90520732458721.166257230609575 ; --            ; --          ; --         ;
 ; PROJECT_OUTPUT_DIRECTORY ; output_files                   ; --            ; --          ; --         ;
 ; STATE_MACHINE_PROCESSING ; minimal bits                   ; Auto          ; --          ; --         ;
 +--------------------------+--------------------------------+---------------+-------------+------------+
@@ -90,11 +90,20 @@ https://fpgasoftware.intel.com/eula.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:34     ; 1.0                     ; 601 MB              ; 00:00:47                           ;
-; Fitter               ; 00:03:32     ; 1.2                     ; 1988 MB             ; 00:06:06                           ;
-; Timing Analyzer      ; 00:00:05     ; 1.6                     ; 741 MB              ; 00:00:06                           ;
-; Assembler            ; 00:00:10     ; 1.0                     ; 548 MB              ; 00:00:10                           ;
-; Total                ; 00:04:21     ; --                      ; --                  ; 00:07:09                           ;
+; Analysis & Synthesis ; 00:00:34     ; 1.0                     ; 565 MB              ; 00:00:47                           ;
+; Fitter               ; 00:03:08     ; 1.2                     ; 1991 MB             ; 00:05:23                           ;
+; Timing Analyzer      ; 00:00:04     ; 1.6                     ; 737 MB              ; 00:00:06                           ;
+; Assembler            ; 00:00:10     ; 1.0                     ; 547 MB              ; 00:00:10                           ;
+; MIF/HEX Update       ; 00:00:12     ; 1.0                     ; 837 MB              ; 00:00:11                           ;
+; Assembler            ; 00:00:10     ; 1.0                     ; 558 MB              ; 00:00:10                           ;
+; MIF/HEX Update       ; 00:00:02     ; 1.0                     ; 838 MB              ; 00:00:02                           ;
+; MIF/HEX Update       ; 00:00:11     ; 1.0                     ; 841 MB              ; 00:00:11                           ;
+; Assembler            ; 00:00:10     ; 1.0                     ; 567 MB              ; 00:00:10                           ;
+; MIF/HEX Update       ; 00:00:12     ; 1.0                     ; 842 MB              ; 00:00:11                           ;
+; Assembler            ; 00:00:10     ; 1.0                     ; 563 MB              ; 00:00:10                           ;
+; MIF/HEX Update       ; 00:00:12     ; 1.0                     ; 845 MB              ; 00:00:11                           ;
+; Assembler            ; 00:00:10     ; 1.0                     ; 567 MB              ; 00:00:10                           ;
+; Total                ; 00:05:25     ; --                      ; --                  ; 00:07:52                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
@@ -107,6 +116,15 @@ https://fpgasoftware.intel.com/eula.
 ; Fitter               ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
 ; Timing Analyzer      ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
 ; Assembler            ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; MIF/HEX Update       ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; Assembler            ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; MIF/HEX Update       ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; MIF/HEX Update       ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; Assembler            ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; MIF/HEX Update       ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; Assembler            ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; MIF/HEX Update       ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
+; Assembler            ; cnl-riscv        ; Ubuntu 21.10 ; 21         ; x86_64         ;
 +----------------------+------------------+--------------+------------+----------------+
 
 
@@ -116,6 +134,15 @@ https://fpgasoftware.intel.com/eula.
 quartus_map --read_settings_files=on --write_settings_files=off mc2101 --optimize=balanced --state_machine_encoding=minimal_bits
 quartus_fit --read_settings_files=on --write_settings_files=off mc2101
 quartus_sta --sdc=mc2101.sdc --do_report_timing mc2101 --model=slow
+quartus_asm --read_settings_files=on --write_settings_files=off mc2101
+quartus_cdb mc2101 --update_mif
+quartus_asm --read_settings_files=on --write_settings_files=off mc2101
+quartus_cdb mc2101 --update_mif
+quartus_cdb mc2101 --update_mif
+quartus_asm --read_settings_files=on --write_settings_files=off mc2101
+quartus_cdb mc2101 --update_mif
+quartus_asm --read_settings_files=on --write_settings_files=off mc2101
+quartus_cdb mc2101 --update_mif
 quartus_asm --read_settings_files=on --write_settings_files=off mc2101
 
 

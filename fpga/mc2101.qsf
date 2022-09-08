@@ -19,7 +19,7 @@
 #
 # Quartus Prime
 # Version 21.1.0 Build 842 10/21/2021 SJ Lite Edition
-# Date created = 12:46:10  September 05, 2022
+# Date created = 16:27:31  September 07, 2022
 #
 # -------------------------------------------------------------------------- #
 #
@@ -40,7 +40,7 @@
 set_global_assignment -name FAMILY "Cyclone V"
 set_global_assignment -name DEVICE 5CSEMA5F31C6
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 21.1.0
-set_global_assignment -name PROJECT_CREATION_TIME_DATE "12:46:10  SEPTEMBER 05, 2022"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "16:27:31  SEPTEMBER 07, 2022"
 set_global_assignment -name LAST_QUARTUS_VERSION "21.1.0 Lite Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_WEAK_PULLUP "AS INPUT TRI-STATED"
@@ -72,67 +72,66 @@ set_location_assignment PIN_AA15 -to gpio_pads[20]
 set_location_assignment PIN_W15 -to gpio_pads[21]
 set_location_assignment PIN_Y16 -to gpio_pads[22]
 set_global_assignment -name TOP_LEVEL_ENTITY mc2101
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_register.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_multiplexer.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_comparator.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_counter.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_isseu.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_full_adder.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_half_adder.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_one_bit_register.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_opt_adder.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_adder.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_adder_subtractor.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_decoder.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_barrel_shifter.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_llu.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_sulu.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_register_file.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_ctrl.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_logic.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_csr_addressing_decoder.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_csr_counter.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_csr_isl.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_csr_registers.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_iccd.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_isagu.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_csr/aftab_register_bank.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_shift_register.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_datapath.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_datapath.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_tcl.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_su_divider.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_aau/aftab_aau.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_daru/aftab_daru_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_daru/aftab_daru_error_detector.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_daru/aftab_daru_datapath.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_daru/aftab_daru.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_error_detector.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_datapath.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_datapath/aftab_datapath.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE ips/aftab/aftab_core.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/gpio/gpio_pads_if.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/gpio/gpio_core.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/gpio/gpio.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/gpio/gpio_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/gpio/gpio_bus_wrap.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/ssram/program.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/ssram/ssram_fpga.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/ssram/ssram_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/ssram/ssram_bus_wrap.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/uart/uart_tx_core.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/uart/uart_rx_core.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/uart/fifo.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/uart/uart_interrupt.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/uart/uart.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/uart/uart_controller.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/uart/uart_bus_wrap.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/core_bus_wrap.vhd -hdl_version VHDL_2008
-set_global_assignment -name VHDL_FILE rtl/mc2101.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_register.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_multiplexer.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_comparator.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_counter.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_isseu.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_full_adder.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_half_adder.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_one_bit_register.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_opt_adder.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_adder.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_adder_subtractor.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_decoder.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_barrel_shifter.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_llu.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_sulu.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_register_file.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_ctrl.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_logic.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_csr_addressing_decoder.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_csr_counter.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_csr_isl.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_csr_registers.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_iccd.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_isagu.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_csr/aftab_register_bank.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_shift_register.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_datapath.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_datapath.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_tcl.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_su_divider.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_aau/aftab_aau.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_daru/aftab_daru_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_daru/aftab_daru_error_detector.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_daru/aftab_daru_datapath.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_daru/aftab_daru.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_error_detector.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_datapath.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_datapath/aftab_datapath.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../ips/aftab/aftab_core.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ./ips/altera_mem_16384x8_dp/altera_mem_16384x8_dp.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ./ips/altera_mem_16384x8_dp/altera_mem_mc2101_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ./ips/altera_mem_16384x8_dp/altera_mem_mc2101_bus_wrap.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/gpio/gpio_pads_if.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/gpio/gpio_core.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/gpio/gpio.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/gpio/gpio_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/gpio/gpio_bus_wrap.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/uart/uart_tx_core.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/uart/uart_rx_core.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/uart/fifo.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/uart/uart_interrupt.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/uart/uart.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/uart/uart_controller.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/uart/uart_bus_wrap.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/core_bus_wrap.vhd -hdl_version VHDL_2008
+set_global_assignment -name VHDL_FILE ../rtl/mc2101.vhd -hdl_version VHDL_2008
