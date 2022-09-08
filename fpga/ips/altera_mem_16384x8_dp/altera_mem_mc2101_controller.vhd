@@ -1,9 +1,9 @@
 -- **************************************************************************************
---	Filename:	uart_controller.vhd
+--	Filename:	altera_mem_mc2101_controller.vhd
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		21 Aug 2022
+--	Date:		7 Sep 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -31,37 +31,40 @@
 -- **************************************************************************************
 --
 --	File content description:
---	uart peripheral controller
+--	ssram hbus peripheral controller
 --
 -- **************************************************************************************
-
 LIBRARY IEEE;
 LIBRARY STD;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
-ENTITY uart_controller IS   
+
+ENTITY altera_mem_mc2101_controller IS 
 	PORT (
-	    clk         :IN STD_LOGIC;
-	    rst         :IN STD_LOGIC;
-	    chip_select :IN  STD_LOGIC;
-		request     :IN  STD_LOGIC;
-	    uart_read   :OUT STD_LOGIC;
-	    uart_write  :OUT STD_LOGIC;
-	    uart_ready  :OUT STD_LOGIC;
-	    uart_resp   :OUT STD_LOGIC
+	    --system signals
+		clk           : IN  STD_LOGIC;
+		rst           : IN  STD_LOGIC;
+		--input
+		chip_select   : IN  STD_LOGIC;
+		request       : IN  STD_LOGIC;
+		--output
+		memRead       : OUT STD_LOGIC;
+		memWrite      : OUT STD_LOGIC;
+		memResponse   : OUT STD_LOGIC;
+		memReady      : OUT STD_LOGIC
 	);
-END uart_controller;
+END altera_mem_mc2101_controller;
 
-ARCHITECTURE behavior OF uart_controller IS
+ARCHITECTURE behavior OF altera_mem_mc2101_controller IS
 
-    TYPE statetype IS (IDLE, READ, WRITE);
+    TYPE statetype IS (IDLE, MEM_WR, MEM_RD);
     SIGNAL next_state, current_state: statetype;
     SIGNAL readReq, writeReq: STD_LOGIC;
 
 BEGIN
 
-     PROCESS(clk,rst)
+    PROCESS(clk,rst)
     BEGIN
         IF rst='1' THEN
             current_state<=IDLE;
@@ -72,49 +75,48 @@ BEGIN
     
     readReq<=chip_select and (not request);
     writeReq<=chip_select and request;
-
+    
     PROCESS(readReq, writeReq, current_state)
     BEGIN
+        --memResponse is always 0 (no data integrity check or write protection mechanisms)
+        memResponse<='0';
         CASE current_state IS
-            WHEN IDLE =>
-                uart_read<='0';
-	            uart_write<='0';
-	            IF readReq = '1'  THEN
-	                uart_read<='1';
-	                next_state<=READ;
-	            ELSIF writeReq = '1' THEN
-	                next_state<=WRITE;
-	                uart_write<='1';
-	            ELSE
-	                next_state<=IDLE;
-	            END IF;
-            
-            WHEN READ =>
-                uart_read<='0';
-	            uart_write<='0';
-	            IF readReq = '1' THEN
-	                next_state<=READ;
-	            ELSE
-	                next_state<=IDLE;
-	            END IF;
-	            
-            WHEN WRITE=>
-                uart_read<='0';
-	            uart_write<='0';
-	            IF writeReq = '1' THEN
-	                next_state<=WRITE;
-	            ELSE
-	                next_state<=IDLE;
-	            END IF;
+            WHEN IDLE=>
+                memRead<='0';
+                memWrite<='0';
+                memReady<='1';
+                IF readReq= '1' THEN
+                    next_state<=MEM_RD;
+                    memRead<='1';
+                ELSIF writeReq='1' THEN
+                    next_state<=MEM_WR;
+                    memWrite<='1';
+                ELSE
+                    next_state<=IDLE;
+                END IF;
+            WHEN MEM_RD=>
+                memReady<='1';
+                memWrite<='0';
+                IF readReq='1' THEN
+                    next_state<=MEM_RD;
+                    memRead<='1';
+                ELSE
+                    next_state<=IDLE;
+                    memRead<='0';
+                END IF;
+            WHEN MEM_WR=>
+                memReady<='1';
+                memRead<='0';
+                IF writeReq='1' THEN
+                    next_state<=MEM_WR;
+                    memWrite<='1';
+                ELSE
+                    next_state<=IDLE;
+                    memWrite<='0';
+                END IF;
         END CASE;
     END PROCESS;
-    
-    uart_ready<='1';
-    uart_resp<='0';
-    
+
 END behavior;
-
-
-
 
 
