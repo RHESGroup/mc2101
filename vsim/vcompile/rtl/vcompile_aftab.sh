@@ -4,7 +4,7 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     1 Sep, 2022  #
+#  Date:     7 Sep, 2022  #
 #
 # Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 #
@@ -176,8 +176,7 @@ set IP_NAME="MC2101"
 #peripheral ssram
 echo "${Green}Compiling peripheral: ${Brown} SSRAM ${NC}"
 echo "${NC}"
-vcom -2008 -work work ${RTL_PATH}/ssram/program.vhd  || goto error
-vcom -2008 -work work ${RTL_PATH}/ssram/ssram_fpga.vhd  || goto error
+vcom -2008 -work work ${RTL_PATH}/ssram/ssram.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/ssram/ssram_controller.vhd  || goto error
 vcom -2008 -work work ${RTL_PATH}/ssram/ssram_bus_wrap.vhd  || goto error
 

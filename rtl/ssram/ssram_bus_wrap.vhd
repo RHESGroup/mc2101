@@ -3,7 +3,7 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		31 Aug 2022
+--	Date:		7 Sep 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -66,7 +66,7 @@ END ssram_bus_wrap;
 ARCHITECTURE behavior OF ssram_bus_wrap IS
 
     --ssram
-    COMPONENT ssram_fpga IS
+    COMPONENT ssram IS
 	GENERIC (
 		dataWidth      : INTEGER :=8;
 		addressWidth   : INTEGER :=13
@@ -80,9 +80,6 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
 		dataOut       : OUT STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0)
 	);
     END COMPONENT;
-    
-    --CURRENT SELECTION: SIMULATION
-    FOR memory: ssram_fpga USE ENTITY WORK.ssram_fpga(behavior_SIM);
     
     SIGNAL readMem: STD_LOGIC;
     SIGNAL writeMem: STD_LOGIC;
@@ -115,7 +112,7 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
     
 BEGIN
 
-    memory: ssram_fpga
+    memory: ssram
 	GENERIC MAP(
 		dataWidth      => busDataWidth,
 		addressWidth   => PHSIZE

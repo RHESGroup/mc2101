@@ -1,9 +1,9 @@
 -- **************************************************************************************
---	Filename:	ssram_test.vhd
+--	Filename:	ssram.vhd
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		31 May 2022
+--	Date:		7 Sep 2022
 --
 -- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
 --
@@ -31,7 +31,7 @@
 -- **************************************************************************************
 --
 --	File content description:
---	ssram peripheral compatible with CycloneV Embedded Memories
+--	ssram peripheral used just for simulation
 -- **************************************************************************************
 
 
@@ -42,9 +42,8 @@ USE IEEE.NUMERIC_STD.ALL;
 USE IEEE.STD_LOGIC_TEXTIO.ALL;
 USE STD.TEXTIO.ALL;
 
-USE WORK.PROGRAM.ALL;
 
-ENTITY ssram_fpga IS
+ENTITY ssram IS
 	GENERIC (
 		dataWidth      : INTEGER :=8;
 		addressWidth   : INTEGER :=13
@@ -57,41 +56,13 @@ ENTITY ssram_fpga IS
 		dataIn     	  : IN  STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0);
 		dataOut       : OUT STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0)
 	);
-END ssram_fpga;
-
---#####################################################
---VERSION SUITED FOR SYNTHESIS (Intel Quartus software)
---#####################################################
-
-ARCHITECTURE behavior_SYN OF ssram_fpga IS 
-
-	SIGNAL mem : MEM_TYPE:=init_my_ram;
-
-BEGIN
-
-    --Synch write with enable
-    PROCESS(clk)
-    BEGIN
-        IF (rising_edge(clk) and writeMem='1') THEN
-            mem(TO_INTEGER(UNSIGNED(address))) <= dataIn;
-        END IF;
-    END PROCESS;
-      
-    --Synch read with enable
-    PROCESS(clk)
-    BEGIN
-        IF (falling_edge(clk) and readMem='1') THEN
-            dataOut <= mem(TO_INTEGER(UNSIGNED(address)));
-        END IF;
-    END PROCESS;
-
-END ARCHITECTURE behavior_SYN;
+END ssram;
 
 --#####################################################
 --VERSION SUITED FOR SIMULATION
 --#####################################################
 
-ARCHITECTURE behavior_SIM OF ssram_fpga IS
+ARCHITECTURE behavior OF ssram IS
 
     TYPE MEMORY IS ARRAY (0 TO 2**addressWidth - 1) OF STD_LOGIC_VECTOR (dataWidth-1 DOWNTO 0);
 	
@@ -149,4 +120,4 @@ BEGIN
         END IF;
     END PROCESS;
 
-END ARCHITECTURE behavior_SIM;
+END ARCHITECTURE behavior;
