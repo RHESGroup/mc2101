@@ -57,8 +57,8 @@ If you see a message like this: "No JTAG device available" means the USB-Blaster
 # PIN assignment
 
 MC2101 includes a set of build-in peripherals like UART and GPIOs.
--   *UART TX* is connected to the GPIO Connection 0[1] of the board Expansion Headers
--   *UART RX* is connected to the GPIO Connection 0[3] of the board Expansion Headers
+-   *UART_TX* is connected to the GPIO Connection 0[1] of the board Expansion Headers
+-   *UART_RX* is connected to the GPIO Connection 0[3] of the board Expansion Headers
 -   *GPIO[0-9]* are connected to LEDR[0-9]
 -   *GPIO[10-19]* are connected to SW[0-9]
 -   *GPIO[20-22]* are connected to KEY[1-3]
@@ -66,3 +66,15 @@ MC2101 includes a set of build-in peripherals like UART and GPIOs.
 -   *CLOCK* is connected to the CLOCK_50(50MHz) line of the clock distribution on the DE1-SoC.
 
 More informations on the pins can be found in [DE1-SoC user manual](https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=0CAMQw7AJahcKEwjo6Ze3x4f6AhUAAAAAHQAAAAAQAg&url=http%3A%2F%2Fwww.ee.ic.ac.uk%2Fpcheung%2Fteaching%2Fee2_digital%2FDE1-SoC_User_manual.pdf&psig=AOvVaw1HUMjhOmZAMx6oPnrUV0CZ&ust=1662807670601964)
+
+# Connect Terminal to MC2101
+
+It is possible to interact with MC2101 on FPGA through the UART peripheral, for instance the printf and scanf functions make use of it.<br>
+First of all, once the board is powered up and the FPGA is programmed, you need to *connect the UART_TX and UART_RX to the USB to UART Bridge Controller's RX, TX pins* and then plug him in your pc usb.<br>
+<br>
+*be sure to connect UART_RX->USB-to-UART_TX, and UART_TX->USB-to-UART_RX*
+<br>
+then use the command:
+
+    sudo screen /dev/ttyUSB0 115200
+
