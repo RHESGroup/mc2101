@@ -49,7 +49,6 @@ USE IEEE.NUMERIC_STD.ALL;
 --| 0x0010  | INTTYPE0 |
 --| 0x0014  | INTTYPE1 |
 --| 0x0018  | INTSTATUS|
---| 0x001C  | GPIOVER  |
 --TOT BYTES: 32
 --REQUIRED ADDRESS WIDTH: 32
 --BYTE ADDRESSABLE PERIPHERAL: NOT
@@ -80,9 +79,6 @@ ARCHITECTURE behavior OF gpio_core IS
     SIGNAL INTTYPE0  : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL INTTYPE1  : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL INTSTATUS : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL GPIOVER   : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    --CURRENT GPIO VERSION (00_MAJ_MIN_PAT)
-    CONSTANT VER_ID  : UNSIGNED(31 DOWNTO 0):=x"00010000";
     --Async input synchronization registers DOUBLE SYNCHRONIZER
     SIGNAL gpio_in_sync1 : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL gpio_in_sync2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -114,13 +110,6 @@ BEGIN
         END IF;
     END PROCESS;
     
-    --GPIOVER UPDATE
-    PROCESS(rst)
-    BEGIN
-        IF rst='1' THEN
-            GPIOVER<=STD_LOGIC_VECTOR(VER_ID);
-        END IF;
-    END PROCESS;
     
     --USER WRITABLE REGISTERS UPDATE
     PROCESS(clk, rst)
@@ -174,12 +163,9 @@ BEGIN
                 WHEN "101"=>
                     --INTTYPE1
                     busDataOut<=INTTYPE1;
-                WHEN "110"=>
+                WHEN OTHERS=>
                     --INTSTATUS
                     busDataOut<=INTSTATUS;
-                WHEN OTHERS=>
-                    --GPIOVER
-                    busDataOut<=GPIOVER;
             END CASE;
         ELSE
             busDataOut<=(OTHERS=>'0');
