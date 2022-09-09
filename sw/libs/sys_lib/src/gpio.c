@@ -1,8 +1,8 @@
 /**
  * @file  gpio.c
  * @version 1.0 
- * @date 03 Jun, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran 
+ * @date 9 Sep, 2022
+ * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains

@@ -3,9 +3,9 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		21 Aug 2022
+--	Date:		9 Sep 2022
 --
--- Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
+-- Copyright (C) 2022 CINI Cybersecurity National Laboratory
 --
 -- This source file may be used and distributed without
 -- restriction provided that this copyright statement is not
