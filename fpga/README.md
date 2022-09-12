@@ -37,7 +37,7 @@ After this process a *mc2101.sof* file in [ouput_files](./output_files/) folder 
 ## Memory update
 
 In order to run an application on MC2101 there are 2 steps to be done:
--   **build the target application**: the application must be located in the [sw/apps/test_mc2101](../sw/apps/test_mc2101/) folder, there are already two demos ready to be used. The application must be compiled folliwing the instructions defined in the [sw/README](../sw/README.md)
+-   **build the target application**: the application must be located in the [sw/apps/test_mc2101](../sw/apps/test_mc2101/) folder, there are already two demos ready to be used. The application must be compiled following the instructions defined in the [sw/README](../sw/README.md)
 
 -   **generate the memory initialization file**, used by Quartus to initialize the memory content of the synthesized ram and **update mc2101.sof configuration file**. Just call `make update_ram`, the default target application is defined in the [Makefile](./Makefile) as TARGET_APP, so if you intend to run your custom application make sure to run the command like this: `make TARGET_APP=your_app_name update_ram`
 
@@ -78,3 +78,4 @@ then use the command:
 
     sudo screen /dev/ttyUSB0 115200
 
+*(115200 is the default baudrate of UART configured in the [board.c](sw/libs/sys_lib/src/board.c) system library)*
