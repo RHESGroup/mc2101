@@ -78,4 +78,4 @@ then use the command:
 
     sudo screen /dev/ttyUSB0 115200
 
-*(115200 is the default baudrate of UART configured in the [board.c](sw/libs/sys_lib/src/board.c) system library)*
+*(115200 is the default baudrate of UART configured in the [board.c](../sw/libs/sys_lib/src/board.c) system library)*
