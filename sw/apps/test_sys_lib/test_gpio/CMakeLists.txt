@@ -2,9 +2,9 @@
 #  Filename: CMakeSim.txt  #
 #  Project:  CNL_RISC-V
 #  Version:  1.0
-#  Date:     03 Jun, 2022  #
+#  Date:     12 Sep, 2022  #
 #
-# Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
+# Copyright (C) 2022 CINI Cybersecurity National Laboratory
 #
 # This source file may be used and distributed without
 # restriction provided that this copyright statement is not
