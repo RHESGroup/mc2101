@@ -157,7 +157,6 @@ set(VSIM "vsim" CACHE FILEPATH "Path to the vsim executable")
  add_library(crt0_boot_MU OBJECT ${crt0_boot_MU})  # Added by Simone 29 October 2021
  set_target_properties(crt0_boot_M PROPERTIES COMPILE_FLAGS "-DBOOT_M")
  set_target_properties(crt0_boot_MU PROPERTIES COMPILE_FLAGS "-DBOOT_MU") # Added by Simone 29 October 2021
- set_target_properties(crt0_boot_MU_test_csr PROPERTIES COMPILE_FLAGS "-DBOOT_MU_test_csr") # Added by Simone 29 October 2021
 
 
 ################################################################################
