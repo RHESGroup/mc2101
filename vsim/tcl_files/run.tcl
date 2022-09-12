@@ -3,9 +3,9 @@
 #  Project:  CNL_RISC-V
 #  Version:  1.0
 #  History:
-#  Date:     1 Sep, 2022  #
+#  Date:     12 Sep, 2022  #
 #
-# Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran
+# Copyright (C) 2022 CINI Cybersecurity National Laboratory
 #
 # This source file may be used and distributed without
 # restriction provided that this copyright statement is not
@@ -31,7 +31,7 @@
 # **************************************************************************************
 #
 #  File content description:
-#  Run ModelSim simulation of the target through GUI  #
+#  Run ModelSim simulation of the MC2101 through GUI  #
 #
 # **************************************************************************************
 
@@ -115,7 +115,7 @@ add wave -noupdate -group AFTAB_CORE -radix hexadecimal /tb_mc2101/microcontroll
 add wave -noupdate -group AFTAB_CORE -radix hexadecimal /tb_mc2101/microcontroller/AFTAB/coreWriteReq
 add wave -noupdate -group AFTAB_CORE -radix hexadecimal /tb_mc2101/microcontroller/AFTAB/core/datapathAFTAB/registerFile/rData
 
-#run $var ns
+run $var ns
 
 
 
