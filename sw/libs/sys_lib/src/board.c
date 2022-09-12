@@ -1,8 +1,8 @@
 /**
  * @file  board.c
  * @version 1.0 
- * @date 6 Sep, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran 
+ * @date 12 Sep, 2022
+ * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains
@@ -20,7 +20,7 @@
  * You should have received a copy of the GNU Lesser General
  * Public License along with this source; if not, download it
  * from https://www.gnu.org/licenses/lgpl-3.0.txt
- * @brief reference pinout used for all board_test programs
+ * @brief init GPIO, UART peripherals
  *
  */
  

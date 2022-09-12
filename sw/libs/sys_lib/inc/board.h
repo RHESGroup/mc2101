@@ -1,8 +1,8 @@
 /**
- * @file  board.c
+ * @file  board.h
  * @version 1.0 
- * @date 6 Sep, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory and University of Teheran 
+ * @date 12 Sep, 2022
+ * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains
@@ -24,28 +24,52 @@
  *
  */
  
- #include "gpio.h"
- #include "uart.h"
- #include "board.h" 
+ #ifndef _BOARD_H
+ #define _BOARD_H
  
- void board_setup()
- {
-    /**Setup LEDR[i] as output pins*/
-    for(int i=LEDR0; i<=LEDR9; i++)
-        set_pin_direction(i,GPIO_OUT);
-    
-    /**Setup SW[i] as input pins*/
-    for(int i=SW0; i<=SW9; i++)
-        set_pin_direction(i,GPIO_IN);
-        
-    /**Setup KEY[i] as input pins*/
-    for(int i=KEY1; i<=KEY3; i++)
-        set_pin_direction(i,GPIO_IN);
-        
-    /**Setup uart for IO operations*/
-    uart_set_cfg(WORD_LENGTH_8,
-                 STOP_BIT_LENGTH_1,
-                 PARITY_OFF,
-                 PARITY_ODD,
-                 UART_DIV_BR_115200);
- }
+ /**
+ * @defgroup BOARD GPIO PINS
+ * @{
+ */
+ 
+ /** Switches */
+ 
+ #define SW0        0
+ #define SW1        1
+ #define SW2        2
+ #define SW3        3
+ #define SW4        4
+ #define SW5        5
+ #define SW6        6
+ #define SW7        7
+ #define SW8        8
+ #define SW9        9
+ 
+ /** LEDs  */
+ 
+ #define LEDR0      10
+ #define LEDR1      11
+ #define LEDR2      12
+ #define LEDR3      13
+ #define LEDR4      14
+ #define LEDR5      15
+ #define LEDR6      16
+ #define LEDR7      17
+ #define LEDR8      18
+ #define LEDR9      19
+ 
+ /** KEY BUTTONS */
+ 
+ #define KEY1       20
+ #define KEY2       21
+ #define KEY3       22
+ 
+ /** @} */
+ 
+ /**
+ * @brief setup board GPIO and UART according to pin assignment
+ * UART is set with the following configuration : 115200,NO-PARITY,1 STOP, 8 BIT
+ */
+ void board_setup();
+ 
+ #endif
