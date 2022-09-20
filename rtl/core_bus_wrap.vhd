@@ -126,8 +126,11 @@ ARCHITECTURE behavior OF core_bus_wrap IS
     SIGNAL selGPIO: STD_LOGIC;
     SIGNAL selUART: STD_LOGIC;
     
+    --BUS FAULT SIGNAL
+    SIGNAL busFAULT: STD_LOGIC;
+    
     --htrans (BUS STATUS) controller
-    TYPE BUS_STAT_TYPE IS (S_IDLE, S_READ, S_WRITE);
+    TYPE BUS_STAT_TYPE IS (S_IDLE, S_READ, S_WRITE, S_BUS_FAULT);
     SIGNAL curr_bus_state, next_bus_state: BUS_STAT_TYPE;
     
     SIGNAL haddr_cpy: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
@@ -145,6 +148,9 @@ BEGIN
 	        '1' WHEN coreWriteReq='1' ELSE
 	        '0';
 	--######################################
+	
+	busFAULT<='1' WHEN (hready='0' AND hresp='1') ELSE
+	          '0';
 	
 	--######################################
     --CORE
@@ -183,12 +189,14 @@ BEGIN
 	    END IF;
 	END PROCESS;    
 	
-	PROCESS(hselram, hselflash, hselgpio, hseluart, curr_bus_state, coreReadReq, coreWriteReq)
+	PROCESS(hselram, hselflash, hselgpio, hseluart, curr_bus_state, coreReadReq, coreWriteReq, busFAULT)
 	BEGIN
 	    CASE curr_bus_state IS
 	        WHEN S_IDLE=>
 	            htrans<="00";
-	            IF( coreReadReq='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
+	            IF busFAULT='1' THEN
+	                next_bus_state<=S_BUS_FAULT;
+	            ELSIF( coreReadReq='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
 	                next_bus_state<=S_READ;
 	            ELSIF( coreWriteReq='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
 	                next_bus_state<=S_WRITE;
@@ -197,17 +205,29 @@ BEGIN
 	            END IF;
 	        WHEN S_READ=>
 	            htrans<="01";
-	            IF coreReadReq='1' THEN
+	            IF busFAULT='1' THEN
+	                next_bus_state<=S_BUS_FAULT;
+	            ELSIF coreReadReq='1' THEN
 	                next_bus_state<=S_READ;
 	            ELSE
 	                next_bus_state<=S_IDLE;
 	            END IF;
 	        WHEN S_WRITE=>
 	            htrans<="10";
-	            IF coreWriteReq='1' THEN
+	            IF busFAULT='1' THEN
+	                next_bus_state<=S_BUS_FAULT;
+	            ELSIF coreWriteReq='1' THEN
 	                next_bus_state<=S_WRITE;
 	            ELSE
 	                next_bus_state<=S_IDLE;
+	            END IF;
+	        WHEN S_BUS_FAULT=>
+	            --TODO: here the bus fault should be signaled to the processor by rising a proper interrupt line
+	            htrans<="11";
+	            IF (coreWriteReq='0' AND coreReadReq='0') THEN
+	                next_bus_state<=S_IDLE;
+	            ELSE
+	                next_bus_state<=S_BUS_FAULT;
 	            END IF;
 	    END CASE;
 	END PROCESS;
