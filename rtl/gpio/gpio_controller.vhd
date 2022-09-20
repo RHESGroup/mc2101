@@ -96,7 +96,9 @@ BEGIN
 	                    gpio_ready<='0';
 	                    next_state<=READ;
 	                ELSE
+	                    --BUS FAULT (hready=0 AND hresp=1)
 	                    gpio_ready<='0';
+	                    gpio_resp<='1';
 	                    next_state<=MISAL;
 	                END IF;
 	            ELSIF writeReq = '1' THEN
@@ -104,8 +106,10 @@ BEGIN
 	                    shiftDin<='1';
 	                    next_state<=WRITE;
 	                    latchAin<='1';
-	                ELSE
+	                ELSE    
+	                    --BUS FAULT (hready=0 AND hresp=1)
 	                    gpio_ready<='0';
+	                    gpio_resp<='1';
 	                    next_state<=MISAL;
 	                END IF;
 	            ELSE
@@ -113,14 +117,18 @@ BEGIN
 	            END IF;
             
             WHEN MISAL=>
+                --FAULTY STATE:
+                --  KEEP hresp=1 for 1 clock period
+                --  RELEASE hready
+                gpio_ready<='1';
+                gpio_resp<='1';
+                            
                 clear<='0';
                 latchAin<='0';
                 shiftDin<='0';
                 gpio_read<='0';
 	            gpio_write<='0';
 	            shiftDout<='0';
-                gpio_ready<='1';
-                gpio_resp<='1';
                 IF readReq = '1' OR writeReq = '1' THEN
                     next_state<=MISAL;
                 ELSE
