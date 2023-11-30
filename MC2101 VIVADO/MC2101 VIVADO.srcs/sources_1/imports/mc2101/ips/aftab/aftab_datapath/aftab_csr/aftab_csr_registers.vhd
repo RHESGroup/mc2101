@@ -51,6 +51,8 @@ ENTITY aftab_csr_registers IS
 	);
 END ENTITY aftab_csr_registers;
 --
+
+--IMPORTANT: Multiple words are dedicated to specific purposes. See table on page 39 of the AFTAB User Manual
 ARCHITECTURE behavioral OF aftab_csr_registers IS
 	TYPE csr_arr IS ARRAY (0 TO 31) OF STD_LOGIC_VECTOR (31 DOWNTO 0);
 	SIGNAL rData                : csr_arr;

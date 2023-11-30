@@ -49,7 +49,7 @@ ENTITY aftab_register_bank IS
 		inputRegBank     : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
 		loadMieReg       : IN  STD_LOGIC;
 		loadMieUieField  : IN  STD_LOGIC;
-		outRegBank       : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
+		outRegBank       : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --OUTPUT going to the CSRISL 
 		mirrorUstatus    : OUT STD_LOGIC;
 		mirrorUie        : OUT STD_LOGIC;
 		mirrorUip        : OUT STD_LOGIC;
@@ -65,7 +65,7 @@ END ENTITY aftab_register_bank;
 ARCHITECTURE behavioral OF aftab_register_bank IS
 SIGNAL translatedAddress : STD_LOGIC_VECTOR (4 DOWNTO 0);
 BEGIN
-	CSR_registers : ENTITY work.aftab_csr_registers
+	CSR_registers : ENTITY work.aftab_csr_registers  --Considers 
 		GENERIC
 		MAP(len => 32)
 		PORT MAP

@@ -53,11 +53,14 @@ END ENTITY aftab_csr_address_logic;
 ARCHITECTURE behavioral OF aftab_csr_address_logic IS
 	SIGNAL mirrorUstatusTemp, mirrorUieTemp, mirrorUipTemp : STD_LOGIC;
 BEGIN
-	ldMieReg          <= '1' WHEN addressRegBank = X"304" ELSE '0';
-	ldMieUieField     <= '1' WHEN addressRegBank = X"300" ELSE '0';
-	mirrorUstatusTemp <= '1' WHEN addressRegBank(7 DOWNTO 0) = X"00" ELSE '0';
-	mirrorUieTemp     <= '1' WHEN addressRegBank(7 DOWNTO 0) = X"04" ELSE '0';
-	mirrorUipTemp     <= '1' WHEN addressRegBank(7 DOWNTO 0) = X"44" ELSE '0';
+   
+    
+    --For better understanding, see table in AFTAB User Manual - page 39
+	ldMieReg          <= '1' WHEN addressRegBank = X"304" ELSE '0'; --Machine Interrupt Pending(MIP)
+	ldMieUieField     <= '1' WHEN addressRegBank = X"300" ELSE '0'; --Machine Status(MSTATUS)
+	mirrorUstatusTemp <= '1' WHEN addressRegBank(7 DOWNTO 0) = X"00" ELSE '0'; --User Status(USTATUS)
+	mirrorUieTemp     <= '1' WHEN addressRegBank(7 DOWNTO 0) = X"04" ELSE '0'; --User Interrupt Enable(UIE)
+	mirrorUipTemp     <= '1' WHEN addressRegBank(7 DOWNTO 0) = X"44" ELSE '0'; --User interrupt Pending(UIP)
 	mirrorUstatus     <= mirrorUstatusTemp;
 	mirrorUie         <= mirrorUieTemp;
 	mirrorUip         <= mirrorUipTemp;
