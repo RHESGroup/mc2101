@@ -1,9 +1,0 @@
-sw/build/*
-vsim/work/*
-fpga/db/*
-fpga/incremental_db/*
-fpga/output_files/*
-fpga/mc2101.qpf
-fpga/mc2101.qsf
-fpga/c5_pin_model_dump.txt
-fpga/utils/program.mif
