@@ -65,9 +65,9 @@ ENTITY aftab_iccd IS
 		interruptRaise : OUT STD_LOGIC; --OUTPUT whose final purpose is to indicate the rest of the microcontroller that an interrupt has occurred
 		exceptionRaise : OUT STD_LOGIC; --OUTPUT whose final purpose is to indicate the rest of the microcontroller that an exception has occurred
 		delegationMode : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); --OUTPUT going to the Control Unit
-		curPRV         : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); 
-		causeCode      : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
-		trapValue      : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0)
+		curPRV         : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); --OUTPUT going to the CSRISL
+		causeCode      : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0); --OUTPUT going to the CSRISL
+		trapValue      : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0) --OUPUT going to the CSRISL
 	);
 END ENTITY aftab_iccd;
 --
@@ -277,6 +277,7 @@ BEGIN
 			delegationReg <= "11";
 		END IF;
 	END PROCESS;
+	--This signal captures the value that causes the trap(something outside of the currently executing instruction caused the CPU to "trap")
 	trapValue <= inst WHEN (tempIllegalInstr = '1')        ELSE
 				outPC WHEN (tempInstrAddrMisaligned = '1') ELSE
 			   outADR WHEN (tempStoreAddrMisaligned = '1' OR tempLoadAddrMisaligned = '1') 
