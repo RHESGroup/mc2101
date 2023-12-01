@@ -45,25 +45,27 @@ ENTITY aftab_iccd IS
 		(len : INTEGER := 32);
 	PORT
 	(
+	   --INPUTS
 		clk            : IN  STD_LOGIC;
 		rst            : IN  STD_LOGIC;
 		inst           : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		outPC          : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		outADR         : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
-		mipCC          : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
-		mieCC          : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
+		mipCC          : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0); --INPUT coming from the interSrcSynchReg(ISSR)(signal called CCmip). It consists of the interrupts sources(32 bits)
+		mieCC          : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0); --INPUT coming from the Register Bank(signal called CCmie) 
 		midelegCSR     : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		medelegCSR     : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
-		mieFieldCC     : IN  STD_LOGIC;
-		uieFieldCC     : IN  STD_LOGIC;
+		mieFieldCC     : IN  STD_LOGIC; --INPUT coming from the Register Bank(signal called CCmieField)
+		uieFieldCC     : IN  STD_LOGIC; --INPUT coming from the Register Bank(signal called CCuieField)
 		ldDelegation   : IN  STD_LOGIC;
 		ldMachine      : IN  STD_LOGIC;
 		ldUser         : IN  STD_LOGIC;
-		tempFlags      : IN  STD_LOGIC_VECTOR(5 DOWNTO 0);
-		interruptRaise : OUT STD_LOGIC;
-		exceptionRaise : OUT STD_LOGIC;
-		delegationMode : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
-		curPRV         : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+		tempFlags      : IN  STD_LOGIC_VECTOR(5 DOWNTO 0); --INPUT coming from the regExceptionFlags. This signal corresponds to the exceptionSources
+		--OUTPUTS
+		interruptRaise : OUT STD_LOGIC; --OUTPUT whose final purpose is to indicate the rest of the microcontroller that an interrupt has occurred
+		exceptionRaise : OUT STD_LOGIC; --OUTPUT whose final purpose is to indicate the rest of the microcontroller that an exception has occurred
+		delegationMode : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); --OUTPUT going to the Control Unit
+		curPRV         : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); 
 		causeCode      : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		trapValue      : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0)
 	);
@@ -84,16 +86,18 @@ BEGIN
 	PROCESS (clk, rst)
 	BEGIN
 		IF (rst = '1') THEN
-			currentPRV <= "11";
+			currentPRV <= "11"; --When reset, the privilege mode is Machine mode
 		ELSIF (clk = '1' AND clk 'EVENT) THEN
 			IF (ldMachine = '1') THEN
-				currentPRV <= "11";
+				currentPRV <= "11"; --Machine mode
 			ELSIF (ldUser = '1') THEN
-				currentPRV <= "00";
+				currentPRV <= "00"; --User mode
 			END IF;
 		END IF;
 	END PROCESS;
+	
 	curPRV <= currentPRV;
+	
 	PROCESS (clk, rst)
 	BEGIN
 		IF (rst = '1') THEN
@@ -105,8 +109,11 @@ BEGIN
 		END IF;
 	END PROCESS;
 	--Current Mode
-	user                      <= NOT(currentPRV(1)) AND NOT(currentPRV(0));
-	machine                   <= currentPRV(1) AND currentPRV(0);
+	--If currentPRV(1) = 0 AND currentPRV(0) = 0, we set to 1 the signal user
+	user                      <= NOT(currentPRV(1)) AND NOT(currentPRV(0)); --We are in User mode if CSR address[9:8](currentPRV) = "00"
+	--If currentPRV(1) = 1 AND currentPRV(0) = 1, we set to 1 the signal machine
+	machine                   <= currentPRV(1) AND currentPRV(0); --We are in Machine mode if CSR address[9:8](currentPRV) = "11"
+	
 	--Exception Flags
 	tempEcallFlag             <= tempFlags(5);
 	tempDividedByZero         <= tempFlags(4);
@@ -114,13 +121,21 @@ BEGIN
 	tempInstrAddrMisaligned   <= tempFlags(2);
 	tempLoadAddrMisaligned    <= tempFlags(1);
 	tempStoreAddrMisaligned   <= tempFlags(0);
+	-- If at least one of the signals is '1, it means there is an exception and the system has to set the signal exceptionRaise
 	exceptionRaiseTemp        <= ((tempIllegalInstr OR tempInstrAddrMisaligned) OR 
 								  (tempStoreAddrMisaligned OR tempLoadAddrMisaligned)) OR 
 								  (tempDividedByZero OR tempEcallFlag);
-	exceptionRaise            <= exceptionRaiseTemp;
+	--This signal will go as an external output of the AFTAB processor to notify the rest of the microcontroller that an exception has occurred
+	exceptionRaise            <= exceptionRaiseTemp; 
+	
 	--Interrupt Source
+	--The MIP register(mipCC has its values) is a 32-bit register that contains information related to pending interrupts.
+	--The MIE register(mieCC has its values) is a 32-bit register that contains interrupt enable bits
+    --The UIE(User Interrupt enable)(uieFieldCC) and MIE(Machine Interrupt enable)(mieFieldCC) are 1-bit fields associated with interrupt enable at the current privilege mode
+	--For further information, read page 39 and 42 of the AFTAB user manual
 	interRaiseMachineExternal <= (user OR (machine AND mieFieldCC)) AND 
 								 (mipCC(11) AND mieCC(11));
+								 
 	interRaiseMachineSoftware <= (user OR (machine AND mieFieldCC)) AND 
 								 (mipCC(3) AND mieCC(3));
 	interRaiseMachineTimer    <= (user OR (machine AND mieFieldCC)) AND 
@@ -145,40 +160,44 @@ BEGIN
 								 interRaiseMachineTimer    OR interRaiseUserExternal    OR 
 								 interRaiseUserSoftware    OR interRaiseUserTimer       OR 
 								 interRaiseReserved;
+    --This signal will go as an external output of the AFTAB processor to notify the rest of the microcontroller that an interrupt has occurred
 	interruptRaise <= interRaiseTemp;
+	
+	--This process analyzes the flags and generates the proper cause code for both interrupts and exception depending on the case
 	causeCodeGeneration : PROCESS (exceptionRaiseTemp, tempIllegalInstr, tempInstrAddrMisaligned, 
 									tempStoreAddrMisaligned, tempLoadAddrMisaligned, tempDividedByZero, 
 									tempEcallFlag, interRaiseTemp, mipCC
 								   )
 	BEGIN
-		IF (exceptionRaiseTemp = '1') THEN
-			IF    (tempIllegalInstr = '1') THEN
+	   --For further details, read page 41 of the AFTAB User Manual
+		IF (exceptionRaiseTemp = '1') THEN --If there is at leat one exception...
+			IF    (tempIllegalInstr = '1') THEN --Illegal instruction
 				causeCode <= '0' & STD_LOGIC_VECTOR(to_unsigned(2, len - 1));
-			ELSIF (tempInstrAddrMisaligned = '1') THEN
+			ELSIF (tempInstrAddrMisaligned = '1') THEN --Instruction address misaligned
 				causeCode <= '0' & STD_LOGIC_VECTOR(to_unsigned(0, len - 1));
-			ELSIF (tempStoreAddrMisaligned = '1') THEN
+			ELSIF (tempStoreAddrMisaligned = '1') THEN --Store/AMO address misaligned
 				causeCode <= '0' & STD_LOGIC_VECTOR(to_unsigned(6, len - 1));
-			ELSIF (tempLoadAddrMisaligned = '1') THEN
+			ELSIF (tempLoadAddrMisaligned = '1') THEN --Load address misaligned
 				causeCode <= '0' & STD_LOGIC_VECTOR(to_unsigned(4, len - 1));
-			ELSIF (tempEcallFlag = '1') THEN
+			ELSIF (tempEcallFlag = '1') THEN --Environment called from U-mode
 				causeCode <= '0' & STD_LOGIC_VECTOR(to_unsigned(8, len - 1)); --ecall from user
 			ELSE
 				causeCode <= (OTHERS => '0');
 			END IF;
-		ELSIF (interRaiseTemp = '1') THEN
-			IF    (mipCC(11) = '1') THEN
+		ELSIF (interRaiseTemp = '1') THEN --If there is at leat one interrupt...
+			IF    (mipCC(11) = '1') THEN --Machine external interrupt
 				causeCode <= '1' & STD_LOGIC_VECTOR(to_unsigned(11, len - 1));
-			ELSIF (mipCC(3) = '1') THEN
+			ELSIF (mipCC(3) = '1') THEN --Machine software interrupt
 				causeCode <= '1' & STD_LOGIC_VECTOR(to_unsigned(3, len - 1));
-			ELSIF (mipCC(7) = '1') THEN
+			ELSIF (mipCC(7) = '1') THEN --Machine Timer interrupt
 				causeCode <= '1' & STD_LOGIC_VECTOR(to_unsigned(7, len - 1));
-			ELSIF (mipCC(8) = '1') THEN
+			ELSIF (mipCC(8) = '1') THEN --User exteral interrupt
 				causeCode <= '1' & STD_LOGIC_VECTOR(to_unsigned(8, len - 1));
-			ELSIF (mipCC(0) = '1') THEN
+			ELSIF (mipCC(0) = '1') THEN --User software interrupt
 				causeCode <= '1' & STD_LOGIC_VECTOR(to_unsigned(0, len - 1));
-			ELSIF (mipCC(4) = '1') THEN
+			ELSIF (mipCC(4) = '1') THEN --User timer interrupt
 				causeCode <= '1' & STD_LOGIC_VECTOR(to_unsigned(4, len - 1));		
-			--for reserved		
+			--Reserved for platform use
 			ELSIF (mipCC(16) = '1') THEN
 				causeCode <= '1' & STD_LOGIC_VECTOR(to_unsigned(16, len - 1));	
 			ELSIF (mipCC(17) = '1') THEN
@@ -218,6 +237,10 @@ BEGIN
 			causeCode <= (OTHERS => '0');
 		END IF;
 	END PROCESS;
+	
+	-- The trap delegation mechanism allows high performance traps by delegating them directly to User
+	--mode in hardware while still allowing the flexibility of handling any trap in a lower privilege mode.
+	--Then, the Machine mode delegates the traps to the User mode. This process is associated with this strategy
 	delegationCheck : PROCESS (exceptionRaiseTemp, interRaiseTemp, tempIllegalInstr, 
 							   tempInstrAddrMisaligned, tempStoreAddrMisaligned, 
 							   tempLoadAddrMisaligned, tempDividedByZero, tempEcallFlag, 

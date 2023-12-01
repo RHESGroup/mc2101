@@ -506,6 +506,8 @@ BEGIN
 	--CSR Units
 	--interruptSourceSynchronizationRegister
 	mipCCLd          <= NOT (mipCCLdDisable);
+	--The signal interruptSources goes as an input to the ISSR(interSrcSynchReg)
+	-- All the signals shown here come from outside of the AFTAB core
 	interruptSources <= platformInterruptSignals & "0000" & machineExternalInterrupt &
 						"00" & userExternalInterrupt & machineTimerInterrupt & 
 						"00" & userTimerInterrupt & machineSoftwareInterrupt & 
@@ -653,9 +655,16 @@ BEGIN
 		load   => ldFlags,
 		inReg  => exceptionSources,
 		outReg => tempFlags);
+	
+	--This signal goes as an input to regExceptionFlags
+	--dividedByZeroFlag: Exception signal coming from the AAU(Attached Arithmetic Unit). It is set in case the AAU is asked to perform a division by zero
+	--instrMisalignedFlag: Exception signal coming from the DARU(Data Adjustment Read Unit). It is set when there is a misaligned address
+	--ecallFlag: Acknowledge signal coming from the Control Unit when it has entered the ecall state.
+	--illegalInstrFlag: Exception signal coming from the Control Unit when it does not recognize the OPCODE of the instruction
 	exceptionSources   <= ecallFlag & dividedByZeroFlag & 
 						  illegalInstrFlag & instrMisalignedFlag & 
 						  '0' & '0';
+						  
 	instrMisalignedOut <= instrMisalignedFlag;
 	loadMisalignedOut  <= '0'; --not used
 	storeMisalignedOut <= '0'; --not used

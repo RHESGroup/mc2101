@@ -45,8 +45,8 @@ ENTITY aftab_register_bank IS
 		clk              : IN  STD_LOGIC;
 		rst              : IN  STD_LOGIC;
 		writeRegBank     : IN  STD_LOGIC;
-		addressRegBank   : IN  STD_LOGIC_VECTOR (11 DOWNTO 0);
-		inputRegBank     : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
+		addressRegBank   : IN  STD_LOGIC_VECTOR (11 DOWNTO 0); --INPUT coming from mux8
+		inputRegBank     : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --INPUT coming from the CSRISL
 		loadMieReg       : IN  STD_LOGIC;
 		loadMieUieField  : IN  STD_LOGIC;
 		outRegBank       : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --OUTPUT going to the CSRISL 
@@ -65,7 +65,7 @@ END ENTITY aftab_register_bank;
 ARCHITECTURE behavioral OF aftab_register_bank IS
 SIGNAL translatedAddress : STD_LOGIC_VECTOR (4 DOWNTO 0);
 BEGIN
-	CSR_registers : ENTITY work.aftab_csr_registers  --Considers 
+	CSR_registers : ENTITY work.aftab_csr_registers  --Acts like a small Register File
 		GENERIC
 		MAP(len => 32)
 		PORT MAP
@@ -77,10 +77,12 @@ BEGIN
 			inputRegBank   => inputRegBank,
 			outRegBank     => outRegBank
 		);
+	--The RISC-V ISA encodes CSR addresses on 12 bits, for a total amount of 4096 CSRs. However, AFTAB only considers 16 CSRs
 	translatedAddress <= addressRegBank(8) & addressRegBank(6) & addressRegBank(2) &
 						 addressRegBank(1) & addressRegBank(0);
-	CSR_address_logic : ENTITY work.aftab_csr_address_logic PORT
-		MAP(
+						 					 
+	CSR_address_logic : ENTITY work.aftab_csr_address_logic PORT --Generates signals for load data in carbon copy mie field and MIE register
+		MAP( --It also generates control signals for mirror CSRs
 		addressRegBank => addressRegBank,
 		ldMieReg       => ldMieReg,
 		ldMieUieField  => ldMieUieField,
@@ -90,7 +92,8 @@ BEGIN
 		mirror         => mirror
 		);	
 
-	mieCCregister : ENTITY work.aftab_register
+    --The nex three components correspond to Carbon Copy Registers
+	mieCCregister : ENTITY work.aftab_register --Used for generation of signal "interruptRaise" and cause detection
 		GENERIC
 		MAP(len => 32)
 		PORT
@@ -102,9 +105,9 @@ BEGIN
 		inReg  => inputRegBank,
 		outReg => outMieCCreg
 		);
-	mieFieldCCregister : ENTITY work.aftab_one_bit_register
+	mieFieldCCregister : ENTITY work.aftab_one_bit_register --Used for generation of signal "interruptRaise" and cause detection
 		PORT
-		MAP(
+		MAP( --This one-bit register copies the MIE(Machine Interrupt enable) field of the MSTATUS register
 		clk    => clk,
 		rst    => rst,
 		zero   => '0',
@@ -114,7 +117,7 @@ BEGIN
 		);
 	uieFieldCCregister : ENTITY work.aftab_one_bit_register
 		PORT
-		MAP(
+		MAP( --This one-bit register copies the UIE(User Interrupt enable) field of the USTATUS register
 		clk    => clk,
 		rst    => rst,
 		zero   => '0',

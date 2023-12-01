@@ -44,15 +44,17 @@ ENTITY aftab_csr_registers IS
 	(
 		clk            : IN STD_LOGIC;
 		rst            : IN STD_LOGIC;
-		writeRegBank   : IN STD_LOGIC; 
-		addressRegBank : IN STD_LOGIC_VECTOR  (4 DOWNTO 0);
-		inputRegBank   : IN STD_LOGIC_VECTOR  (len - 1 DOWNTO 0);
+		writeRegBank   : IN STD_LOGIC; --Write Enable signal
+		addressRegBank : IN STD_LOGIC_VECTOR  (4 DOWNTO 0); --INPUT coming from the entity "aftab_register_bank"
+		inputRegBank   : IN STD_LOGIC_VECTOR  (len - 1 DOWNTO 0); --INPUT coming from the CSRISL
 		outRegBank     : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0)
 	);
 END ENTITY aftab_csr_registers;
 --
 
 --IMPORTANT: Multiple words are dedicated to specific purposes. See table on page 39 of the AFTAB User Manual
+--Synchronous Read and Write. Plus, write enable signal
+--Asynchrnous Reset
 ARCHITECTURE behavioral OF aftab_csr_registers IS
 	TYPE csr_arr IS ARRAY (0 TO 31) OF STD_LOGIC_VECTOR (31 DOWNTO 0);
 	SIGNAL rData                : csr_arr;

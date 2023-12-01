@@ -59,7 +59,7 @@ ENTITY aftab_csr_isl IS
 		mirrorUie                      : IN  STD_LOGIC;
 		mirrorUip                      : IN  STD_LOGIC;
 		mirrorUser                     : IN  STD_LOGIC;
-		curPRV                         : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
+		curPRV                         : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --INPUT coming from the ICCD(Interrupt Check and Cause detection). This signal is associated with the current Privilege mode
 		ir19_15                        : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);
 		CCmip                          : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		causeCode                      : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
