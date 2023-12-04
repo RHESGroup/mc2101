@@ -57,13 +57,13 @@ ENTITY aftab_iccd IS
 		medelegCSR     : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		mieFieldCC     : IN  STD_LOGIC; --INPUT coming from the Register Bank(signal called CCmieField)
 		uieFieldCC     : IN  STD_LOGIC; --INPUT coming from the Register Bank(signal called CCuieField)
-		ldDelegation   : IN  STD_LOGIC;
-		ldMachine      : IN  STD_LOGIC;
-		ldUser         : IN  STD_LOGIC;
+		ldDelegation   : IN  STD_LOGIC; --INPUT coming from the Control Unit
+		ldMachine      : IN  STD_LOGIC; --INPUT coming from the Control Unit
+		ldUser         : IN  STD_LOGIC; --INPUT coming from the Control Unit
 		tempFlags      : IN  STD_LOGIC_VECTOR(5 DOWNTO 0); --INPUT coming from the regExceptionFlags. This signal corresponds to the exceptionSources
 		--OUTPUTS
-		interruptRaise : OUT STD_LOGIC; --OUTPUT whose final purpose is to indicate the rest of the microcontroller that an interrupt has occurred
-		exceptionRaise : OUT STD_LOGIC; --OUTPUT whose final purpose is to indicate the rest of the microcontroller that an exception has occurred
+		interruptRaise : OUT STD_LOGIC; --OUTPUT going to the Control Unit
+		exceptionRaise : OUT STD_LOGIC; --OUTPUT going to the Control Unit
 		delegationMode : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); --OUTPUT going to the Control Unit
 		curPRV         : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); --OUTPUT going to the CSRISL
 		causeCode      : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0); --OUTPUT going to the CSRISL

@@ -159,7 +159,6 @@ ARCHITECTURE procedural OF aftab_core IS
 	SIGNAL ecallFlag                      : STD_LOGIC;
 	SIGNAL illegalInstrFlag               : STD_LOGIC;
 	SIGNAL instrMisalignedOut             : STD_LOGIC;
-	SIGNAL loadMisalignedOut              : STD_LOGIC;
 	SIGNAL storeMisalignedOut             : STD_LOGIC;
 	SIGNAL selTval_CSR                    : STD_LOGIC;
 	SIGNAL exceptionRaise                 : STD_LOGIC;
@@ -286,8 +285,6 @@ BEGIN
 			ecallFlag                      => ecallFlag,
 			illegalInstrFlag               => illegalInstrFlag,
 			instrMisalignedOut             => instrMisalignedOut,
-			loadMisalignedOut              => OPEN,
-			storeMisalignedOut             => OPEN,
 			dividedByZeroOut               => dividedByZeroOut,
 			validAccessCSR                 => validAccessCSR,
 			readOnlyCSR                    => readOnlyCSR,

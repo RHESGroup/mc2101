@@ -68,7 +68,6 @@ ENTITY aftab_csr_isl IS
 		P1                             : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0); --INPUT coming from the Register File
 		PC                             : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0); --INPUT coming from the PC
 		outCSR                         : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0); --INPUT coming from the Register bank
-		
 		--OUTPUTS
 		previousPRV                    : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); --OUTPUT going to the Control Unit
 		inCSR                          : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0) --OUTPUT going to the Register Bank
@@ -93,7 +92,7 @@ BEGIN
 		orRes WHEN set = '1' ELSE --When the instruction is csrrs or csrrsi
 		andRes WHEN clr = '1' ELSE --When the instruction is csrrc or csrrci
 		CCmip WHEN selmip = '1' ELSE
-		causeCode WHEN selCause = '1' ELSE
+		causeCode WHEN selCause = '1' ELSE --Encoding of the interrupt or exception cause
 		trapValue WHEN selTval = '1' ELSE --When an exception has occurred, we need to send the trapValue to update either the Machine trap Value(MTVAL) or the User trap Value(UTVAL)
 		PC WHEN selPC = '1' ELSE 
 		(outCSR(31 DOWNTO 13) & curPRV & outCSR(10 DOWNTO 8) & outCSR(3) & outCSR(6 DOWNTO 4) & '0' & outCSR(2 DOWNTO 0)) WHEN machineStatusAlterationPreCSR = '1' ELSE --JUAN: I change this as it originally was

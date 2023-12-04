@@ -42,6 +42,7 @@ ENTITY aftab_controller IS
 		(len : INTEGER := 32);
 	PORT
 	(
+	   --INPUTS
 		clk                            : IN  STD_LOGIC;
 		rst                            : IN  STD_LOGIC;
 		completeDARU                   : IN  STD_LOGIC;
@@ -51,6 +52,7 @@ ENTITY aftab_controller IS
 		eq                             : IN  STD_LOGIC;
 		gt                             : IN  STD_LOGIC;
 		IR                             : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
+		--OUTPUTS
 		muxCode                        : OUT STD_LOGIC_VECTOR (11 DOWNTO 0);
 		nBytes                         : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
 		selLogic                       : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
@@ -95,14 +97,13 @@ ENTITY aftab_controller IS
 		selAAL                         : OUT STD_LOGIC;
 		selAAH                         : OUT STD_LOGIC;
 		--- Interrupts
-		interruptRaise                 : IN  STD_LOGIC;
-		exceptionRaise                 : IN  STD_LOGIC;
-		ecallFlag                      : OUT STD_LOGIC;
-		illegalInstrFlag               : OUT STD_LOGIC;
-		instrMisalignedOut             : IN  STD_LOGIC;
+		--INPUTS
+		interruptRaise                 : IN  STD_LOGIC; --INPUT coming from the ICCD
+		exceptionRaise                 : IN  STD_LOGIC; --INPUT coming from the ICCD
+		instrMisalignedOut             : IN  STD_LOGIC; --INPUT coming from the DARU(Data Adjustment Read Unit)
 		loadMisalignedOut              : IN  STD_LOGIC;
 		storeMisalignedOut             : IN  STD_LOGIC;
-		dividedByZeroOut               : IN  STD_LOGIC;
+		dividedByZeroOut               : IN  STD_LOGIC; --INPUT coming from the AAU(Attached Arithmetic Unit)
 		validAccessCSR                 : IN  STD_LOGIC;		
 		readOnlyCSR                    : IN  STD_LOGIC;
 		mirror                         : IN  STD_LOGIC;
@@ -111,6 +112,9 @@ ENTITY aftab_controller IS
 		delegationMode                 : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
 		previousPRV                    : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
 		modeTvec                       : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
+		--OUTPUTS
+		ecallFlag                      : OUT STD_LOGIC; --OUTPUT going to the Datapath as an acknowledgement 
+		illegalInstrFlag               : OUT STD_LOGIC; --OUTPUT going to the Datapath as an acknowledgement
 		mipCCLdDisable                 : OUT STD_LOGIC;
 		selCCMip_CSR                   : OUT STD_LOGIC;
 		selCause_CSR                   : OUT STD_LOGIC;
@@ -124,9 +128,9 @@ ENTITY aftab_controller IS
 		upCntCSR                       : OUT STD_LOGIC;
 		ldFlags                        : OUT STD_LOGIC;
 		zeroFlags                      : OUT STD_LOGIC;
-		ldDelegation                   : OUT STD_LOGIC;
-		ldMachine                      : OUT STD_LOGIC;
-		ldUser                         : OUT STD_LOGIC;
+		ldDelegation                   : OUT STD_LOGIC; --OUTPUT going to the ICCD
+		ldMachine                      : OUT STD_LOGIC; --OUTPUT going to the ICCD
+		ldUser                         : OUT STD_LOGIC; --OUTPUT going to the ICCD
 		loadMieReg                     : OUT STD_LOGIC;
 		loadMieUieField                : OUT STD_LOGIC;
 		mirrorUser                     : OUT STD_LOGIC;

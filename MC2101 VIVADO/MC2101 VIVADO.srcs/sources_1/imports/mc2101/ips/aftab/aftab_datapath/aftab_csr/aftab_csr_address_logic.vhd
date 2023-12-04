@@ -40,7 +40,9 @@ USE IEEE.STD_LOGIC_UNSIGNED.ALL;
 ENTITY aftab_csr_address_logic IS
 	PORT
 	(
+	   --INPUTS
 		addressRegBank : IN  STD_LOGIC_VECTOR(11 DOWNTO 0);
+		--OUTPUTS
 		ldMieReg       : OUT STD_LOGIC;
 		ldMieUieField  : OUT STD_LOGIC;
 		mirrorUstatus  : OUT STD_LOGIC;

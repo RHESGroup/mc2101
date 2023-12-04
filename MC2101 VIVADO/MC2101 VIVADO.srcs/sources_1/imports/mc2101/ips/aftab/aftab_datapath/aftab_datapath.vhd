@@ -153,8 +153,6 @@ ENTITY aftab_datapath IS
 		ecallFlag                      : IN  STD_LOGIC;
 		illegalInstrFlag               : IN  STD_LOGIC;
 		instrMisalignedOut             : OUT STD_LOGIC;
-		loadMisalignedOut              : OUT STD_LOGIC;
-		storeMisalignedOut             : OUT STD_LOGIC;
 		dividedByZeroOut               : OUT STD_LOGIC;
 		validAccessCSR                 : OUT STD_LOGIC;
 		readOnlyCSR                    : OUT STD_LOGIC;
@@ -666,8 +664,6 @@ BEGIN
 						  '0' & '0';
 						  
 	instrMisalignedOut <= instrMisalignedFlag;
-	loadMisalignedOut  <= '0'; --not used
-	storeMisalignedOut <= '0'; --not used
 	dividedByZeroOut   <= dividedByZeroFlag;
 	
 	interruptRaise <= interruptRaiseTemp;

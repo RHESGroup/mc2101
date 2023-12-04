@@ -42,6 +42,7 @@ ENTITY aftab_register_bank IS
 		(len : INTEGER := 32);
 	PORT
 	(
+	    --INPUTS
 		clk              : IN  STD_LOGIC;
 		rst              : IN  STD_LOGIC;
 		writeRegBank     : IN  STD_LOGIC;
@@ -49,6 +50,7 @@ ENTITY aftab_register_bank IS
 		inputRegBank     : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --INPUT coming from the CSRISL
 		loadMieReg       : IN  STD_LOGIC;
 		loadMieUieField  : IN  STD_LOGIC;
+		--OUTPUTS
 		outRegBank       : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --OUTPUT going to the CSRISL 
 		mirrorUstatus    : OUT STD_LOGIC;
 		mirrorUie        : OUT STD_LOGIC;
