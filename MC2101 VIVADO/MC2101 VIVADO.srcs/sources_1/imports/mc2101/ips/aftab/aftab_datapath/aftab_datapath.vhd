@@ -41,6 +41,7 @@ ENTITY aftab_datapath IS
 		(len : INTEGER := 32);
 	PORT
 	(
+	   --INPUTS 
 		clk                            : IN  STD_LOGIC;
 		rst                            : IN  STD_LOGIC;
 		writeRegFile                   : IN  STD_LOGIC;
@@ -92,6 +93,7 @@ ENTITY aftab_datapath IS
 		nBytes                         : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
 		memReady                       : IN  STD_LOGIC;
 		memDataIn                      : IN  STD_LOGIC_VECTOR (7 DOWNTO 0);
+		--OUTPUTS
 		memDataOut                     : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
 		memAddrDAWU                    : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
 		memAddrDARU                    : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
@@ -105,6 +107,7 @@ ENTITY aftab_datapath IS
 		completeDARU                   : OUT STD_LOGIC;
 		completeAAU                    : OUT STD_LOGIC;
 		--CSR and Interrupt inputs and outputs
+		--INPUTS
 		selCSR                         : IN  STD_LOGIC;
 		machineExternalInterrupt       : IN  STD_LOGIC;
 		machineTimerInterrupt          : IN  STD_LOGIC;
@@ -152,6 +155,7 @@ ENTITY aftab_datapath IS
 		selRomAddress                  : IN  STD_LOGIC;
 		ecallFlag                      : IN  STD_LOGIC;
 		illegalInstrFlag               : IN  STD_LOGIC;
+		--OUTPUTS
 		instrMisalignedOut             : OUT STD_LOGIC;
 		dividedByZeroOut               : OUT STD_LOGIC;
 		validAccessCSR                 : OUT STD_LOGIC;
@@ -235,6 +239,7 @@ BEGIN
 	);
 	--validAccessCSR <= '1' WHEN (curPRV >= addressRegBank(9 DOWNTO 8)) ELSE '0'; -- changed Luca
 	validAccessCSR <= '1' WHEN ( curPRV >= addressRegBank(9 DOWNTO 8) AND validAddressCSR = '1') ELSE '0';
+	--IF csr[11:10](addressRegBank(11 DOWNTO 10)) = "11", the register is read-only. See page 38 of AFTAB User Manual
 	readOnlyCSR    <= '1' WHEN (addressRegBank(11 DOWNTO 10) = "11") ELSE '0';
 	IR             <= inst;
 	registerFile : ENTITY WORK.aftab_register_file

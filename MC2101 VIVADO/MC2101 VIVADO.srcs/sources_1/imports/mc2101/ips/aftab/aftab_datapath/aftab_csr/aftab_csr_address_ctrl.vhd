@@ -50,7 +50,7 @@ END aftab_csr_address_ctrl;
 ARCHITECTURE behavioral OF aftab_csr_address_ctrl IS
 
 BEGIN
-
+    --For further details, see page 39 of AFTAB User Manual
     validAddressCSR <= '1' WHEN addressRegBank = x"300" ELSE
                        '1' WHEN addressRegBank = x"344" ELSE
                        '1' WHEN addressRegBank = x"304" ELSE

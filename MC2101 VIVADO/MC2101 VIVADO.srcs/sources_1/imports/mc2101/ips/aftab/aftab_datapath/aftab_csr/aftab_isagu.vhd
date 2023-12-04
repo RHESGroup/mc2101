@@ -44,7 +44,7 @@ ENTITY aftab_isagu IS
 	(
 		tvecBase                      : IN  STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		causeCode                     : IN  STD_LOGIC_VECTOR(5 DOWNTO 0);
-		modeTvec                      : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+		modeTvec                      : OUT STD_LOGIC_VECTOR(1 DOWNTO 0); 
 		interruptStartAddressDirect   : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0);
 		interruptStartAddressVectored : OUT STD_LOGIC_VECTOR(len - 1 DOWNTO 0)
 	);

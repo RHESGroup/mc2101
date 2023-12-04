@@ -101,17 +101,17 @@ ENTITY aftab_controller IS
 		interruptRaise                 : IN  STD_LOGIC; --INPUT coming from the ICCD
 		exceptionRaise                 : IN  STD_LOGIC; --INPUT coming from the ICCD
 		instrMisalignedOut             : IN  STD_LOGIC; --INPUT coming from the DARU(Data Adjustment Read Unit)
-		loadMisalignedOut              : IN  STD_LOGIC;
-		storeMisalignedOut             : IN  STD_LOGIC;
+		storeMisalignedOut             : IN  STD_LOGIC; --INPUT whose value is always '0'
+		loadMisalignedOut              : IN  STD_LOGIC; --INPUT whose value is always '0'
 		dividedByZeroOut               : IN  STD_LOGIC; --INPUT coming from the AAU(Attached Arithmetic Unit)
-		validAccessCSR                 : IN  STD_LOGIC;		
-		readOnlyCSR                    : IN  STD_LOGIC;
-		mirror                         : IN  STD_LOGIC;
-		ldMieReg                       : IN  STD_LOGIC;
-		ldMieUieField                  : IN  STD_LOGIC;
-		delegationMode                 : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
-		previousPRV                    : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
-		modeTvec                       : IN  STD_LOGIC_VECTOR (1 DOWNTO 0);
+		validAccessCSR                 : IN  STD_LOGIC; --INPUT coming from the CSRAddrCtrl
+		readOnlyCSR                    : IN  STD_LOGIC; --INPUT coming from the Datapath as an acknowledgement 
+		mirror                         : IN  STD_LOGIC; --INPUT coming from the Register Bank
+		ldMieReg                       : IN  STD_LOGIC; --INPUT coming from the Register Bank
+		ldMieUieField                  : IN  STD_LOGIC; --INPUT coming from the Register Bank
+		delegationMode                 : IN  STD_LOGIC_VECTOR (1 DOWNTO 0); --INPUT coming from the ICCD
+		previousPRV                    : IN  STD_LOGIC_VECTOR (1 DOWNTO 0); --INPUT coming from the CSRISL
+		modeTvec                       : IN  STD_LOGIC_VECTOR (1 DOWNTO 0); --INPUT coming from the ISAGU. It helps to recognize the type of interrupt("00"-direct interrupt and "11" vectored mode interrupt)
 		--OUTPUTS
 		ecallFlag                      : OUT STD_LOGIC; --OUTPUT going to the Datapath as an acknowledgement 
 		illegalInstrFlag               : OUT STD_LOGIC; --OUTPUT going to the Datapath as an acknowledgement
