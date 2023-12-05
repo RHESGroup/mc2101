@@ -57,7 +57,7 @@ ENTITY gpio_core IS
 	PORT (
 		clk           : IN  STD_LOGIC;
 		rst           : IN  STD_LOGIC;
-		address       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);
+		address       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0); 
 		busDataIn     : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
 		read          : IN  STD_LOGIC;
 		write         : IN  STD_LOGIC;
@@ -72,17 +72,17 @@ END gpio_core;
 ARCHITECTURE behavior OF gpio_core IS
 
     --GPIO REGISTERS
-    SIGNAL PADDIR    : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL PADIN     : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL PADOUT    : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL PADINTEN  : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL INTTYPE0  : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL INTTYPE1  : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL INTSTATUS : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL PADDIR    : STD_LOGIC_VECTOR(31 DOWNTO 0); --Control the direction of each of the GPIO pads
+    SIGNAL PADIN     : STD_LOGIC_VECTOR(31 DOWNTO 0); --Saves the input values coming from input pins
+    SIGNAL PADOUT    : STD_LOGIC_VECTOR(31 DOWNTO 0); --Drives the output lines with its content
+    SIGNAL PADINTEN  : STD_LOGIC_VECTOR(31 DOWNTO 0); --Interrupt enable bits for input lines
+    SIGNAL INTTYPE0  : STD_LOGIC_VECTOR(31 DOWNTO 0); --Controls the interrupt triggering behavior of each interrupt-enabled pin
+    SIGNAL INTTYPE1  : STD_LOGIC_VECTOR(31 DOWNTO 0); --Controls the interrupt triggering behavior of each interrupt-enabled pin
+    SIGNAL INTSTATUS : STD_LOGIC_VECTOR(31 DOWNTO 0); --Contains interrupt status for each GPIO line
     --Async input synchronization registers DOUBLE SYNCHRONIZER
     SIGNAL gpio_in_sync1 : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL gpio_in_sync2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    --Effective address (registers are only 32 byte addressable)
+    --Effective address (registers are only 32-byte addressable)
     SIGNAL eff_addr: STD_LOGIC_VECTOR(2 DOWNTO 0);
     --SIGNALS USED FOR INTERRUPTS
     SIGNAL risings  : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -94,6 +94,8 @@ ARCHITECTURE behavior OF gpio_core IS
 BEGIN
 
     --Effective address
+    --We only consider the last 8 bits of the original address. Specifically, the address[4:0] are of interest because we can distinguish each register by only considering these bits
+    --Moreover, we don't have to read the bits 0 and 1 to recognize the register, then, we only need address[4:2]
     eff_addr<=address(4 DOWNTO 2);
 
     --DOUBLE SYNCHRONIZER
@@ -194,7 +196,8 @@ BEGIN
             interrupt<='0';
         --rise interrupt if there's one and if not yet pending and update status
         --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN (not synthesizable by older version of Quartus)
-          ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND interrupts/=x"00000000")) THEN
+        --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND interrupts/=x"00000000")) THEN CHANGED JUAN
+        ELSIF (rising_edge(clk) AND  interrupts/=x"00000000") THEN --IF interrupts is not zero, it means there is at least one interrupt
             interrupt<='1';
             INTSTATUS<=interrupts;
         END IF;
