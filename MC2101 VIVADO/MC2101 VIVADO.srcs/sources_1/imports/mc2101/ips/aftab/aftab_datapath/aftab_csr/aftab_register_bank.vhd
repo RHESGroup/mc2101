@@ -49,7 +49,7 @@ ENTITY aftab_register_bank IS
 		addressRegBank   : IN  STD_LOGIC_VECTOR (11 DOWNTO 0); --INPUT coming from mux8
 		inputRegBank     : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --INPUT coming from the CSRISL
 		loadMieReg       : IN  STD_LOGIC;
-		loadMieUieField  : IN  STD_LOGIC;
+		loadMieUieField  : IN  STD_LOGIC; --INPUT coming from the Control Unit
 		--OUTPUTS
 		outRegBank       : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --OUTPUT going to the CSRISL 
 		mirrorUstatus    : OUT STD_LOGIC;

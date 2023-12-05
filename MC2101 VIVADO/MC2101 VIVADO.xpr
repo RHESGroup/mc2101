@@ -92,8 +92,23 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
+      <File Path="$PSRCDIR/sources_1/new/Constants.vhd">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/mc2101/rtl/ssram/ssram.vhd">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/rtl/ssram/ssram.vhd"/>
+          <Attr Name="ImportTime" Val="1701368182"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_register.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_register.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -102,6 +117,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_shift_register.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_shift_register.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -110,6 +126,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_adder.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_adder.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -118,6 +135,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_adder_subtractor.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_adder_subtractor.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -126,6 +144,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_datapath.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_datapath.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -134,6 +153,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_counter.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_counter.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -142,6 +162,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_controller.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier_controller.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -150,6 +171,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_booth_multiplier/aftab_booth_multiplier.vhd"/>
           <Attr Name="ImportTime" Val="1701368181"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -158,6 +180,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_tcl.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_tcl.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -166,6 +189,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_multiplexer.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_multiplexer.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -174,6 +198,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_datapath.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_datapath.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -182,6 +207,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_controller.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider_controller.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -190,6 +216,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_divider.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -198,6 +225,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_su_divider.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_su_divider/aftab_su_divider.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -206,6 +234,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_aau.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_aau/aftab_aau.vhd"/>
           <Attr Name="ImportTime" Val="1701368181"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -214,6 +243,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_barrel_shifter.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_barrel_shifter.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -222,6 +252,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_comparator.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_comparator.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -230,6 +261,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_controller.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_controller.vhd"/>
           <Attr Name="ImportTime" Val="1701368181"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -238,6 +270,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_ctrl.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_ctrl.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -246,6 +279,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_register_file.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_register_file.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -254,6 +288,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_isseu.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_isseu.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -262,6 +297,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_llu.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_llu.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -270,6 +306,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_full_adder.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_full_adder.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -278,6 +315,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_half_adder.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_half_adder.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -286,6 +324,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_opt_adder.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_opt_adder.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -294,6 +333,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_error_detector.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_error_detector.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -302,6 +342,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_datapath.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_datapath.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -310,6 +351,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_controller.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu_controller.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -318,6 +360,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_dawu/aftab_dawu.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -326,6 +369,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_decoder.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_decoder.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -334,6 +378,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru_error_detector.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru_error_detector.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -342,6 +387,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru_datapath.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru_datapath.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -350,6 +396,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru_controller.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru_controller.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -358,6 +405,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_daru/aftab_daru.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -366,6 +414,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_sulu.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_sulu.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -374,6 +423,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_isl.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_isl.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -382,6 +432,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_registers.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_registers.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -390,6 +441,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_logic.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_address_logic.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -398,6 +450,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_one_bit_register.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_one_bit_register.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -406,6 +459,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_register_bank.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_register_bank.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -414,6 +468,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_counter.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_counter.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -422,6 +477,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_addressing_decoder.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_csr_addressing_decoder.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -430,6 +486,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_iccd.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_iccd.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -438,6 +495,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_isagu.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_csr/aftab_isagu.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -446,6 +504,7 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_datapath/aftab_datapath.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_datapath/aftab_datapath.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -454,8 +513,18 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/ips/aftab/aftab_core.vhd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/ips/aftab/aftab_core.vhd"/>
           <Attr Name="ImportTime" Val="1701368181"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/mc2101/tb/aftab_memory.vhd">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/tb/aftab_memory.vhd"/>
+          <Attr Name="ImportTime" Val="1701368184"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -518,15 +587,6 @@
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/rtl/gpio/gpio_pads_if.vhd"/>
-          <Attr Name="ImportTime" Val="1701368182"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/imports/mc2101/rtl/ssram/ssram.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/rtl/ssram/ssram.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -640,15 +700,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/imports/mc2101/tb/aftab_memory.vhd">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/tb/aftab_memory.vhd"/>
-          <Attr Name="ImportTime" Val="1701368184"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/tb/aftab_testbench.vhd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
@@ -718,7 +769,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="aftab_core"/>
+        <Option Name="TopModule" Val="ssram"/>
       </Config>
     </FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">

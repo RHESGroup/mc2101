@@ -41,20 +41,17 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 USE IEEE.STD_LOGIC_TEXTIO.ALL;
 USE STD.TEXTIO.ALL;
+USE work.Constants.ALL;
 
 
 ENTITY ssram IS
-	GENERIC (
-		dataWidth      : INTEGER :=8;
-		addressWidth   : INTEGER :=13
-	);  
 	PORT (
 		clk           : IN  STD_LOGIC;
 		readMem       : IN  STD_LOGIC;
 		writeMem      : IN  STD_LOGIC;
-		address       : IN  STD_LOGIC_VECTOR (addressWidth - 1 DOWNTO 0);
-		dataIn     	  : IN  STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0);
-		dataOut       : OUT STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0)
+		address       : IN  STD_LOGIC_VECTOR (addressWidthSRAM - 1 DOWNTO 0);
+		dataIn     	  : IN  STD_LOGIC_VECTOR (dataWidthSRAM -1 DOWNTO 0);
+		dataOut       : OUT STD_LOGIC_VECTOR (dataWidthSRAM -1 DOWNTO 0)
 	);
 END ssram;
 
@@ -64,12 +61,12 @@ END ssram;
 
 ARCHITECTURE behavior OF ssram IS
 
-    TYPE MEMORY IS ARRAY (0 TO 2**addressWidth - 1) OF STD_LOGIC_VECTOR (dataWidth-1 DOWNTO 0);
+    TYPE MEMORY IS ARRAY (0 TO 2**addressWidthSRAM - 1) OF STD_LOGIC_VECTOR (dataWidthSRAM-1 DOWNTO 0);
 	
 	FUNCTION init_memory_from_file (filename : string) RETURN MEMORY IS
     FILE f : TEXT;
     VARIABLE m : MEMORY;
-    VARIABLE adr: STD_LOGIC_VECTOR(addressWidth-1 DOWNTO 0);
+    VARIABLE adr: STD_LOGIC_VECTOR(addressWidthSRAM-1 DOWNTO 0);
 	VARIABLE memline: LINE;
 	VARIABLE linechar: CHARACTER;
 	VARIABLE read_address: STD_LOGIC_VECTOR (31 DOWNTO 0);
@@ -87,9 +84,9 @@ ARCHITECTURE behavior OF ssram IS
 			READ (memline, linechar); -- read character '_' 
 		    HREAD (memline, read_data);
 		    IF UNSIGNED(read_address) > end_iram THEN -- it is a data address (see file link.common.ld)
-			    adr := '1' & read_address(addressWidth-2 DOWNTO 0);
+			    adr := '1' & read_address(addressWidthSRAM-2 DOWNTO 0);
 			ELSE -- it is a program address
-				adr := '0' & read_address(addressWidth-2 DOWNTO 0);
+				adr := '0' & read_address(addressWidthSRAM-2 DOWNTO 0);
 			END IF;
 				m(TO_INTEGER(UNSIGNED(adr))) 	 := read_data(7 DOWNTO 0);
 				m(TO_INTEGER(UNSIGNED(adr) + 1)) := read_data(15 DOWNTO 8);

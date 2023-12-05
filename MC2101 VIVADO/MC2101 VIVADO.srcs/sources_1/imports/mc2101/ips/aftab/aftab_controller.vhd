@@ -45,13 +45,13 @@ ENTITY aftab_controller IS
 	   --INPUTS
 		clk                            : IN  STD_LOGIC;
 		rst                            : IN  STD_LOGIC;
-		completeDARU                   : IN  STD_LOGIC;
-		completeDAWU                   : IN  STD_LOGIC;
-		completeAAU                    : IN  STD_LOGIC;
-		lt                             : IN  STD_LOGIC;
-		eq                             : IN  STD_LOGIC;
-		gt                             : IN  STD_LOGIC;
-		IR                             : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
+		completeDARU                   : IN  STD_LOGIC; --INPUT coming from the DARU(Data Adjustment Read Unit)
+		completeDAWU                   : IN  STD_LOGIC; --INPUT coming from the DAWU(Data Adjustment Write Unit)
+		completeAAU                    : IN  STD_LOGIC; --INPUT coming from the AAU(Attached Arithmetic Unit)
+		lt                             : IN  STD_LOGIC; --INPUT coming from comp(comparator) -- less than
+		eq                             : IN  STD_LOGIC; --INPUT coming from comp(comparator) --equal to
+		gt                             : IN  STD_LOGIC; --INPUT coming from comp(comparator) --greater than
+		IR                             : IN  STD_LOGIC_VECTOR (len - 1 DOWNTO 0); --INPUT coming from the IR(Instruction Register)
 		--OUTPUTS
 		muxCode                        : OUT STD_LOGIC_VECTOR (11 DOWNTO 0);
 		nBytes                         : OUT STD_LOGIC_VECTOR (1 DOWNTO 0);
@@ -115,44 +115,44 @@ ENTITY aftab_controller IS
 		--OUTPUTS
 		ecallFlag                      : OUT STD_LOGIC; --OUTPUT going to the Datapath as an acknowledgement 
 		illegalInstrFlag               : OUT STD_LOGIC; --OUTPUT going to the Datapath as an acknowledgement
-		mipCCLdDisable                 : OUT STD_LOGIC;
-		selCCMip_CSR                   : OUT STD_LOGIC;
-		selCause_CSR                   : OUT STD_LOGIC;
-		selPC_CSR                      : OUT STD_LOGIC;
-		selTval_CSR                    : OUT STD_LOGIC;
-		selMedeleg_CSR                 : OUT STD_LOGIC;
-		selMideleg_CSR                 : OUT STD_LOGIC;
-		ldValueCSR                     : OUT STD_LOGIC_VECTOR (2 DOWNTO 0);
-		ldCntCSR                       : OUT STD_LOGIC;
-		dnCntCSR                       : OUT STD_LOGIC;
-		upCntCSR                       : OUT STD_LOGIC;
-		ldFlags                        : OUT STD_LOGIC;
-		zeroFlags                      : OUT STD_LOGIC;
+		mipCCLdDisable                 : OUT STD_LOGIC; --OUTPUT going to the ISSR(Interrupt sources synchronization register)
+		selCCMip_CSR                   : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		selCause_CSR                   : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		selPC_CSR                      : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		selTval_CSR                    : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		selMedeleg_CSR                 : OUT STD_LOGIC; --OUTPUT going to MUX7
+		selMideleg_CSR                 : OUT STD_LOGIC; --OUTPUT going to MUX7
+		ldValueCSR                     : OUT STD_LOGIC_VECTOR (2 DOWNTO 0); --OUTPUT going to the CSRC
+		ldCntCSR                       : OUT STD_LOGIC; --OUTPUT going to the CSRC
+		dnCntCSR                       : OUT STD_LOGIC; --OUTPUT going to the CSRC
+		upCntCSR                       : OUT STD_LOGIC; --OUTPUT going to the CSRC
+		ldFlags                        : OUT STD_LOGIC; --OUTPUT going to the EFR(Exception flags register)
+		zeroFlags                      : OUT STD_LOGIC; --OUTPUT going to the EFR(Exception flags register)
 		ldDelegation                   : OUT STD_LOGIC; --OUTPUT going to the ICCD
 		ldMachine                      : OUT STD_LOGIC; --OUTPUT going to the ICCD
 		ldUser                         : OUT STD_LOGIC; --OUTPUT going to the ICCD
-		loadMieReg                     : OUT STD_LOGIC;
-		loadMieUieField                : OUT STD_LOGIC;
-		mirrorUser                     : OUT STD_LOGIC;
-		selCSR                         : OUT STD_LOGIC;
-		selP1CSR                       : OUT STD_LOGIC;
-		selReadWriteCSR                : OUT STD_LOGIC;
-		selImmCSR                      : OUT STD_LOGIC;
-		setCSR                         : OUT STD_LOGIC;
-		clrCSR                         : OUT STD_LOGIC;
-		writeRegBank                   : OUT STD_LOGIC;
-		selCSRAddrFromInst             : OUT STD_LOGIC;
-		selRomAddress                  : OUT STD_LOGIC;
-		selMepc_CSR                    : OUT STD_LOGIC;
-		selInterruptAddressDirect      : OUT STD_LOGIC;
-		selInterruptAddressVectored    : OUT STD_LOGIC;
-		checkMisalignedDARU            : OUT STD_LOGIC;
-		checkMisalignedDAWU            : OUT STD_LOGIC;
-		machineStatusAlterationPreCSR  : OUT STD_LOGIC;
-		userStatusAlterationPreCSR     : OUT STD_LOGIC;
-		machineStatusAlterationPostCSR : OUT STD_LOGIC;
-		userStatusAlterationPostCSR    : OUT STD_LOGIC;
-		zeroCntCSR                     : OUT STD_LOGIC
+		loadMieReg                     : OUT STD_LOGIC; --OUTPUT going to the Register Bank
+		loadMieUieField                : OUT STD_LOGIC; --OUTPUT going to the Register Bank
+		mirrorUser                     : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		selCSR                         : OUT STD_LOGIC; --OUTPUT going to Mux10
+		selP1CSR                       : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		selReadWriteCSR                : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		selImmCSR                      : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		setCSR                         : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		clrCSR                         : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		writeRegBank                   : OUT STD_LOGIC; --OUTPUT going to the Register Bank
+		selCSRAddrFromInst             : OUT STD_LOGIC; --OUTPUT going to MUX7
+		selRomAddress                  : OUT STD_LOGIC; --OUTPUT going to MUX7
+		selMepc_CSR                    : OUT STD_LOGIC; --OUTPUT going to MUX1(that is described inside the datapath with concurrent assignment)
+		selInterruptAddressDirect      : OUT STD_LOGIC; --OUTPUT going to MUX1(that is described inside the datapath with concurrent assignment)
+		selInterruptAddressVectored    : OUT STD_LOGIC; --OUTPUT going to MUX1(that is described inside the datapath with concurrent assignment)
+		checkMisalignedDARU            : OUT STD_LOGIC; --OUTPUT going to the DARU(Data Adjustment Read Unit)
+		checkMisalignedDAWU            : OUT STD_LOGIC; --OUTPUT going to the DAWU(Data Adjustment Write Unit)
+		machineStatusAlterationPreCSR  : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		userStatusAlterationPreCSR     : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		machineStatusAlterationPostCSR : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		userStatusAlterationPostCSR    : OUT STD_LOGIC; --OUTPUT going to the CSRISL
+		zeroCntCSR                     : OUT STD_LOGIC  --OUTPUT going to the CSRC
 	);
 END aftab_controller;
 --

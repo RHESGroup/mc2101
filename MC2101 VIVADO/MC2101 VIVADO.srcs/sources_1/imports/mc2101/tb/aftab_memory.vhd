@@ -40,15 +40,11 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 USE IEEE.STD_LOGIC_TEXTIO.ALL;
 USE STD.TEXTIO.ALL;
+USE work.Constants.ALL;
 
 
 ENTITY aftab_memory IS
-	GENERIC (
-		dataWidth      : INTEGER := 8;
-		addressWidth   : INTEGER := 32;
-		actual_address : INTEGER := 13;
-		size           : INTEGER := 2**actual_address -- 2^12 for data and 2^12 for instr, 4 K each
-	);  
+
 	PORT (
 		clk           : IN  STD_LOGIC;
 		rst           : IN  STD_LOGIC;
@@ -64,18 +60,9 @@ END aftab_memory;
 
 ARCHITECTURE behavioral OF aftab_memory IS
 
+	--Memory definition
 	TYPE mem_type IS ARRAY (0 TO size - 1) OF STD_LOGIC_VECTOR (dataWidth-1 DOWNTO 0);
 	SIGNAL mem : MEM_TYPE;
-
-	-- Memory boundaries - change this according to the linker script: sw/ref/link.common.ld
-	CONSTANT base_iram : INTEGER := 16#00000#; 
-	CONSTANT end_iram : INTEGER := 16#FFFFF#;
-	
-	CONSTANT base_dram : INTEGER := 16#100000#; 
-	CONSTANT end_dram : INTEGER := 16#100600#;
-
-	CONSTANT base_dram_actual : INTEGER := 16#1000#;
-	CONSTANT size_dram : INTEGER := 16#0FFF#;
 	
 BEGIN
 
@@ -119,7 +106,7 @@ RW : PROCESS(rst, clk, writeMem, readMem, addressBus, log_en)
 				FILE_CLOSE (f);
 			END IF;
 		
-		ELSIF log_en = '1' THEN
+		ELSIF log_en = '1' THEN --The idea is to clear the memory, but save the data inside of it into a file
 
 			FILE_OPEN(err_check, f_log, ("./slm_files/dram_dump.txt"), WRITE_MODE);
 			index:=base_dram;
