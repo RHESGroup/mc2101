@@ -97,7 +97,7 @@ BEGIN
     --We only consider the last 8 bits of the original address. Specifically, the address[4:0] are of interest because we can distinguish each register by only considering these bits
     --Moreover, we don't have to read the bits 0 and 1 to recognize the register, then, we only need address[4:2]
     eff_addr<=address(4 DOWNTO 2);
-
+    
     --DOUBLE SYNCHRONIZER
     PROCESS(clk, rst)
     BEGIN
@@ -112,7 +112,7 @@ BEGIN
         END IF;
     END PROCESS;
     
-    
+    --CHANGED Juan: Now the clock is the only thing checked by the elsif and there is another inner if statement. This causes more logic levels, but assures that any simulator/synthetizer can understand 
     --USER WRITABLE REGISTERS UPDATE
     PROCESS(clk, rst)
     BEGIN
@@ -122,25 +122,28 @@ BEGIN
             PADINTEN<=(OTHERS=>'0');
             INTTYPE0<=(OTHERS=>'0');
             INTTYPE1<=(OTHERS=>'0');
-        ELSIF (rising_edge(clk) and write='1') THEN
-            IF    eff_addr = "000" THEN
-                --PADDIR
-                PADDIR<=busDataIn;
-            ELSIF eff_addr = "010" THEN
-                --PADOUT
-                PADOUT<=busDataIn;
-            ELSIF eff_addr = "011" THEN
-                --PADINTEN
-                PADINTEN<=busDataIn;
-            ELSIF eff_addr = "100" THEN
-                --INTTYPE0
-                INTTYPE0<=busDataIn;
-            ELSIF eff_addr = "101" THEN
-                --INTTYPE1
-                INTTYPE1<=busDataIn;
+        ELSIF (rising_edge(clk)) THEN
+            IF(write = '1') THEN
+                IF    eff_addr = "000" THEN
+                    --PADDIR
+                    PADDIR<=busDataIn;
+                ELSIF eff_addr = "010" THEN
+                    --PADOUT
+                    PADOUT<=busDataIn;
+                ELSIF eff_addr = "011" THEN
+                    --PADINTEN
+                    PADINTEN<=busDataIn;
+                ELSIF eff_addr = "100" THEN
+                    --INTTYPE0
+                    INTTYPE0<=busDataIn;
+                ELSIF eff_addr = "101" THEN
+                    --INTTYPE1
+                    INTTYPE1<=busDataIn;
+                END IF;
             END IF;
         END IF;
     END PROCESS;
+    
     
     --GPIO REGISTERS READ PROCESS
     PROCESS(eff_addr, read)
@@ -182,6 +185,7 @@ BEGIN
     levels0<=NOT(PADIN) AND (INTTYPE0 AND (NOT(INTTYPE1)));
     interrupts<= (risings OR fallings OR levels1 OR levels0) AND PADINTEN;
     
+    --CHANGED Juan: Now the clock is the thing only checked by the elsif and there is another inner if statement. This causes more logic levels, but assures that any simulator/synthetizer can understand 
     --UPDATE INTERRUPT STATUS REGISTER
     --ASSERT INTERRUPT LINE
     PROCESS(clk, rst)
@@ -189,17 +193,19 @@ BEGIN
         IF rst='1' THEN
             INTSTATUS<=(OTHERS=>'0');
             interrupt<='0';
-        ELSIF (rising_edge(clk) AND (read='1' AND eff_addr="110")) THEN
-            --clear interupt status register
-            INTSTATUS<=(OTHERS=>'0');
-            --deassert interrupt line
-            interrupt<='0';
-        --rise interrupt if there's one and if not yet pending and update status
-        --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN (not synthesizable by older version of Quartus)
-        --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND interrupts/=x"00000000")) THEN CHANGED JUAN
-        ELSIF (rising_edge(clk) AND  interrupts/=x"00000000") THEN --IF interrupts is not zero, it means there is at least one interrupt
-            interrupt<='1';
-            INTSTATUS<=interrupts;
+        ELSIF (rising_edge(clk)) THEN
+            IF(read='1' AND eff_addr="110") THEN
+                --clear interupt status register
+                INTSTATUS<=(OTHERS=>'0');
+                --deassert interrupt line
+                interrupt<='0';
+            --rise interrupt if there's one and if not yet pending and update status
+            --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN (not synthesizable by older version of Quartus)
+            --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND interrupts/=x"00000000")) THEN CHANGED JUAN
+            ELSIF(interrupts/=x"00000000") THEN --IF interrupts is not zero, it means there is at least one interrupt
+                interrupt<='1';
+                INTSTATUS<=interrupts;
+            END IF;
         END IF;
     END PROCESS;
     
