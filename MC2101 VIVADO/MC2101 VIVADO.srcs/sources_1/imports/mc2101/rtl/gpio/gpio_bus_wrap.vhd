@@ -47,6 +47,7 @@ ENTITY gpio_bus_wrap IS
 		busAddressWidth   : INTEGER := 32
 	);  
 	PORT (
+	    --INPUTS
 	    --#BUS INTERFACE SIGNAL
 	    --system signals
 		clk           : IN  STD_LOGIC;
@@ -57,35 +58,19 @@ ENTITY gpio_bus_wrap IS
 		hwrite        : IN  STD_LOGIC;
 		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
 		haddr         : IN  STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+		--OUTPUTS
 		--slave driven signals
 		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
 		hready        : OUT STD_LOGIC;
 		hresp         : OUT STD_LOGIC;
 		--#EXTERNAL SIGNAL
 	    gpio_interrupt: OUT STD_LOGIC;
+	    --INOUTS
 	    gpio_pads     : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);
 END gpio_bus_wrap;
 
-ARCHITECTURE behavior OF gpio_bus_wrap IS
-
-    COMPONENT gpio IS   
-	PORT (
-	    --system signals
-		clk           : IN  STD_LOGIC;
-		rst           : IN  STD_LOGIC;
-		--input from bus wrapper
-		address       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);
-		busDataIn     : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
-		read          : IN  STD_LOGIC;
-		write         : IN  STD_LOGIC;
-		--output to bus wrapper
-		busDataOut    : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-		interrupt     : OUT STD_LOGIC;
-		--bidirectional channel from gpio pads
-		gpio_pads     : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0)
-	);
-    END COMPONENT;
+ARCHITECTURE behavior OF gpio_bus_wrap IS     
     
     SIGNAL dataREAD  : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL dataWRITE : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -102,23 +87,6 @@ ARCHITECTURE behavior OF gpio_bus_wrap IS
     SIGNAL phy_addr  : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL align_bits: STD_LOGIC_VECTOR(1 DOWNTO 0);
     
-    COMPONENT gpio_controller IS   
-	PORT (
-	    clk         :IN STD_LOGIC;
-	    rst         :IN STD_LOGIC;
-	    chip_select :IN  STD_LOGIC;
-		request     :IN  STD_LOGIC;
-	    addr_base   :IN STD_LOGIC_VECTOR(1 DOWNTO 0);
-	    gpio_read   :OUT STD_LOGIC;
-	    gpio_write  :OUT STD_LOGIC;
-	    shiftDout   :OUT STD_LOGIC;
-	    shiftDin    :OUT STD_LOGIC;
-	    latchAin    :OUT STD_LOGIC;
-	    gpio_ready  :OUT STD_LOGIC;
-	    clear       :OUT STD_LOGIC;
-	    gpio_resp   :OUT STD_LOGIC
-	);
-    END COMPONENT;
 
 BEGIN
 
@@ -126,14 +94,14 @@ BEGIN
     BEGIN
         IF (rst='1')THEN
             dataREAD<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
+        ELSIF (rising_edge(clk)) THEN
             IF gpio_read = '1' THEN
                 dataREAD<=gpio_out;
-            ELSIF shiftDout = '1' THEN  
+            ELSIF (shiftDout = '1') THEN  
                 dataREAD(23 DOWNTO 16)<=dataREAD(31 DOWNTO 24);
                 dataREAD(15 DOWNTO 8)<=dataREAD(23 DOWNTO 16);
                 dataREAD(7 DOWNTO 0)<=dataREAD(15 DOWNTO 8);
-            ELSIF ( rising_edge(clk) AND clear='1') THEN
+            ELSIF (clear = '1') THEN
                 dataREAD<=(OTHERS=>'0');
             END IF;
         END IF;
@@ -145,13 +113,15 @@ BEGIN
     BEGIN
         IF (rst='1')THEN
             dataWRITE<=(OTHERS=>'0');
-        ELSIF ( rising_edge(clk) AND shiftDin='1' )THEN        
-            dataWRITE(31 DOWNTO 24)<=hwrdata;
-            dataWRITE(23 DOWNTO 16)<=dataWRITE(31 DOWNTO 24);
-            dataWRITE(15 DOWNTO 8)<=dataWRITE(23 DOWNTO 16);
-            dataWRITE(7 DOWNTO 0)<=dataWRITE(15 DOWNTO 8);
-        ELSIF ( rising_edge(clk) AND clear='1') THEN
-            dataWRITE<=(OTHERS=>'0');
+        ELSIF (rising_edge(clk))THEN      
+            IF (shiftDin = '1') THEN       
+                dataWRITE(31 DOWNTO 24)<=hwrdata;
+                dataWRITE(23 DOWNTO 16)<=dataWRITE(31 DOWNTO 24);
+                dataWRITE(15 DOWNTO 8)<=dataWRITE(23 DOWNTO 16);
+                dataWRITE(7 DOWNTO 0)<=dataWRITE(15 DOWNTO 8);
+            ELSIF (clear = '1') THEN
+                dataWRITE<=(OTHERS=>'0');
+            END IF;
         END IF;
     END PROCESS;
     
@@ -159,8 +129,10 @@ BEGIN
     BEGIN
         IF rst='1' THEN
             addrLATCH<=(OTHERS=>'0');
-        ELSIF (rising_edge(clk) AND latchAin='1') THEN
-            addrLATCH<=phy_addr;
+        ELSIF (rising_edge(clk)) THEN
+            IF (latchAin='1') THEN
+                addrLATCH<=phy_addr;
+            END IF;
         END IF;
     END PROCESS;
     
@@ -170,7 +142,7 @@ BEGIN
     addr<=addrLATCH WHEN gpio_write='1' ELSE
           phy_addr;
     
-    periph_gpio: gpio  
+    periph_gpio: ENTITY work.gpio  
 	PORT MAP(
 		clk           =>clk,
 		rst           =>rst,
@@ -183,7 +155,7 @@ BEGIN
 		gpio_pads     =>gpio_pads
 	);
 	
-	controller: gpio_controller 
+	controller: ENTITY work.gpio_controller 
 	PORT MAP(
 	    clk         =>clk,
 	    rst         =>rst,
