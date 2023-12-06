@@ -42,6 +42,7 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY gpio IS   
 	PORT (
+	   --INPUTS
 	    --system signals
 		clk           : IN  STD_LOGIC;
 		rst           : IN  STD_LOGIC;
@@ -50,9 +51,11 @@ ENTITY gpio IS
 		busDataIn     : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
 		read          : IN  STD_LOGIC;
 		write         : IN  STD_LOGIC;
+		--OUTPUTS
 		--output to bus wrapper
 		busDataOut    : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		interrupt     : OUT STD_LOGIC;
+		--INOUTS
 		--bidirectional channel from gpio pads
 		gpio_pads     : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);
@@ -60,38 +63,13 @@ END gpio;
 
 ARCHITECTURE behavior OF gpio IS
 
-    COMPONENT gpio_core IS   
-	PORT (
-		clk           : IN  STD_LOGIC;
-		rst           : IN  STD_LOGIC;
-		address       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);
-		busDataIn     : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
-		read          : IN  STD_LOGIC;
-		write         : IN  STD_LOGIC;
-		busDataOut    : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-		interrupt     : OUT STD_LOGIC;
-	    gpio_in_async : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
-		gpio_out_sync : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-		gpio_pad_dir  : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
-	);
-    END COMPONENT;
-    
-    COMPONENT gpio_pads_if IS   
-	PORT (
-	    gpio_pins:  INOUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
-	    gpio_port_in : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
-	    gpio_pad_dir : IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
-	    gpio_port_out: IN STD_LOGIC_VECTOR( 31 DOWNTO 0)
-	);
-    END COMPONENT;
-    
     SIGNAL gpio_core_ins: STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL gpio_core_outs: STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL gpio_core_dirs: STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 BEGIN
 
-    core: gpio_core   
+    core: ENTITY work.gpio_core   
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
@@ -106,7 +84,7 @@ BEGIN
 		gpio_pad_dir=>gpio_core_dirs
 	);
     
-    pads: gpio_pads_if   
+    pads: ENTITY work.gpio_pads_if   
 	PORT MAP(
 	    gpio_pins=>gpio_pads,
 	    gpio_port_in=>gpio_core_ins,
