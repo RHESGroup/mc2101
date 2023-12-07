@@ -41,10 +41,13 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY gpio_pads_if IS   
 	PORT (
-	    gpio_pins:  INOUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
-	    gpio_port_in : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    --INPUTS
 	    gpio_pad_dir : IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
-	    gpio_port_out: IN STD_LOGIC_VECTOR( 31 DOWNTO 0)
+	    gpio_port_out: IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    --OUTPUTS
+	    gpio_port_in : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    --INOUTS
+	    gpio_pins:  INOUT STD_LOGIC_VECTOR( 31 DOWNTO 0)
 	);
 END gpio_pads_if;
 

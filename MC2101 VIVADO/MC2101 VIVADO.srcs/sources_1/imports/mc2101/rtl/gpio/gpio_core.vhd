@@ -55,15 +55,17 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY gpio_core IS   
 	PORT (
+	    --INPUTS
 		clk           : IN  STD_LOGIC;
 		rst           : IN  STD_LOGIC;
 		address       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0); 
 		busDataIn     : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
 		read          : IN  STD_LOGIC;
 		write         : IN  STD_LOGIC;
+	    gpio_in_async : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
+		--OUTPUTS
 		busDataOut    : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		interrupt     : OUT STD_LOGIC;
-	    gpio_in_async : IN  STD_LOGIC_VECTOR(31 DOWNTO 0);
 		gpio_out_sync : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		gpio_pad_dir  : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);

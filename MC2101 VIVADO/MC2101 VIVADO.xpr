@@ -61,7 +61,7 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="pynq-z1"/>
-    <Option Name="WTXSimLaunchSim" Val="0"/>
+    <Option Name="WTXSimLaunchSim" Val="1"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
@@ -102,7 +102,6 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/rtl/gpio/gpio_pads_if.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/rtl/gpio/gpio_pads_if.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -111,7 +110,6 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/rtl/gpio/gpio.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/rtl/gpio/gpio.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -120,7 +118,6 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/rtl/gpio/gpio_controller.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/rtl/gpio/gpio_controller.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -129,7 +126,6 @@
       </File>
       <File Path="$PSRCDIR/sources_1/imports/mc2101/rtl/gpio/gpio_bus_wrap.vhd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="ImportPath" Val="$PPRDIR/../mc2101/rtl/gpio/gpio_bus_wrap.vhd"/>
           <Attr Name="ImportTime" Val="1701368182"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -770,7 +766,7 @@
       </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
-        <Option Name="TopModule" Val="gpio_core"/>
+        <Option Name="TopModule" Val="gpio_bus_wrap"/>
       </Config>
     </FileSet>
     <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">

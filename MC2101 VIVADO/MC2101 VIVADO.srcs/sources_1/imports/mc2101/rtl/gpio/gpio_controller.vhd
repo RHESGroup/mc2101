@@ -41,11 +41,13 @@ USE IEEE.NUMERIC_STD.ALL;
 
 ENTITY gpio_controller IS   
 	PORT (
+	    --INPUTS
 	    clk         :IN STD_LOGIC;
 	    rst         :IN STD_LOGIC;
-	    chip_select :IN  STD_LOGIC;
-		request     :IN  STD_LOGIC;
+	    chip_select :IN  STD_LOGIC; --Enables the peripheral
+		request     :IN  STD_LOGIC; --Indicates the transfer direction. Write(1) or Read(0)
 	    addr_base   :IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+	    --OUTPUTS
 	    gpio_read   :OUT STD_LOGIC;
 	    gpio_write  :OUT STD_LOGIC;
 	    shiftDout   :OUT STD_LOGIC;
@@ -74,13 +76,13 @@ BEGIN
         END IF;
     END PROCESS;
     
-    readReq<=chip_select and (not request);
-    writeReq<=chip_select and request;
+    readReq<=chip_select and (not request); -- '1' if the GPIO has been selected and it is a READ request
+    writeReq<=chip_select and request; --'1' if the GPIO has been selected and it is a WRITE request
 
     PROCESS(readReq, writeReq, addr_base, current_state)
     BEGIN
         CASE current_state IS
-            WHEN IDLE =>
+            WHEN IDLE => --We stay in IDLE unless we receive a request(write or read)
                 clear<='0';
                 latchAin<='0';
                 gpio_read<='0';
@@ -89,10 +91,10 @@ BEGIN
 	            gpio_ready<='1';
 	            gpio_resp<='0';
 	            shiftDin<='0';
-	            IF readReq = '1'  THEN
+	            IF readReq = '1'  THEN --If the operation requested is a READ...
 	                IF addr_base="00" THEN
 	                    latchAin<='1';
-	                    gpio_read<='1';
+	                    gpio_read<='1'; --Indicates the GPIO core that we want to read
 	                    gpio_ready<='0';
 	                    next_state<=READ;
 	                ELSE
@@ -101,7 +103,7 @@ BEGIN
 	                    gpio_resp<='1';
 	                    next_state<=MISAL;
 	                END IF;
-	            ELSIF writeReq = '1' THEN
+	            ELSIF writeReq = '1' THEN --If the operation requested is a WRITE...
 	                IF addr_base="00" THEN
 	                    shiftDin<='1';
 	                    next_state<=WRITE;
@@ -165,7 +167,7 @@ BEGIN
 	                clear<='0';
 	            ELSE
 	                next_state<=IDLE;
-	                gpio_write<='1';
+	                gpio_write<='1'; --Indicates the GPIO core that we want to write
 	                shiftDin<='0';
 	                gpio_ready<='0';
 	                clear<='1';

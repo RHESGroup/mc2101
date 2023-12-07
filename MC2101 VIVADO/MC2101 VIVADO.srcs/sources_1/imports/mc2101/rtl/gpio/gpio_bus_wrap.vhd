@@ -53,16 +53,16 @@ ENTITY gpio_bus_wrap IS
 		clk           : IN  STD_LOGIC;
 		rst           : IN  STD_LOGIC;
 		--master driven signals
-		htrans        : IN  STD_LOGIC_VECTOR(1 DOWNTO 0);
-		hselx         : IN  STD_LOGIC;
-		hwrite        : IN  STD_LOGIC;
-		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		haddr         : IN  STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+		htrans        : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --Shows the current state of the bus
+		hselx         : IN  STD_LOGIC; --CHIP SELECT signal -- Enables the peripheral selection
+		hwrite        : IN  STD_LOGIC; --Indicates the transfer direction. Write(1) or Read(0)
+		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); --Data lines from mater to slave. It comes from the AFTAB
+		haddr         : IN  STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0); --Address
 		--OUTPUTS
 		--slave driven signals
-		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		hready        : OUT STD_LOGIC;
-		hresp         : OUT STD_LOGIC;
+		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); --Data lines from slave to master. It goes to the AFTAB
+		hready        : OUT STD_LOGIC; --When driven low, the transfer is extended
+		hresp         : OUT STD_LOGIC; --When high, indicates that the transfer status is on error. It goes to the AFTAB
 		--#EXTERNAL SIGNAL
 	    gpio_interrupt: OUT STD_LOGIC;
 	    --INOUTS
@@ -86,82 +86,36 @@ ARCHITECTURE behavior OF gpio_bus_wrap IS
     SIGNAL addr      : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL phy_addr  : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL align_bits: STD_LOGIC_VECTOR(1 DOWNTO 0);
+    SIGNAL hwritedata:  STD_LOGIC_VECTOR(31 DOWNTO 0);
     
 
 BEGIN
 
-    PROCESS(clk, rst)
-    BEGIN
-        IF (rst='1')THEN
-            dataREAD<=(OTHERS=>'0');
-        ELSIF (rising_edge(clk)) THEN
-            IF gpio_read = '1' THEN
-                dataREAD<=gpio_out;
-            ELSIF (shiftDout = '1') THEN  
-                dataREAD(23 DOWNTO 16)<=dataREAD(31 DOWNTO 24);
-                dataREAD(15 DOWNTO 8)<=dataREAD(23 DOWNTO 16);
-                dataREAD(7 DOWNTO 0)<=dataREAD(15 DOWNTO 8);
-            ELSIF (clear = '1') THEN
-                dataREAD<=(OTHERS=>'0');
-            END IF;
-        END IF;
-    END PROCESS;
-    
-    hrdata<=dataREAD(7 DOWNTO 0);
-    
-    PROCESS(clk, rst)
-    BEGIN
-        IF (rst='1')THEN
-            dataWRITE<=(OTHERS=>'0');
-        ELSIF (rising_edge(clk))THEN      
-            IF (shiftDin = '1') THEN       
-                dataWRITE(31 DOWNTO 24)<=hwrdata;
-                dataWRITE(23 DOWNTO 16)<=dataWRITE(31 DOWNTO 24);
-                dataWRITE(15 DOWNTO 8)<=dataWRITE(23 DOWNTO 16);
-                dataWRITE(7 DOWNTO 0)<=dataWRITE(15 DOWNTO 8);
-            ELSIF (clear = '1') THEN
-                dataWRITE<=(OTHERS=>'0');
-            END IF;
-        END IF;
-    END PROCESS;
-    
-    PROCESS(clk, rst)--, latchAin)
-    BEGIN
-        IF rst='1' THEN
-            addrLATCH<=(OTHERS=>'0');
-        ELSIF (rising_edge(clk)) THEN
-            IF (latchAin='1') THEN
-                addrLATCH<=phy_addr;
-            END IF;
-        END IF;
-    END PROCESS;
-    
-    phy_addr<=haddr(4 DOWNTO 0);
-    align_bits<=haddr(1 DOWNTO 0);
-    
-    addr<=addrLATCH WHEN gpio_write='1' ELSE
-          phy_addr;
-    
     periph_gpio: ENTITY work.gpio  
 	PORT MAP(
+	   --INPUTS
 		clk           =>clk,
 		rst           =>rst,
 		address       =>addr,
-		busDataIn     =>dataWRITE,
+		busDataIn     =>hwritedata,
 		read          =>gpio_read,
 		write         =>gpio_write,
+		--OUTPUTS
 		busDataOut    =>gpio_out,
 		interrupt     =>gpio_interrupt,
+		--INOUTS
 		gpio_pads     =>gpio_pads
 	);
 	
 	controller: ENTITY work.gpio_controller 
 	PORT MAP(
+	   --INPUTS
 	    clk         =>clk,
 	    rst         =>rst,
 	    chip_select =>hselx,
 		request     =>hwrite,
 	    addr_base   =>align_bits,
+	    --OUTPUTS
 	    gpio_read   =>gpio_read,
 	    gpio_write  =>gpio_write,
 	    shiftDout   =>shiftDout,
@@ -171,7 +125,67 @@ BEGIN
 	    clear       =>clear,
 	    gpio_resp   =>hresp
 	);
+	--haddr has a size of 32 bits. However, we do not have to have this number of bits for the GPIO addressing
+	phy_addr<=haddr(4 DOWNTO 0); --5 bit address signal that selects which user regiser is accessed by the AFTAB processor
+    align_bits<=haddr(1 DOWNTO 0); --Signal that helps to check if the incoming address is aligned
+    
+    addr<=addrLATCH WHEN gpio_write='1' ELSE
+          phy_addr; --Normally, we consider phy_addr(address of User Register)
+    
 
+    --Process associated with READING user register
+    PROCESS(clk, rst)
+    BEGIN
+        IF (rst='1')THEN
+            dataREAD<=(OTHERS=>'0');
+        ELSIF (rising_edge(clk)) THEN
+            IF gpio_read = '1' THEN --If the operation requested is a READ(set by the GPIO controller). We get this value when making the transition to READ state
+                dataREAD<=gpio_out; --We read the 32 bits coming from the user register, but we have to shifth them out later.
+            ELSIF (shiftDout = '1') THEN  --We shift 8 bits at at a time---When the CU is in READ state
+                dataREAD(23 DOWNTO 16)<=dataREAD(31 DOWNTO 24);
+                dataREAD(15 DOWNTO 8)<=dataREAD(23 DOWNTO 16);
+                dataREAD(7 DOWNTO 0)<=dataREAD(15 DOWNTO 8);
+            ELSIF (clear = '1') THEN --Before going back to IDLE state, we clear the register
+                dataREAD<=(OTHERS=>'0');
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    hrdata<=dataREAD(7 DOWNTO 0); --Signal that goes to the AFTAB. We need four clock cycles to send the whole data(32 bits) to the AFTAB
+    
+    
+    --Process associated with WRITING user registers. In particular, with the shifting of values
+    PROCESS(clk, rst)
+    BEGIN
+        IF (rst='1')THEN
+            dataWRITE<=(OTHERS=>'0');
+        ELSIF (rising_edge(clk))THEN      
+            IF (shiftDin = '1') THEN --We shift 8 bits at at a time---When the CU is in WRITE state
+                dataWRITE(31 DOWNTO 24)<=hwrdata;
+                dataWRITE(23 DOWNTO 16)<=dataWRITE(31 DOWNTO 24);
+                dataWRITE(15 DOWNTO 8)<=dataWRITE(23 DOWNTO 16);
+                dataWRITE(7 DOWNTO 0)<=dataWRITE(15 DOWNTO 8); --This is the signal that goes as input to the CORE
+            ELSIF (clear = '1') THEN
+                dataWRITE<=(OTHERS=>'0');
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    --CHANGE JUAN
+    hwritedata<=dataWRITE WHEN gpio_write='1' ELSE (OTHERS => '0'); --Signal that goes to the GPIO core
+    
+    --Process associated with WRITING user registers. In particular, with the  preparation of the shifting to write valus into the user register
+    PROCESS(clk, rst)--, latchAin)
+    BEGIN
+        IF rst='1' THEN
+            addrLATCH<=(OTHERS=>'0');
+        ELSIF (rising_edge(clk)) THEN
+            IF (latchAin='1') THEN 
+                addrLATCH<=phy_addr; --Signal that captures the address value of the register to be written
+            END IF;
+        END IF;
+    END PROCESS;
+    
 END behavior;
 
 
