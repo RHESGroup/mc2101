@@ -86,7 +86,7 @@ ARCHITECTURE behavior OF gpio_bus_wrap IS
     SIGNAL addr      : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL phy_addr  : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL align_bits: STD_LOGIC_VECTOR(1 DOWNTO 0);
-    SIGNAL hwritedata:  STD_LOGIC_VECTOR(31 DOWNTO 0);
+
     
 
 BEGIN
@@ -97,7 +97,7 @@ BEGIN
 		clk           =>clk,
 		rst           =>rst,
 		address       =>addr,
-		busDataIn     =>hwritedata,
+		busDataIn     =>dataWRITE,
 		read          =>gpio_read,
 		write         =>gpio_write,
 		--OUTPUTS
@@ -171,8 +171,6 @@ BEGIN
         END IF;
     END PROCESS;
     
-    --CHANGE JUAN
-    hwritedata<=dataWRITE WHEN gpio_write='1' ELSE (OTHERS => '0'); --Signal that goes to the GPIO core
     
     --Process associated with WRITING user registers. In particular, with the  preparation of the shifting to write valus into the user register
     PROCESS(clk, rst)--, latchAin)
