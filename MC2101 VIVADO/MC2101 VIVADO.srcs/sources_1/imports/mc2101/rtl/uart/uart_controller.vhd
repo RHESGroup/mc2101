@@ -75,10 +75,10 @@ BEGIN
 
     PROCESS(readReq, writeReq, current_state)
     BEGIN
+    uart_read<='0';
+	uart_write<='0';
         CASE current_state IS
             WHEN IDLE =>
-                uart_read<='0';
-	            uart_write<='0';
 	            IF readReq = '1'  THEN
 	                uart_read<='1';
 	                next_state<=READ;
@@ -90,8 +90,6 @@ BEGIN
 	            END IF;
             
             WHEN READ =>
-                uart_read<='0';
-	            uart_write<='0';
 	            IF readReq = '1' THEN
 	                next_state<=READ;
 	            ELSE
@@ -99,13 +97,16 @@ BEGIN
 	            END IF;
 	            
             WHEN WRITE=>
-                uart_read<='0';
-	            uart_write<='0';
 	            IF writeReq = '1' THEN
 	                next_state<=WRITE;
 	            ELSE
 	                next_state<=IDLE;
 	            END IF;
+	        WHEN OTHERS=>
+	            uart_read<='0';
+	            uart_write<='0';
+	            next_state<=IDLE;
+	              
         END CASE;
     END PROCESS;
     

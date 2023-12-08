@@ -31,13 +31,14 @@
 -- **************************************************************************************
 --
 --	File content description:
---	uart peripheral top level entity
+--	UART peripheral top level entity
 --
 -- **************************************************************************************
 LIBRARY IEEE;
 LIBRARY STD;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
+USE work.CONSTANTS.ALL;
 
 --TODO: this uart has been designed starting from the standard UART 16550
 --      some functionality are not included in this current version
@@ -65,104 +66,11 @@ END uart;
 
 ARCHITECTURE behavior of uart IS
 
-    --UART RECEIVER
-    COMPONENT uart_rx_core IS 
-	PORT (
-	    --system signals
-		clk             : IN  STD_LOGIC;
-		rst             : IN  STD_LOGIC;
-		--input signals
-		divisor         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);--divisor value for baudrate 
-		parity_bit_en   : IN  STD_LOGIC;  --enable for parity bit
-		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
-		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
-		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
-		rx_in_async     : IN  STD_LOGIC; --RX line
-		--output signals signals
-		break_interrupt : OUT STD_LOGIC; --break interrupt
-		frame_error     : OUT STD_LOGIC; --frame error
-		parity_error    : OUT STD_LOGIC; --parity error
-		rx_data_buffer  : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --registered data
-		rx_valid        : OUT STD_LOGIC --data correctly sampled
-	);
-    END COMPONENT;
-    
-    
-    --UART TRANSMITTER
-    COMPONENT uart_tx_core IS 
-	PORT (
-	    --system signals
-		clk             : IN  STD_LOGIC;
-		rst             : IN  STD_LOGIC;
-		--input signals
-		divisor         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);--divisor value for baudrate
-		parity_bit_en   : IN  STD_LOGIC;  --enable for parity bit
-		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
-		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
-		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
-		tx_data_i       : IN  STD_LOGIC_VECTOR(7 DOWNTO 0); --data to be transmitted
-		tx_valid        : IN  STD_LOGIC; --some data is ready to be transmitted
-		--output signals signals
-		tx_ready        : OUT STD_LOGIC; --transmitter ready for next data
-		tx_out          : OUT STD_LOGIC --TX line
-	);
-    END COMPONENT;
-    
-    
-    --UART INTERRUPT CONTROLLER
-    COMPONENT uart_interrupt IS 
-    GENERIC (
-        FIFO_DEPTH   : INTEGER:=16;
-        LOG_FIFO_D   : INTEGER:=4
-    );
-	PORT (
-	    --system signals
-		clk                 : IN  STD_LOGIC;
-		rst                 : IN  STD_LOGIC;
-		--input signals
-		IER                 : IN  STD_LOGIC_VECTOR(2 DOWNTO 0); --Interrupt Enable Register: RLS, THRe, DR enables
-		rx_fifo_trigger_lv  : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --Receiver fifo trigger level
-		rx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in rx fifo
-		tx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in tx fifo
-		rx_line_error       : IN  STD_LOGIC; --Parity error or Break error or Overrun error or frame error in rx line
-		interrupt_clear     : IN  STD_LOGIC; --bit used to clear interrup line
-		char_timeout        : IN  STD_LOGIC; --no data has been received and no data has been read from receiver fifo during a certain time
-		--output signals signals
-		interrupt           : OUT STD_LOGIC;
-		interrupt_isr_code  : OUT STD_LOGIC_VECTOR(3 DOWNTO 0) --id of the interrupt raised
-	);
-    END COMPONENT;
-    
-    
-    --UART GENERIC FIFO
-    COMPONENT fifo IS 
-    GENERIC (
-        DATA_WIDTH:  INTEGER:=32;
-        FIFO_DEPTH:  INTEGER:=16;
-        LOG_FIFO_D:  INTEGER:=4
-    );
-	PORT (
-	    --system signals
-		clk             : IN  STD_LOGIC;
-		rst             : IN  STD_LOGIC;
-		--input signals
-		clear           : IN  STD_LOGIC;    --clear the FIFO
-		data_in         : IN  STD_LOGIC_VECTOR(DATA_WIDTH-1 DOWNTO 0); --data IN
-		read_request    : IN  STD_LOGIC;  --read operation reequest on the FIFO
-		write_request   : IN  STD_LOGIC;  --write operation reequest on the FIFO
-		--output signals signals
-		elements        : OUT STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);  --#elements in the queue
-		data_out        : OUT STD_LOGIC_VECTOR(DATA_WIDTH-1 DOWNTO 0);  --data OUT
-		fifo_empty      : OUT STD_LOGIC; --is fifo empty?
-		fifo_full       : OUT STD_LOGIC --is fifo full
-	);
-    END COMPONENT;
-    
     --FIFOs CONFIGURATION
-    CONSTANT DATA_WIDTH: INTEGER:= 8;
-    CONSTANT FIFO_DEPTH: INTEGER:=16;
-    CONSTANT LOG_FIFO_D: INTEGER:=4;
-    CONSTANT DATA_ERRORS: INTEGER:=3; --(parity + framing + break are saved foreach received frame)
+    CONSTANT DATA_WIDTH: INTEGER:= DATA_WIDTHFIFO;
+    CONSTANT FIFO_DEPTH: INTEGER:= FIFO_DEPTH;
+    CONSTANT LOG_FIFO_D: INTEGER:= LOG_FIFO_D;
+    CONSTANT DATA_ERRORS: INTEGER:= DATA_ERRORS; --(parity + framing + break are saved foreach received frame)
 
     --Register file signals
     --Interrupt enable register
@@ -237,98 +145,113 @@ ARCHITECTURE behavior of uart IS
 
 BEGIN
 
-    --RECEIVER
-    U_RX: uart_rx_core  
+    --UART RECEIVER
+    U_RX: ENTITY work.uart_rx_core  
 	PORT MAP(
+	    --SYSTEM SIGNALS
 		clk=>clk,
 		rst=>rst,
-		divisor=>divisor,
-		parity_bit_en=>reg_LCR(3),
-		parity_type=>reg_LCR(4), 
-		data_width=>reg_LCR(1 DOWNTO 0),
-		stop_bits=>reg_LCR(2),
-		rx_in_async=>uart_rx,
-		break_interrupt=>rx_break_interrupt,
-		frame_error=>rx_framing_error,
-		parity_error=>rx_parity_error,
-		rx_data_buffer=>rx_data_i,
-		rx_valid=>rx_finished
+		--INPUTS
+		divisor=>divisor, --divisor value for baudrate
+		parity_bit_en=>reg_LCR(3), --emable for parity bit
+		parity_type=>reg_LCR(4), --even(0) or odd parity xheck
+		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 4,6,7,8 bits
+		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 atop bit, 1 -> 2 stop bits)
+		rx_in_async=>uart_rx, --RX line
+		--OUTPUTS
+		break_interrupt=>rx_break_interrupt, --Break interrupt
+		frame_error=>rx_framing_error, --frame error
+		parity_error=>rx_parity_error, --parity error
+		rx_data_buffer=>rx_data_i, --registered data
+		rx_valid=>rx_finished --data correctly sampled
 	);
 	
 	--RECEIVER FIFO
-	U_RX_FIFO: fifo 
+	U_RX_FIFO: ENTITY work.fifo 
     GENERIC MAP(
         DATA_WIDTH=>DATA_WIDTH+DATA_ERRORS,
         FIFO_DEPTH=>FIFO_DEPTH,
         LOG_FIFO_D=>LOG_FIFO_D
     )
 	PORT MAP(
+	    --SYSTEM SIGNALS
 		clk=>clk,
 		rst=>rst,
-		clear=>reg_FCR(0),
-		data_in=>rx_frame,
-		read_request=>read_RHR,
-		write_request=>rx_finished,
-		elements=>rx_elements,
-		data_out=>rx_fifo_data_out,
-		fifo_empty=>rx_fifo_empty,
-		fifo_full=>rx_fifo_full
+		--INPUTS
+		clear=>reg_FCR(0), --clear the FIFO
+		data_in=>rx_frame, --data IN
+		read_request=>read_RHR, --read operation request on the FIFO
+		write_request=>rx_finished, --write operation request on the FIFO
+		--OUTPUTS
+		elements=>rx_elements, --#elements in the queue
+		data_out=>rx_fifo_data_out, --data OUT
+		fifo_empty=>rx_fifo_empty, --Is fifo empty?
+ 		fifo_full=>rx_fifo_full --Is fifo full?
 	);
 	
-	--TRANSMITTER
-	U_TX: uart_tx_core 
+	--UART TRANSMITTER
+	U_TX: ENTITY work.uart_tx_core 
 	PORT MAP(
+	    --SYSTEM SIGNALS
 		clk=>clk,
 		rst=>rst,
-		divisor=>divisor,
-		parity_bit_en=>reg_LCR(3),
-		parity_type=>reg_LCR(4),
-		data_width=>reg_LCR(1 DOWNTO 0),
-		stop_bits=>reg_LCR(2),
-		tx_data_i=>tx_fifo_data_out,
-		tx_valid=>NOT(tx_fifo_empty),
-		tx_ready=>tx_ready,
-		tx_out=>uart_tx
+		--INPUTS
+		divisor=>divisor, --divisor value for baudrate
+		parity_bit_en=>reg_LCR(3), --enable for parity check
+		parity_type=>reg_LCR(4), --even(0) or odd parity check
+		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 4,6,7,8 bits
+		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 atop bit, 1 -> 2 stop bits)
+		tx_data_i=>tx_fifo_data_out, --data to be transmitted
+		tx_valid=>NOT(tx_fifo_empty), --data ready to be transmitted
+		--OUTPUTS
+		tx_ready=>tx_ready, --transmitter ready for next data
+		tx_out=>uart_tx --TX line
 	);
 	
 	--TRANSMITTER FIFO
-	U_TX_FIFO: fifo 
+	U_TX_FIFO: ENTITY work.fifo 
     GENERIC MAP(
         DATA_WIDTH=>DATA_WIDTH,
         FIFO_DEPTH=>FIFO_DEPTH,
         LOG_FIFO_D=>LOG_FIFO_D
     )
 	PORT MAP(
+	    --SYSTEM SIGNALS
 		clk=>clk,
 		rst=>rst,
-		clear=>reg_FCR(1),
-		data_in=>busDataIn,
-		read_request=>tx_ready,
-		write_request=>write_THR,
-		elements=>tx_elements,
-		data_out=>tx_fifo_data_out,
-		fifo_empty=>tx_fifo_empty,
-		fifo_full=>tx_fifo_full
+		--INPUTS
+		clear=>reg_FCR(1), --clear the fifo
+		data_in=>busDataIn, --data IN
+		read_request=>tx_ready, --read operation request on the FIFO
+		write_request=>write_THR, --write operation request on the FIFO
+		--OUTPUTS
+		elements=>tx_elements, --#elements in the queue
+		data_out=>tx_fifo_data_out, --data OUT
+		fifo_empty=>tx_fifo_empty, --Is fifo empty?
+		fifo_full=>tx_fifo_full --Is fifo full?
 	);
 	
 	--INTERRUPT CONTROLLER
-	U_IN_CTRL: uart_interrupt 
+	U_IN_CTRL: ENTITY work.uart_interrupt 
     GENERIC MAP(
         FIFO_DEPTH=>FIFO_DEPTH,
         LOG_FIFO_D=>LOG_FIFO_D
     )
 	PORT MAP(
+	    --SYSTEM SIGNALS
 		clk=>clk,
 		rst=>rst,
-		IER=>reg_IER(2 DOWNTO 0),
-		rx_fifo_trigger_lv=>reg_FCR(3 DOWNTO 2),
-		rx_elements=>rx_elements,
-		tx_elements=>tx_elements,
-		rx_line_error=>rx_line_error,
-		interrupt_clear=>clear_int,
-		char_timeout=>rx_char_timeout,
+		--INPUTS
+		IER=>reg_IER(2 DOWNTO 0), --Interrupt Enable register: RLS, ThRe, DR enables
+		rx_fifo_trigger_lv=>reg_FCR(3 DOWNTO 2), --Receiver fifo trigger level
+		rx_elements=>rx_elements, --#elements in rx fifo
+		tx_elements=>tx_elements, --#elements in tx fifo
+		rx_line_error=>rx_line_error, --Parity error or Break error or Overrun error or Frame error in Rx line
+		interrupt_clear=>clear_int, --bit used to clear interrupt line
+		char_timeout=>rx_char_timeout, --no data has been received and no data has been read frm receiver fifo during a certain time
+		--OUTPUTS
 		interrupt=>interrupt,
-		interrupt_isr_code=>ISR_code
+		interrupt_isr_code=>ISR_code --ID of the interrupt raised
 	);
 
     --DIVISOR (DLL + DLM)

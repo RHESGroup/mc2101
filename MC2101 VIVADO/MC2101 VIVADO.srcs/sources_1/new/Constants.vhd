@@ -23,6 +23,9 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
 PACKAGE Constants IS
+    
+    --AFTAB CONSTANTS
+
     --Constants related to AFTAB memory
     
     CONSTANT dataWidth      : INTEGER := 8;
@@ -39,9 +42,20 @@ PACKAGE Constants IS
 	CONSTANT base_dram_actual : INTEGER := 16#1000#;
 	CONSTANT size_dram : INTEGER := 16#0FFF#;
 	
+	--MC2101 CONSTANTS
+	
 	--Constants related to MC2101
-    CONSTANT dataWidthSRAM      : INTEGER :=8;
-	CONSTANT addressWidthSRAM   : INTEGER :=13;
+    CONSTANT dataWidthSRAM:           INTEGER :=8;
+	CONSTANT addressWidthSRAM:        INTEGER :=13;
+	
+	--Oonstants related to UART
+	--FIFO
+	CONSTANT DATA_WIDTHFIFO:          INTEGER:=8;
+    CONSTANT FIFO_DEPTH:              INTEGER:=16;
+    CONSTANT LOG_FIFO_D:              INTEGER:=4;
+    CONSTANT DATA_ERRORS:             INTEGER:=3; --(parity + framing + break are saved foreach received frame)
+    
+
 
 END Constants;
 
