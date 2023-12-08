@@ -50,8 +50,8 @@ PACKAGE Constants IS
 	
 	--Oonstants related to UART
 	--FIFO
-	CONSTANT DATA_WIDTHFIFO:          INTEGER:=8;
-    CONSTANT FIFO_DEPTH:              INTEGER:=16;
+	CONSTANT DATA_WIDTHFIFO:          INTEGER:=8; --Maximun data word length
+    CONSTANT FIFO_DEPTH:              INTEGER:=16; --Size of the FIFO buffer
     CONSTANT LOG_FIFO_D:              INTEGER:=4;
     CONSTANT DATA_ERRORS:             INTEGER:=3; --(parity + framing + break are saved foreach received frame)
     

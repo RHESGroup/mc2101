@@ -169,8 +169,8 @@ BEGIN
 	--RECEIVER FIFO
 	U_RX_FIFO: ENTITY work.fifo 
     GENERIC MAP(
-        DATA_WIDTH=>DATA_WIDTH+DATA_ERRORS,
-        FIFO_DEPTH=>FIFO_DEPTH,
+        DATA_WIDTH=>DATA_WIDTH+DATA_ERRORS, --11-bit wide. Receiver sends the data plus error flags associated with each character
+        FIFO_DEPTH=>FIFO_DEPTH, --16-word FIFO buffer
         LOG_FIFO_D=>LOG_FIFO_D
     )
 	PORT MAP(
@@ -211,8 +211,8 @@ BEGIN
 	--TRANSMITTER FIFO
 	U_TX_FIFO: ENTITY work.fifo 
     GENERIC MAP(
-        DATA_WIDTH=>DATA_WIDTH,
-        FIFO_DEPTH=>FIFO_DEPTH,
+        DATA_WIDTH=>DATA_WIDTH, --8-bit wide 
+        FIFO_DEPTH=>FIFO_DEPTH, --16-word FIFO buffer
         LOG_FIFO_D=>LOG_FIFO_D
     )
 	PORT MAP(
