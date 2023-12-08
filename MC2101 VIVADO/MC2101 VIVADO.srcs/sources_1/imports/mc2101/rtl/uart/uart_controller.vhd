@@ -70,13 +70,15 @@ BEGIN
         END IF;
     END PROCESS;
     
-    readReq<=chip_select and (not request);
-    writeReq<=chip_select and request;
+    readReq<=chip_select and (not request); -- '1' if the UART has been selected and it is a READ request
+    writeReq<=chip_select and request; --'1' if the UART has been selected and it is a WRITE request
 
     PROCESS(readReq, writeReq, current_state)
     BEGIN
     uart_read<='0';
 	uart_write<='0';
+	uart_ready<='1';
+    uart_resp<='0';
         CASE current_state IS
             WHEN IDLE =>
 	            IF readReq = '1'  THEN
@@ -110,8 +112,7 @@ BEGIN
         END CASE;
     END PROCESS;
     
-    uart_ready<='1';
-    uart_resp<='0';
+
     
 END behavior;
 

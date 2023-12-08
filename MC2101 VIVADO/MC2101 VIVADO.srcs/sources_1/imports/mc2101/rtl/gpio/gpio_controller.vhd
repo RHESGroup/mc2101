@@ -81,16 +81,16 @@ BEGIN
 
     PROCESS(readReq, writeReq, addr_base, current_state)
     BEGIN
+    clear<='0';
+    latchAin<='0';
+    gpio_read<='0';
+    gpio_write<='0';
+    shiftDout<='0';
+    gpio_ready<='1';
+    gpio_resp<='0';
+    shiftDin<='0';
         CASE current_state IS
             WHEN IDLE => --We stay in IDLE unless we receive a request(write or read)
-                clear<='0';
-                latchAin<='0';
-                gpio_read<='0';
-	            gpio_write<='0';
-	            shiftDout<='0';
-	            gpio_ready<='1';
-	            gpio_resp<='0';
-	            shiftDin<='0';
 	            IF readReq = '1'  THEN --If the operation requested is a READ...
 	                IF addr_base="00" THEN
 	                    latchAin<='1';
@@ -122,15 +122,8 @@ BEGIN
                 --FAULTY STATE:
                 --  KEEP hresp=1 for 1 clock period
                 --  RELEASE hready
-                gpio_ready<='1';
                 gpio_resp<='1';
-                            
-                clear<='0';
-                latchAin<='0';
-                shiftDin<='0';
-                gpio_read<='0';
-	            gpio_write<='0';
-	            shiftDout<='0';
+
                 IF readReq = '1' OR writeReq = '1' THEN
                     next_state<=MISAL;
                 ELSE
@@ -138,12 +131,6 @@ BEGIN
                 END IF;
             
             WHEN READ =>
-                latchAin<='0';
-                gpio_read<='0';
-	            gpio_write<='0';
-	            gpio_ready<='1';
-	            gpio_resp<='0';
-	            shiftDin<='0';
 	            IF readReq = '1' THEN
 	                next_state<=READ;
 	                shiftDout<='1';
@@ -155,11 +142,6 @@ BEGIN
 	            END IF;
 	            
             WHEN WRITE=>
-                latchAin<='0';
-                gpio_read<='0';
-	            gpio_ready<='1';
-	            gpio_resp<='0';
-	            shiftDout<='0';
 	            IF writeReq = '1' THEN
 	                next_state<=WRITE;
 	                shiftDin<='1';
@@ -172,6 +154,17 @@ BEGIN
 	                gpio_ready<='0';
 	                clear<='1';
 	            END IF;
+	        WHEN OTHERS=>
+	            clear<='0';
+                latchAin<='0';
+                gpio_read<='0';
+                gpio_write<='0';
+                shiftDout<='0';
+                gpio_ready<='1';
+                gpio_resp<='0';
+                shiftDin<='0';
+                next_state<=IDLE;
+	        
         END CASE;
     END PROCESS;
     
