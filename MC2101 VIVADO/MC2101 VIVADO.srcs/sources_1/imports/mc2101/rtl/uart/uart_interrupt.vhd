@@ -26,7 +26,7 @@
 --
 -- You should have received a copy of the GNU Lesser General
 -- Public License along with this source; if not, download it
--- from https://www.gnu.org/licenses/lgpl-3.0.txt
+-- from https://www.gnu.org/licenses/lgpl-3.0.txt3 
 --
 -- **************************************************************************************
 --
@@ -38,6 +38,7 @@ LIBRARY IEEE;
 LIBRARY STD;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
+USE work.Constants.ALL;
 
 --TODO: current version does not support DMA, MODEM, SCRATCHPAD, PRESCALER
 --      all relative bits and registers are not implemented or hardwired   
@@ -45,23 +46,20 @@ USE IEEE.NUMERIC_STD.ALL;
 
 
 ENTITY uart_interrupt IS 
-    GENERIC (
-        FIFO_DEPTH   : INTEGER:=16;
-        LOG_FIFO_D   : INTEGER:=4
-    );
+
 	PORT (
 	    --system signals
 		clk                 : IN  STD_LOGIC;
 		rst                 : IN  STD_LOGIC;
-		--input signals
-		IER                 : IN  STD_LOGIC_VECTOR(2 DOWNTO 0); --Interrupt Enable Register: RLS, THRe, DR enables
+		--INPUTS
+		IER                 : IN  STD_LOGIC_VECTOR(2 DOWNTO 0); --Interrupt Enable Register: RLS, THRe, DR enables. Enables each of the possible interrupt sources
 		rx_fifo_trigger_lv  : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --Receiver fifo trigger level
 		rx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in rx fifo
 		tx_elements         : IN  STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0); --#elements in tx fifo
 		rx_line_error       : IN  STD_LOGIC; --Parity error or Break error or Overrun error or frame error in rx line
 		interrupt_clear     : IN  STD_LOGIC; --bit used to clear interrup line
 		char_timeout        : IN  STD_LOGIC; --no data has been received and no data has been read from receiver fifo during a certain time
-		--output signals signals
+		--OUTPUTS
 		interrupt           : OUT STD_LOGIC;
 		interrupt_isr_code  : OUT STD_LOGIC_VECTOR(3 DOWNTO 0) --id of the interrupt raised
 	);
@@ -82,7 +80,7 @@ ARCHITECTURE behavior OF uart_interrupt IS
     --("11"-->trigger level 14[receiver fifo almost full])
     SIGNAL rx_trigger_reached: STD_LOGIC;
     
-    --The uart interrupt controller is in charge of computin the last 4 bits of the Interrupt Status Register
+    --The uart interrupt controller is in charge of computing the last 4 bits of the Interrupt Status Register
     --ISRcode=ISR(3 DOWNTO 0)=InterruptIdentificationCode & Interrupt status
     --See the 'Interrupt sources and their identification codes in the ISR' table in the datasheet
     SIGNAL current_iic_register, next_iic_register: STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -90,13 +88,15 @@ ARCHITECTURE behavior OF uart_interrupt IS
 BEGIN
 
     --Receiver data ready interrupt enable
-    DR_int_enable<=IER(0);
+    DR_int_enable<=IER(0); --Enables the data ready interrupt
     
     --Transmitter empty (data can be transmitted) interrupt enable
-    TX_EMPTY_int_enable<=IER(1);
+    TX_EMPTY_int_enable<=IER(1); --Enables the THR empty interrupt
     
     --Receiver line error interrupt enable
-    RX_LINE_int_enable<=IER(2);
+    RX_LINE_int_enable<=IER(2); --Enables the Receiver Line Status interrupt
+    
+    ---NOTE: The rest of the bits are not used because they are related to DMA. TODO
     
     --Receiver trigger level reached signal
     PROCESS(rx_elements, rx_fifo_trigger_lv)

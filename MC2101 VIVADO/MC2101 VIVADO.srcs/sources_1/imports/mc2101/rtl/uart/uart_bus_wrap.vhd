@@ -112,7 +112,7 @@ BEGIN
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
-		address=>haddr(2 DOWNTO 0),
+		address=>haddr(2 DOWNTO 0), --The UART is controlled through a set of registers addressable with 3 bits
 		busDataIn=>hwrdata,
 		read=>read,
 		write=>write,

@@ -66,6 +66,7 @@ END uart;
 
 ARCHITECTURE behavior of uart IS
 
+
     --FIFOs CONFIGURATION
     CONSTANT DATA_WIDTH: INTEGER:= DATA_WIDTHFIFO;
     CONSTANT FIFO_DEPTH: INTEGER:= FIFO_DEPTH;
@@ -73,45 +74,79 @@ ARCHITECTURE behavior of uart IS
     CONSTANT DATA_ERRORS: INTEGER:= DATA_ERRORS; --(parity + framing + break are saved foreach received frame)
 
     --Register file signals
-    --Interrupt enable register
-    SIGNAL reg_IER: STD_LOGIC_VECTOR(2 DOWNTO 0);
+    --Interrupt enable register -- Address : 001 -- Access type: R/W
+    --IER(0): Data ready
+    --IER(1): THR Empty
+    --IER(2): Receiver line status
+    --IER(3): Modem Status --Not currently implemented
+    --IER(5:4): not important
+    --IER(6): DMA Rx End --Not currently implemented 
+    SIGNAL reg_IER: STD_LOGIC_VECTOR(7 DOWNTO 0); --Now, we consider all the bits
     SIGNAL read_IER: STD_LOGIC;
     SIGNAL write_IER: STD_LOGIC;
     
-    --Fifo control register
-    SIGNAL reg_FCR: STD_LOGIC_VECTOR(3 DOWNTO 0);
+    --Fifo control register -- Address: 010 -- Access type: W
+    --FCR(0): FIFO enable
+    --FCR(1): Rx FIFO Reset
+    --FCR(2): Tx FIFO Reset
+    --FCR(3): DMA mode --Not currently used
+    --FCR(4): Enable DMA End --Not currently used
+    --FCR(5): not important
+    --FCR(7:6): Receiver's FIFO Trigger level
+    SIGNAL reg_FCR: STD_LOGIC_VECTOR(7 DOWNTO 0);  --Now, we consider all the bits
     SIGNAL write_FCR: STD_LOGIC;
     
-    --Line control register
-    SIGNAL reg_LCR: STD_LOGIC_VECTOR(4 DOWNTO 0);
+    --Line control register -- Address: 011 -- Access type: R/W
+    --LCR(1:0): Word length
+    --LCR(2): Stop bits
+    --LCR(3): Parity enable
+    --LCR(4): Even parity
+    --LCR(5): Force parity --Not currently used
+    --LCR(6): Set Break --Not currently used
+    --LCR(7): DLAB --Not currently used
+    SIGNAL reg_LCR: STD_LOGIC_VECTOR(7 DOWNTO 0); 
     SIGNAL read_LCR: STD_LOGIC;
     SIGNAL write_LCR: STD_LOGIC;
     
-    --Line status register
-    SIGNAL reg_LSR: STD_LOGIC_VECTOR(6 DOWNTO 0);
+    --Line status register -- Address: 101 -- Access type: R
+    --LSR(0): Data ready
+    --LSR(1): Overrun error
+    --LSR(2): Parity error
+    --LSR(3): Framing error
+    --LSR(4): Break interrupt
+    --LSR(5): THR empty
+    --LSR(6): Transmitter empty
+    --LSR(7): FIFO data error                               
+    SIGNAL reg_LSR: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_LSR: STD_LOGIC;
     
-    --Divisor lsb
+    --Divisor latch least significant byte register -- Address: 000 -- Access type: R/W --  Accesible when DLAB = 1
+    --DLL(7:0): Baudrate divisor's constant least significant byte
     SIGNAL reg_DLL: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_DLL: STD_LOGIC;
     SIGNAL write_DLL: STD_LOGIC;
     
-    --Divisor msb
+    --Divisor latch most significant byte register -- Address: 001 -- Access type: R/W --  Accesible when DLAB = 1
+    --DLM(7:0): Baudrate divisor's constant most significant byte
     SIGNAL reg_DLM: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_DLM: STD_LOGIC;
     SIGNAL write_DLM: STD_LOGIC;
     
-    --Transmitter holding register
-    SIGNAL write_THR: STD_LOGIC;
-    
-    --Receiver holding register
-    SIGNAL read_RHR: STD_LOGIC;
-    
-    --Interrupt status register
-    SIGNAL read_ISR: STD_LOGIC;
+
+
     
     --Divisor (DLL + DLM)
     SIGNAL divisor: STD_LOGIC_VECTOR(15 DOWNTO 0);
+    
+    --Transmitter holding register 
+    SIGNAL write_THR: STD_LOGIC; 
+    
+    --Receiver holding register 
+    SIGNAL read_RHR: STD_LOGIC;
+    
+    SIGNAL read_ISR: STD_LOGIC;
+    
+     --TODO: Implment the prescaler Division
     
     --Receiver signals
     SIGNAL rx_parity_error: STD_LOGIC;
@@ -178,7 +213,7 @@ BEGIN
 		clk=>clk,
 		rst=>rst,
 		--INPUTS
-		clear=>reg_FCR(0), --clear the FIFO
+		clear=>reg_FCR(1), --CHANGE: now the bit 1 tells us if we want to clear the buffer... table of UART protocol
 		data_in=>rx_frame, --data IN
 		read_request=>read_RHR, --read operation request on the FIFO
 		write_request=>rx_finished, --write operation request on the FIFO
@@ -220,7 +255,7 @@ BEGIN
 		clk=>clk,
 		rst=>rst,
 		--INPUTS
-		clear=>reg_FCR(1), --clear the fifo
+		clear=>reg_FCR(2), --CHANGE: now the bit 2 tells us if we want to clear the buffer... table of UART protocol
 		data_in=>busDataIn, --data IN
 		read_request=>tx_ready, --read operation request on the FIFO
 		write_request=>write_THR, --write operation request on the FIFO
@@ -243,7 +278,7 @@ BEGIN
 		rst=>rst,
 		--INPUTS
 		IER=>reg_IER(2 DOWNTO 0), --Interrupt Enable register: RLS, ThRe, DR enables
-		rx_fifo_trigger_lv=>reg_FCR(3 DOWNTO 2), --Receiver fifo trigger level
+		rx_fifo_trigger_lv=>reg_FCR(7 DOWNTO 6), --CHANGED: Now, we consider bits 7 and 6...see UART Protocol
 		rx_elements=>rx_elements, --#elements in rx fifo
 		tx_elements=>tx_elements, --#elements in tx fifo
 		rx_line_error=>rx_line_error, --Parity error or Break error or Overrun error or Frame error in Rx line
@@ -266,9 +301,9 @@ BEGIN
     --Receiver frame as a concatenation (ERRORS + DATA)
 	rx_frame<=rx_break_interrupt & rx_framing_error & rx_parity_error & rx_data_i;
     
-    --IER register 
-    read_IER<='1' WHEN read='1' AND address="000" ELSE '0';
-    write_IER<='1' WHEN write='1' AND address="000" ELSE '0';
+    --Do we want to Write/Read the IER register? 
+    read_IER<='1' WHEN read='1' AND address="001" ELSE '0'; --Changed: New address...see UART Protocol
+    write_IER<='1' WHEN write='1' AND address="001" ELSE '0'; --Changed: New address..see UART Protocol
     
     PROCESS(clk, rst)
     BEGIN
@@ -276,12 +311,12 @@ BEGIN
             reg_IER<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
             IF write_IER='1' THEN
-                reg_IER<=busDataIn(2 DOWNTO 0);
+                reg_IER<=busDataIn; --Now, we write all the input value into the IER register...we had previously considered only (2:0)
             END IF;
         END IF;
     END PROCESS;
     
-    --FCR register 
+    --Do we want to Write the FCR register? 
     write_FCR<='1' WHEN write='1' AND address="010" ELSE '0';
     
     PROCESS(clk, rst)
@@ -290,12 +325,12 @@ BEGIN
             reg_FCR<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
             IF write_FCR='1' THEN
-                reg_FCR<=busDataIn(3 DOWNTO 0);
+                reg_FCR<=busDataIn; --Now, we write all the input value into the IER register...we had previously considered only (3:0)
             END IF;
         END IF;
     END PROCESS;
     
-    --LCR register
+    --Do we want to Write/Read the LCR register? 
     read_LCR<='1' WHEN read='1' AND address="011" ELSE '0';
     write_LCR<='1' WHEN write='1' AND address="011" ELSE '0';
     
@@ -305,35 +340,42 @@ BEGIN
             reg_LCR<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
             IF write_LCR='1' THEN
-                reg_LCR<=busDataIn(4 DOWNTO 0);
+                reg_LCR<=busDataIn; --Now, we write all the input value into the IER register...we had previously considered only (4:0)
             END IF;
         END IF;
     END PROCESS;
     
-    --LSR register
-    read_LSR<='1' WHEN read='1' AND address="100" ELSE '0';
+    --Do we want to Read the LSR register? 
+    read_LSR<='1' WHEN read='1' AND address="101" ELSE '0'; --CHANGED: New address...see the UART protocol
     
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            reg_LSR<="1100000";
+            reg_LSR<="01100000"; --When reset, the Transmitter is empty and and THR is empty
         ELSIF rising_edge(clk) THEN
+        
             --LSR's Data Ready
             reg_LSR(0)<=NOT(rx_fifo_empty); 
-            --LSR's overrun error
+            
+            --LSR's overrun error: -- Overrun errors occur when another byte of data arrives even before the previous data has not been read
             IF read_LSR='1' THEN
                 reg_LSR(1)<='0';
-            ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN
+            ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN 
                 reg_LSR(1)<='1';
             END IF;
-            --LSR's parity error
+            
+            --LSR's parity error - Parity errors occur when the parity of the received data does not match the parity previously defined
             reg_LSR(2)<=rx_fifo_data_out(8);
-            --LSR's framing error
+            
+            --LSR's framing error --Framing errors occur when the UART does not see a stop bit at the expected stop bit time
             reg_LSR(3)<=rx_fifo_data_out(9);
-            --LSR's break error
+            
+            --LSR's break error --Break errors occur when the receiver input is at the space level(logic low, '0') for longer than some duration of time
             reg_LSR(4)<=rx_fifo_data_out(10);
+            
             --LSR's transmitter fifo empty
             reg_LSR(5)<=tx_fifo_empty;
+            
             --LSR's transmitter ready to send and fifo empty
             reg_LSR(6)<=tx_ready AND tx_fifo_empty;    
         END IF; 
