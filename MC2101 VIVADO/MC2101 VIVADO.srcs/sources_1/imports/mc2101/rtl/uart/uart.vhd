@@ -85,6 +85,17 @@ ARCHITECTURE behavior of uart IS
     SIGNAL read_IER: STD_LOGIC;
     SIGNAL write_IER: STD_LOGIC;
     
+    
+    -- Interrupt Status Register -- Address : 010 -- Access type: R
+    -- ISR(3:0): Interrupt Indentification Code & Interrupt status 
+    -- ISR(4): DMA Rx END
+    -- ISR(5): DMA Tx END
+    -- ISR(6): FIFOs enabled
+    -- ISR(7): FIFOs enabled 
+    SIGNAL reg_ISR : STD_LOGIC_VECTOR(7 DOWNTO 0); --Change: New register...see UART Protocol
+    SIGNAL read_ISR: STD_LOGIC;
+    
+    
     --Fifo control register -- Address: 010 -- Access type: W
     --FCR(0): FIFO enable
     --FCR(1): Rx FIFO Reset
@@ -103,7 +114,7 @@ ARCHITECTURE behavior of uart IS
     --LCR(4): Even parity
     --LCR(5): Force parity --Not currently used
     --LCR(6): Set Break --Not currently used
-    --LCR(7): DLAB --Not currently used
+    --LCR(7): DLAB --NEW change added
     SIGNAL reg_LCR: STD_LOGIC_VECTOR(7 DOWNTO 0); 
     SIGNAL read_LCR: STD_LOGIC;
     SIGNAL write_LCR: STD_LOGIC;
@@ -144,7 +155,6 @@ ARCHITECTURE behavior of uart IS
     --Receiver holding register 
     SIGNAL read_RHR: STD_LOGIC;
     
-    SIGNAL read_ISR: STD_LOGIC;
     
      --TODO: Implment the prescaler Division
     
@@ -167,6 +177,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL tx_ready: STD_LOGIC;
     SIGNAL tx_elements: STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);
     SIGNAL tx_fifo_full : STD_LOGIC;
+    SIGNAL is_TXvalid : STD_LOGIC;
     
     --Timeout counters
     SIGNAL baud_counter: UNSIGNED(15 DOWNTO 0);
@@ -176,7 +187,7 @@ ARCHITECTURE behavior of uart IS
     
     --Interrupt signals
     SIGNAL clear_int: STD_LOGIC;
-    SIGNAL ISR_code: STD_LOGIC_VECTOR(3 DOWNTO 0);
+    
 
 BEGIN
 
@@ -204,7 +215,7 @@ BEGIN
 	--RECEIVER FIFO
 	U_RX_FIFO: ENTITY work.fifo 
     GENERIC MAP(
-        DATA_WIDTH=>DATA_WIDTH+DATA_ERRORS, --11-bit wide. Receiver sends the data plus error flags associated with each character
+        DATA_WIDTHFIFO=>DATA_WIDTHFIFO+DATA_ERRORS, --11-bit wide. Receiver sends the data plus error flags associated with each character
         FIFO_DEPTH=>FIFO_DEPTH, --16-word FIFO buffer
         LOG_FIFO_D=>LOG_FIFO_D
     )
@@ -237,7 +248,7 @@ BEGIN
 		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 4,6,7,8 bits
 		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 atop bit, 1 -> 2 stop bits)
 		tx_data_i=>tx_fifo_data_out, --data to be transmitted
-		tx_valid=>NOT(tx_fifo_empty), --data ready to be transmitted
+		tx_valid=>is_TXvalid, --data ready to be transmitted
 		--OUTPUTS
 		tx_ready=>tx_ready, --transmitter ready for next data
 		tx_out=>uart_tx --TX line
@@ -246,7 +257,7 @@ BEGIN
 	--TRANSMITTER FIFO
 	U_TX_FIFO: ENTITY work.fifo 
     GENERIC MAP(
-        DATA_WIDTH=>DATA_WIDTH, --8-bit wide 
+        DATA_WIDTHFIFO=>DATA_WIDTHFIFO, --8-bit wide 
         FIFO_DEPTH=>FIFO_DEPTH, --16-word FIFO buffer
         LOG_FIFO_D=>LOG_FIFO_D
     )
@@ -267,7 +278,7 @@ BEGIN
 	);
 	
 	--INTERRUPT CONTROLLER
-	U_IN_CTRL: ENTITY work.uart_interrupt 
+	U_IN_CTRL: ENTITY work.uart_interrupt
     GENERIC MAP(
         FIFO_DEPTH=>FIFO_DEPTH,
         LOG_FIFO_D=>LOG_FIFO_D
@@ -277,7 +288,7 @@ BEGIN
 		clk=>clk,
 		rst=>rst,
 		--INPUTS
-		IER=>reg_IER(2 DOWNTO 0), --Interrupt Enable register: RLS, ThRe, DR enables
+		IER=>reg_IER, --Interrupt Enable register: RLS, ThRe, DR enables
 		rx_fifo_trigger_lv=>reg_FCR(7 DOWNTO 6), --CHANGED: Now, we consider bits 7 and 6...see UART Protocol
 		rx_elements=>rx_elements, --#elements in rx fifo
 		tx_elements=>tx_elements, --#elements in tx fifo
@@ -286,8 +297,10 @@ BEGIN
 		char_timeout=>rx_char_timeout, --no data has been received and no data has been read frm receiver fifo during a certain time
 		--OUTPUTS
 		interrupt=>interrupt,
-		interrupt_isr_code=>ISR_code --ID of the interrupt raised
+		interrupt_isr_code=>reg_ISR(3 DOWNTO 0) --ID of the interrupt raised
 	);
+	
+	is_TXvalid <= NOT(tx_fifo_empty); --Change: New signal
 
     --DIVISOR (DLL + DLM)
     divisor<=reg_DLM & reg_DLL;
@@ -302,8 +315,8 @@ BEGIN
 	rx_frame<=rx_break_interrupt & rx_framing_error & rx_parity_error & rx_data_i;
     
     --Do we want to Write/Read the IER register? 
-    read_IER<='1' WHEN read='1' AND address="001" ELSE '0'; --Changed: New address...see UART Protocol
-    write_IER<='1' WHEN write='1' AND address="001" ELSE '0'; --Changed: New address..see UART Protocol
+    read_IER<='1' WHEN read='1' AND address="001" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address...see UART Protocol and DLB(reg_LCR(7)) = '0'
+    write_IER<='1' WHEN write='1' AND address="001" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address..see UART Protocol and DLB(reg_LCR(7)) = '0'
     
     PROCESS(clk, rst)
     BEGIN
@@ -346,7 +359,7 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read the LSR register? 
-    read_LSR<='1' WHEN read='1' AND address="101" ELSE '0'; --CHANGED: New address...see the UART protocol
+    read_LSR<='1' WHEN read='1' AND address="101" AND reg_LCR(7) = '0'  ELSE '0'; --CHANGE: New address...see the UART protocol and DLB(reg_LCR(7)) = '0'
     
     PROCESS(clk, rst)
     BEGIN
@@ -381,9 +394,9 @@ BEGIN
         END IF; 
     END PROCESS;
     
-    --DLL register 
-    read_DLL<='1' WHEN read='1' AND address="101" ELSE '0';
-    write_DLL<='1' WHEN write='1' AND address="101" ELSE '0';
+    --Do we want to Read/Write the DLL register? 
+    read_DLL<='1' WHEN read='1' AND address="000" AND reg_LCR(7) = '1'  ELSE '0'; --Accessible if DLB(reg_LCR(7)) = '1'
+    write_DLL<='1' WHEN write='1' AND address="000" AND reg_LCR(7) = '1' ELSE '0'; --Accessible if DLB(reg_LCR(7)) = '1'
     
     PROCESS(clk, rst)
     BEGIN
@@ -391,14 +404,14 @@ BEGIN
             reg_DLL<=X"01";
         ELSIF rising_edge(clk) THEN
             IF write_DLL='1' THEN
-                reg_DLL<=busDataIn(7 DOWNTO 0);
+                reg_DLL<=busDataIn;
             END IF;
         END IF;
     END PROCESS;
     
-    --DLM register 
-    read_DLM<='1' WHEN read='1' AND address="110" ELSE '0';
-    write_DLM<='1' WHEN write='1' AND address="110" ELSE '0';
+    --Do we want to Read/Write the DLM register? 
+    read_DLM<='1' WHEN read='1' AND address="001" AND reg_LCR(7) = '1'   ELSE '0'; --Change: New address...see UART Protocol and Accessible if DLB(reg_LCR(7)) = '1
+    write_DLM<='1' WHEN write='1' AND address="001" AND reg_LCR(7) = '1' ELSE '0'; --Change: New address...see UART Protocol and Accessible if DLB(reg_LCR(7)) = '1
     
     PROCESS(clk, rst)
     BEGIN
@@ -406,34 +419,35 @@ BEGIN
             reg_DLM<=X"01";
         ELSIF rising_edge(clk) THEN
             IF write_DLM='1' THEN
-                reg_DLM<=busDataIn(7 DOWNTO 0);
+                reg_DLM<=busDataIn;
             END IF;
         END IF;
     END PROCESS;
     
-    --THR register
-    write_THR<='1' WHEN write='1' AND address="111" ELSE '0';
+    --Do we want to Read/Write the THR register? 
+    write_THR<='1' WHEN write='1' AND address="000" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address...see UART Protocol and DLB(reg_LCR(7)) = '0'
     
     --RHR register
-    read_RHR<='1' WHEN read='1' AND address="111" ELSE '0';
+    read_RHR<='1' WHEN read='1' AND address="000" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address...see UART Protocol and DLB(reg_LCR(7)) = '0'
     
-    --ISR register
-    read_ISR<='1' WHEN read='1' AND address="001" ELSE '0';
+    --Do we want to Read the ISR register? 
+    read_ISR<='1' WHEN read='1' AND address="010" ELSE '0'; --Change: New address...see UART Protocol
     
     --busDataOut update 
-    busDataOut<="00000" & reg_IER WHEN read_IER='1' ELSE
-                "0000" & ISR_code WHEN read_ISR='1' ELSE
-                "000" & reg_LCR WHEN read_LCR='1' ELSE
-                '0' & reg_LSR WHEN read_LSR='1' ELSE
+    busDataOut<=reg_IER WHEN read_IER='1' ELSE 
+                reg_ISR WHEN read_ISR='1' ELSE
+                reg_LCR WHEN read_LCR='1' ELSE
+                reg_LSR WHEN read_LSR='1' ELSE
                 reg_DLL WHEN read_DLL='1' ELSE
                 reg_DLM WHEN read_DLM='1' ELSE
                 rx_data_i;
                 
     --Interrupt clear process
-    clear_int<='1' WHEN ISR_code="0110" AND read_LSR='1' ELSE
-               '1' WHEN ISR_code="0100" AND read_RHR='1' ELSE
-               '1' WHEN ISR_code="1100" AND read_RHR='1' ELSE
-               '1' WHEN ISR_code="0010" AND (write_THR='1' OR read_ISR='1') ELSE
+    --See page 11 of the UART protocol
+    clear_int<='1' WHEN reg_ISR(3 DOWNTO 0)="0110" AND read_LSR='1' ELSE --Receiver Line Status
+               '1' WHEN reg_ISR(3 DOWNTO 0)="0100" AND read_RHR='1' ELSE --Received Data Ready 
+               '1' WHEN reg_ISR(3 DOWNTO 0)="1100" AND read_RHR='1' ELSE --Reception Timeout
+               '1' WHEN reg_ISR(3 DOWNTO 0)="0010" AND (write_THR='1' OR read_ISR='1') ELSE --Transmitter Holding Register Empty
                '0';
                 
     --Receiver transmission timeout
