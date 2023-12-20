@@ -45,14 +45,14 @@ ENTITY uart_rx_core IS
 	    --system signals
 		clk             : IN  STD_LOGIC;
 		rst             : IN  STD_LOGIC;
-		--input signals
+		--INPUTS
 		divisor         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);--divisor value for baudrate 
 		parity_bit_en   : IN  STD_LOGIC;  --enable for parity bit
-		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
+		parity_type     : IN  STD_LOGIC;  --even(0) or odd(1) parity check ---Opposite values with respect to the UART Protocol
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
-		rx_in_async     : IN  STD_LOGIC; --RX line
-		--output signals
+		rx_in_async     : IN  STD_LOGIC; --RX line --It receives one character at a time
+		--OUTPUTS
 		break_interrupt : OUT STD_LOGIC; --break interrupt
 		frame_error     : OUT STD_LOGIC; --frame error
 		parity_error    : OUT STD_LOGIC; --parity error
@@ -63,12 +63,19 @@ END uart_rx_core;
 
 --TODO: check if BI are correct with respect to UART 16550 specifications
 
+--How to guarantee a transition in each frame?
+--UART line keeps at logic 1 when IDLE
+--Stop bits are always at logic 1
+--Start bit is always at logic 0
+--A new frame causes the start bit to make a transition from 1 to 0. The start bit transition synchronizes clocks at the beginning of the frame.
+--Receiver checks the start bit and changes its clock. 
+
 ARCHITECTURE behavior OF uart_rx_core IS
 
     --flag used to detect the falling edge of the start bit
     SIGNAL rx_line_fall: STD_LOGIC;
     
-    --cascade of 3 FF used to synchronize the async RX input line
+    --cascade of 3 FF used to synchronize the async RX input line. If we have an incoming value, UART recognize it three clock cycles later
     SIGNAL rx_line_sync: STD_LOGIC_VECTOR(2 DOWNTO 0);
     
     --receiver FSM states
@@ -112,6 +119,7 @@ BEGIN
 
     half_divisor <= '0' & UNSIGNED(divisor(15 DOWNTO 1)); 
 
+    --This signal makes reference to the target bit position...not to the word length
     target_data_bits <= "100" WHEN data_width="00" ELSE
                         "101" WHEN data_width="01" ELSE
                         "110" WHEN data_width="10" ELSE
@@ -121,14 +129,14 @@ BEGIN
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            rx_line_sync <= (OTHERS=>'1');
-        ELSIF rising_edge(CLK) THEN
-            rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async;
+            rx_line_sync <= (OTHERS=>'1');  --Originally, UART line keeps at logic 1 when IDLE
+        ELSIF rising_edge(CLK) THEN 
+            rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async; --We shift left by 1 and concanate the incoming value
         END IF;
     END PROCESS;
     
     --falling edge detector
-    rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1));
+    rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1)); ---if '1', there is a trasition from 1 to 0
     
     
     --baudrate generator (assert sample signal [like a delta] at half of the bit frame)
@@ -166,9 +174,9 @@ BEGIN
     END PROCESS;
     
     --FSM  (S_IDLE, S_START_BIT, S_DATA_BITS, S_PARITY_CHECK, S_STOP_1, S_STOP_2);
-    PROCESS(all)
+    PROCESS(current_state, current_data_bit, current_data, rx_line_fall, sample, data_width) --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
     BEGIN
-        start_bit<='0';
+        start_bit<='0'; 
         next_data<=current_data;
         next_data_bit<=current_data_bit;
         next_state<=current_state;
@@ -181,7 +189,7 @@ BEGIN
             WHEN S_IDLE=>
                 clear_parity_bit_received<='1';
                 --move to S_START_BIT when falling detected
-                IF rx_line_fall='1' THEN
+                IF rx_line_fall='1' THEN --If there was a transition from 1 to 0...means we have receive a start bit
                     next_state<=S_START_BIT;
                     start_bit<='1';
                     baudgen<='1';
@@ -209,14 +217,14 @@ BEGIN
                 baudgen<='1';
                 IF sample='1' THEN
                     next_data_bit<=STD_LOGIC_VECTOR(UNSIGNED(current_data_bit) + 1);
-                    IF data_width="00" THEN
+                    IF data_width="00" THEN --Word Length: 5 bits
                         next_data<= "000" & rx_line_sync(2) & current_data(4 DOWNTO 1);
-                    ELSIF data_width="01" THEN
+                    ELSIF data_width="01" THEN --Word Length: 6 bits
                         next_data<= "00" & rx_line_sync(2) & current_data(5 DOWNTO 1);
-                    ELSIF data_width="10" THEN
+                    ELSIF data_width="10" THEN --Word Length: 7 bits
                         next_data<= "0" & rx_line_sync(2) & current_data(6 DOWNTO 1);
                     ELSE
-                        next_data<= rx_line_sync(2) & current_data(7 DOWNTO 1);
+                        next_data<= rx_line_sync(2) & current_data(7 DOWNTO 1); --Word Length: 8 bits
                     END IF;
                     
                     IF current_data_bit=target_data_bits THEN
@@ -259,7 +267,7 @@ BEGIN
                 baudgen<='1';
                 IF sample='1' THEN
                     next_state<=S_IDLE;
-                ELSE
+                ELSE 
                     next_state<=S_STOP_2;
                 END IF;                 
         END CASE;
@@ -274,7 +282,7 @@ BEGIN
                     current_data(3) XOR 
                     current_data(2) XOR 
                     current_data(1) XOR 
-                    current_data(0) XOR (NOT parity_type);
+                    current_data(0) XOR (parity_type); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
     
     
     rx_data_buffer <= current_data; 

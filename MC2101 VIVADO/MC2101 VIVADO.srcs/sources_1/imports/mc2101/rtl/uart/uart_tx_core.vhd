@@ -101,7 +101,7 @@ BEGIN
                     reg_tx_data(3) XOR 
                     reg_tx_data(2) XOR 
                     reg_tx_data(1) XOR 
-                    reg_tx_data(0) XOR (NOT parity_type);
+                    reg_tx_data(0) XOR (parity_type); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
                     
     target_data_bits <= "100" WHEN data_width="00" ELSE
                         "101" WHEN data_width="01" ELSE
@@ -152,7 +152,7 @@ BEGIN
     END PROCESS;
     
     --FSM (S_IDLE, S_START_BIT, S_DATA_BITS, S_PARITY_BIT, S_STOP_BIT1, S_STOP_BIT2);
-    PROCESS(ALL)
+    PROCESS(current_state, tx_valid, bit_done) --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
     BEGIN
         next_state<=current_state;
         next_data_bit<=current_data_bit;
