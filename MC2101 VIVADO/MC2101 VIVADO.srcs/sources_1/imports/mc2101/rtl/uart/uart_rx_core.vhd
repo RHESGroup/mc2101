@@ -271,7 +271,9 @@ BEGIN
                     next_state<=S_IDLE;
                 ELSE 
                     next_state<=S_STOP_2;
-                END IF;                 
+                END IF;     
+            WHEN OTHERS=>
+                next_state<=S_IDLE;            
         END CASE;
     END PROCESS;
     

@@ -103,6 +103,7 @@ BEGIN
                     reg_tx_data(1) XOR 
                     reg_tx_data(0) XOR (parity_type); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
                     
+    --This signal makes reference to the expected word length
     target_data_bits <= "100" WHEN data_width="00" ELSE
                         "101" WHEN data_width="01" ELSE
                         "110" WHEN data_width="10" ELSE
@@ -152,7 +153,7 @@ BEGIN
     END PROCESS;
     
     --FSM (S_IDLE, S_START_BIT, S_DATA_BITS, S_PARITY_BIT, S_STOP_BIT1, S_STOP_BIT2);
-    PROCESS(current_state, tx_valid, bit_done) --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
+    PROCESS(current_state, current_data_bit, tx_valid, bit_done) --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
     BEGIN
         next_state<=current_state;
         next_data_bit<=current_data_bit;
@@ -207,6 +208,8 @@ BEGIN
                 tx_out<=parity_value;
                 IF bit_done='1' THEN
                     next_state<=S_STOP_BIT1;
+                ELSE
+                    next_state<=S_PARITY_BIT;
                 END IF;
             
             WHEN S_STOP_BIT1=>
@@ -228,7 +231,12 @@ BEGIN
                 IF bit_done='1' THEN
                     next_state<=S_IDLE;
                     tx_ready<='1';
-                END IF;    
+                ELSE
+                    next_state<=S_STOP_BIT2;                 
+                END IF;   
+            WHEN OTHERS=>
+                next_state<=S_IDLE;
+             
         END CASE;
           
     END PROCESS;
