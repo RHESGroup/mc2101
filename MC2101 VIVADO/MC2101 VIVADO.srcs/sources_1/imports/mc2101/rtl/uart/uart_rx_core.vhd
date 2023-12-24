@@ -73,7 +73,7 @@ END uart_rx_core;
 --Order of UART message:
 --Start bit(logic 0) -> Message(LSB first) -> Parity bit -> Stop bits(logic 1)
 
-ARCHITECTURE behavior OF uart_rx_core IS
+ ARCHITECTURE behavior OF uart_rx_core IS
 
     --flag used to detect the falling edge of the start bit
     SIGNAL rx_line_fall: STD_LOGIC;

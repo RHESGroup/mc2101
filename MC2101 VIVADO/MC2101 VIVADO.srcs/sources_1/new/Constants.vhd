@@ -55,7 +55,8 @@ PACKAGE Constants IS
     CONSTANT LOG_FIFO_D:              INTEGER:=4;
     CONSTANT DATA_ERRORS:             INTEGER:=3; --(parity + framing + break are saved foreach received frame)
     
-
-
+    --Constants related to testbenches
+    CONSTANT ClockPeriod :            TIME := 20 ns;
+    CONSTANT Number_BitsLFSR :        INTEGER := 20;
 END Constants;
 

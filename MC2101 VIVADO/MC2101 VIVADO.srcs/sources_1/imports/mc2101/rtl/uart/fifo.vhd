@@ -42,6 +42,11 @@ USE IEEE.NUMERIC_STD.ALL;
 USE work.CONSTANTS.ALL;
 
 ENTITY fifo IS 
+    GENERIC(
+        DATA_WIDTHFIFO : INTEGER;
+        FIFO_DEPTH : INTEGER;
+        LOG_FIFO_D : INTEGER
+    );
 	PORT ( 
 	    --system signals
 		clk             : IN  STD_LOGIC;

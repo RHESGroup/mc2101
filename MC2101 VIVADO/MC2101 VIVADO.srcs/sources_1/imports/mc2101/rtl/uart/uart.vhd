@@ -200,8 +200,8 @@ BEGIN
 		--INPUTS
 		divisor=>divisor, --divisor value for baudrate
 		parity_bit_en=>reg_LCR(3), --emable for parity bit
-		parity_type=>reg_LCR(4), --even(0) or odd parity xheck
-		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 4,6,7,8 bits
+		parity_type=>reg_LCR(4), --even(1) or odd(0) parity xheck
+		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 atop bit, 1 -> 2 stop bits)
 		rx_in_async=>uart_rx, --RX line
 		--OUTPUTS
@@ -244,7 +244,7 @@ BEGIN
 		--INPUTS
 		divisor=>divisor, --divisor value for baudrate
 		parity_bit_en=>reg_LCR(3), --enable for parity check
-		parity_type=>reg_LCR(4), --even(0) or odd parity check
+		parity_type=>reg_LCR(4), --even(1) or odd(0) parity check
 		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 4,6,7,8 bits
 		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 atop bit, 1 -> 2 stop bits)
 		tx_data_i=>tx_fifo_data_out, --data to be transmitted
