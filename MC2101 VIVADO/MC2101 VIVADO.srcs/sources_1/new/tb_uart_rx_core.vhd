@@ -40,15 +40,6 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE work.Constants.ALL;
 USE std.textio.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
-
 ENTITY tb_uart_rx_core IS
 --  Port ( );
 END tb_uart_rx_core;
@@ -170,7 +161,7 @@ BEGIN
 
 END test_withlfsr;
 
-
+--2° Test patterns are read from the uartRX_values.mem file
 ARCHITECTURE test_withfile OF tb_uart_rx_core IS 
 
    
