@@ -139,9 +139,8 @@ BEGIN
     END PROCESS;
     
     --falling edge detector
-    rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1)); ---if '1', there is a trasition from 1 to 0
-    
-    
+    rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1)); ---if '1', there is a trasition from 1 to 0 
+      
     --baudrate generator (assert sample signal [like a delta] at half of the bit frame)
     PROCESS(clk, rst)
     BEGIN
@@ -206,9 +205,9 @@ BEGIN
                 --when first sample point is asserted the FSM can move to S_DATA_BITS and be ready to sample data
                 IF sample='1' THEN
                     --start bit acceptance(If to confirm that the bit corresponds to a start bit(logic 0) 
-                    IF rx_line_sync(2)='0' THEN --We make sure that the bits have been shifted and now the MSB corresponds to the start bit
+                    IF rx_line_sync(2)='0' THEN --We make sure that the bits have been shifted and now the MSB corresponds to the start bit 
                         next_state<=S_DATA_BITS;
-                    ELSE --rx_line_sync(2) = '1' means that the incoming bit was not a '0'; therefore, it does not correspond to the start bit and we go bak to IDLE
+                    ELSE --rx_line_sync(1) = '1' means that the incoming bit was not a '0'; therefore, it does not correspond to the start bit and we go bak to IDLE
                         next_state<=S_IDLE;
                     END IF;
                 ELSE
@@ -232,11 +231,11 @@ BEGIN
                     
                     IF current_data_bit=target_data_bits THEN --If we have read the number of characters expected(word length), we can mover forward
                         next_data_bit<=(OTHERS=>'0');
-                        IF parity_bit_en='1' THEN --If parity is enabled in the line control register(reg_LCR(3))...                            next_state<=S_PARITY_CHECK;
+                        IF parity_bit_en='1' THEN --If parity is enabled in the line control register(reg_LCR(3))...   
+                            next_state<=S_PARITY_CHECK;                          
                         ELSE
-                            next_state<=S_STOP_1;
-                        END IF;
-                        
+                            next_state<=S_STOP_1; 
+                        END IF;  
                     ELSE
                         next_state<=S_DATA_BITS;
                     END IF;

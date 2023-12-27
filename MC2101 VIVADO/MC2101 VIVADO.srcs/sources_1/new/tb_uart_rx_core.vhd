@@ -168,16 +168,18 @@ ARCHITECTURE test_withfile OF tb_uart_rx_core IS
     --System signals
     SIGNAL clock_s, rst_s : STD_LOGIC := '0';
     --INPUT signals
-    SIGNAL divisor_s : STD_LOGIC_VECTOR(15 DOWNTO 0);
-    SIGNAL parity_bit_en_s, parity_type_s, stop_bits_s, rx_in_async_s : STD_LOGIC;
+    SIGNAL divisor_s : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL parity_bit_en_s, parity_type_s, stop_bits_s, rx_in_async_s : STD_LOGIC := '0';
     SIGNAL data_width_s : STD_LOGIC_VECTOR(1 DOWNTO 0);
     --OUTPUT signals
-    SIGNAL break_interrupt_s, frame_error_s, parity_error_s, rx_valid_s : STD_LOGIC; 
-    SIGNAL rx_data_buffer_s :  STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL break_interrupt_s, frame_error_s, parity_error_s, rx_valid_s : STD_LOGIC := '0'; 
+    SIGNAL rx_data_buffer_s :  STD_LOGIC_VECTOR(7 DOWNTO 0) := (OTHERS => '0');
     
-    SIGNAL configuration_uart :  STD_LOGIC_VECTOR(20 DOWNTO 0); -- divisor(16 bits) +  parity_bit_en_s(1 bit) + parity_type_s(1 bit) + stop_bits_s(1 bits) + data_width_s(2 bits) 
+    SIGNAL configuration_uart :  STD_LOGIC_VECTOR(20 DOWNTO 0) := (OTHERS => '0'); -- divisor(16 bits) +  parity_bit_en_s(1 bit) + parity_type_s(1 bit) + stop_bits_s(1 bits) + data_width_s(2 bits) 
     
-    SIGNAL transmission_uart :   STD_LOGIC; --start bit(1 bit) + message(maximum 8 bit) + parity bit(1 bit) + stop bits(maximum 2 bits)
+    SIGNAL transmission_uart :   STD_LOGIC := '1'; --start bit(1 bit) + message(maximum 8 bit) + parity bit(1 bit) + stop bits(maximum 2 bits)
+    
+
     
     
 BEGIN
@@ -200,28 +202,25 @@ BEGIN
 			FOR i IN inputline'RANGE LOOP
 				read(inputline, inputbit);
 				IF inputbit = '1' THEN		
-					IF i >= 21 then
+					IF i > 21 then
 					   transmission_uart<= '1';
 					ELSE
-					   configuration_uart(i) <= '1';
+					   configuration_uart(21 - i) <= '1';
 					END IF;
 				ELSE
-				
-                    IF i >= 21 then
+                    IF i > 21 THEN
 					   transmission_uart<= '0';
 					ELSE
-					   configuration_uart(i) <= '0';
+					   configuration_uart(21 - i) <= '0';
 					END IF;
 			         
 				END IF;
-			END LOOP; 
-			WAIT FOR ClockPeriod;
+		    WAIT FOR ClockPeriod;
+			END LOOP; 	
 		END LOOP;
-		configuration_uart <= (OTHERS => '0');
-		transmission_uart <= '0';
 		file_close(inputFile);
-		wait;
-	end process pattern;
+		WAIT;
+	END PROCESS pattern;
 
     divisor_s <= configuration_uart(20 DOWNTO 5);
     parity_bit_en_s <= configuration_uart(4);
