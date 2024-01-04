@@ -1,4 +1,19 @@
 #TCL script to create the environment to simulate the uartRX core
+set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
+if {[llength $set]} {
+    puts "The simulation sets are: $sets ";
+    set sim_set [lindex $sets 0] ;# We can simulate everything with only one simulation set 
+    current_fileset -simset $sim_set; ;#Selection of the current simulation set
+    set_property top tb_uart_rx_core $sim_set;
+    set_property top_lib xil_defaultlib $sim_set;
+    puts "The simulation uses : $sim_set";
+} else {
+    create_fileset -simset sim_1 ;#If there is no simulation set, create one 
+    current_fileset -simset [get_filesets sim_1] ;#Selection of the current simulation set
+    set_property top tb_uart_rx_core [get_filesets sim_1];
+    set_property top_lib xil_defaultlib [get_filesets sim_1];
+}
+
 launch_simulation
 set curr_wave [current_wave_config]
 if { [string length $curr_wave] == 0 } {
