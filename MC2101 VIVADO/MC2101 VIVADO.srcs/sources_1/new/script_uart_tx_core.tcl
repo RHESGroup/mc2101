@@ -1,6 +1,6 @@
 #TCL script to create the environment to simulate the uartTX core
 set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
-if {[llength $set]} {
+if {[llength $sets]} {
     puts "The simulation sets are: $sets ";
     set sim_set [lindex $sets 0] ;# We can simulate everything with only one simulation set 
     current_fileset -simset $sim_set; ;#Selection of the current simulation set
@@ -24,6 +24,13 @@ if { [string length $curr_wave] == 0 } {
    }
 }
 restart
-
-
+add_wave {{/tb_uart_tx_core/uart_tx/current_state}} 
+add_wave {{/tb_uart_tx_core/uart_tx/next_state}} 
+add_wave {{/tb_uart_tx_core/uart_tx/bit_done}} 
+add_wave {{/tb_uart_tx_core/uart_tx/count}}
+add_wave {{/tb_uart_tx_core/uart_tx/baudgen}}
+add_wave {{/tb_uart_tx_core/uart_tx/sample_data_in}} 
+add_wave {{/tb_uart_tx_core/uart_tx/reg_tx_data}}
+add_wave {{/tb_uart_tx_core/uart_tx/current_data_bit}} 
+add_wave {{/tb_uart_tx_core/uart_tx/target_data_bits}} 
 run 3000ns
