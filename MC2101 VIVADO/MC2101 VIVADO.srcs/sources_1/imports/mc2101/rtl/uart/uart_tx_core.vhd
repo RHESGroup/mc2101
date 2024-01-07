@@ -59,6 +59,16 @@ ENTITY uart_tx_core IS
 	);
 END uart_tx_core;
 
+--How to guarantee a transition in each frame?
+--UART line keeps at logic 1 when IDLE
+--Stop bits are always at logic 1
+--Start bit is always at logic 0
+--A new frame causes the start bit to make a transition from 1 to 0. The start bit transition synchronizes clocks at the beginning of the frame.
+--Receiver checks the start bit and changes its clock. 
+
+--Order of UART message:
+--Start bit(logic 0) -> Message(LSB first) -> Parity bit -> Stop bits(logic 1)
+
 
 ARCHITECTURE behavior OF uart_tx_core IS
 
@@ -128,17 +138,19 @@ BEGIN
     BEGIN
         IF (rst='1' OR baudgen='0') THEN
             count<=(OTHERS=>'0');
-            bit_done<='0';
+            --bit_done<='0';
         ELSIF rising_edge(clk) THEN
             IF count=UNSIGNED(divisor) THEN
                 count<=(OTHERS=>'0');
-                bit_done<='1';
+                --bit_done<='1';
             ELSE
                 count<=count + 1;
-                bit_done<='0';
+               -- bit_done<='0';
             END IF;
         END IF;
     END PROCESS;
+    
+    bit_done <= '1' WHEN baudgen = '1' ELSE '0'; --Change: change to avoid being two clock cycles in the START BIT state
     
     --FSM registers update
     PROCESS(clk, rst)
@@ -173,6 +185,7 @@ BEGIN
             
             WHEN S_START_BIT=>
                 --send start bit (keep line at zero until bit frame ends)
+                next_data_bit <= (OTHERS => '0'); --Change: Every time UART finishes with a tranmission, it has to reset the current_data_bit counter in order to start counting for the new transmission
                 tx_ready<='0';
                 tx_out<='0';
                 baudgen<='1';
@@ -185,7 +198,7 @@ BEGIN
             WHEN S_DATA_BITS=>
                 --start sending out bits
                 tx_ready<='0';
-                tx_out<=reg_tx_data(0);
+                tx_out<=reg_tx_data(0); --UART transmits LSB first
                 baudgen<='1';
                 IF bit_done='1' THEN
                     next_data_bit<=current_data_bit + 1;
