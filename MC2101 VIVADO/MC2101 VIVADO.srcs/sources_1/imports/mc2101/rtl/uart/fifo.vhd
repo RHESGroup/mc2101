@@ -56,7 +56,7 @@ ENTITY fifo IS
 		data_in         : IN  STD_LOGIC_VECTOR(DATA_WIDTHFIFO-1 DOWNTO 0); --data IN
 		read_request    : IN  STD_LOGIC;  --read operation reequest on the FIFO
 		write_request   : IN  STD_LOGIC;  --write operation reequest on the FIFO
-		--output signals signals
+		--output signals 
 		elements        : OUT STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);  --#elements in the queue
 		data_out        : OUT STD_LOGIC_VECTOR(DATA_WIDTHFIFO-1 DOWNTO 0);  --data OUT
 		fifo_empty      : OUT STD_LOGIC; --is fifo empty?
