@@ -1,6 +1,6 @@
 #TCL script to create the environment to simulate the uartRX core
 set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
-if {[llength $set]} {
+if {[llength $sets]} {
     puts "The simulation sets are: $sets ";
     set sim_set [lindex $sets 0] ;# We can simulate everything with only one simulation set 
     current_fileset -simset $sim_set; ;#Selection of the current simulation set
