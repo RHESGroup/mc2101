@@ -136,13 +136,13 @@ BEGIN
     --1)Receiver Line Status error
     --2)Receiver Data Ready OR Character timeout
     --3)Transmitter holding register is empty (data can be written)
-    PROCESS(interrupt_clear, rx_line_error, RX_LINE_int_enable, DR_int_enable, rx_trigger_reached, TX_EMPTY_int_enable, tx_elements  )
+    PROCESS(interrupt_clear, rx_line_error, RX_LINE_int_enable, DR_int_enable, rx_trigger_reached, TX_EMPTY_int_enable, tx_elements, char_timeout)
     BEGIN --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
         --interrupt reset
         IF interrupt_clear='0' THEN
             next_iic_register<=current_iic_register;
         ELSE
-            next_iic_register<="0001";
+            next_iic_register<="0001"; --If interrupt_clear = '1' means that the system already took care of the respective interrupt and we want to update the ISR with zero pendings
         END IF;
         --Priority level 1
         IF (rx_line_error='1' AND RX_LINE_int_enable='1') THEN --If there ia an error in the Rx line and the interrupt is enabled(IER(2) = '1')...
