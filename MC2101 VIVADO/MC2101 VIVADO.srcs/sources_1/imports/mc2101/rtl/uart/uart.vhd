@@ -74,7 +74,7 @@ ARCHITECTURE behavior of uart IS
     CONSTANT DATA_ERRORS: INTEGER:= DATA_ERRORS; --(parity + framing + break are saved foreach received frame)
 
     --Register file signals
-    --Interrupt enable register -- Address : 001 -- Access type: R/W
+    --Interrupt enable register -- Address : 000 -- Access type: R/W
     --IER(0): Data ready
     --IER(1): THR Empty
     --IER(2): Receiver line status
@@ -86,7 +86,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL write_IER: STD_LOGIC;
     
     
-    -- Interrupt Status Register -- Address : 010 -- Access type: R
+    -- Interrupt Status Register -- Address : 001 -- Access type: R
     -- ISR(3:0): Interrupt Indentification Code & Interrupt status 
     -- ISR(4): DMA Rx END
     -- ISR(5): DMA Tx END
@@ -119,7 +119,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL read_LCR: STD_LOGIC;
     SIGNAL write_LCR: STD_LOGIC;
     
-    --Line status register -- Address: 101 -- Access type: R
+    --Line status register -- Address: 100 -- Access type: R
     --LSR(0): Data ready
     --LSR(1): Overrun error
     --LSR(2): Parity error
@@ -131,13 +131,13 @@ ARCHITECTURE behavior of uart IS
     SIGNAL reg_LSR: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_LSR: STD_LOGIC;
     
-    --Divisor latch least significant byte register -- Address: 000 -- Access type: R/W --  Accesible when DLAB = 1
+    --Divisor latch least significant byte register -- Address: 101 -- Access type: R/W --  Accesible when DLAB = 1
     --DLL(7:0): Baudrate divisor's constant least significant byte
     SIGNAL reg_DLL: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_DLL: STD_LOGIC;
     SIGNAL write_DLL: STD_LOGIC;
     
-    --Divisor latch most significant byte register -- Address: 001 -- Access type: R/W --  Accesible when DLAB = 1
+    --Divisor latch most significant byte register -- Address: 110 -- Access type: R/W --  Accesible when DLAB = 1
     --DLM(7:0): Baudrate divisor's constant most significant byte
     SIGNAL reg_DLM: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_DLM: STD_LOGIC;
@@ -315,8 +315,8 @@ BEGIN
 	rx_frame<=rx_break_interrupt & rx_framing_error & rx_parity_error & rx_data_i;
     
     --Do we want to Write/Read the IER register? 
-    read_IER<='1' WHEN read='1' AND address="001" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address...see UART Protocol and DLB(reg_LCR(7)) = '0'
-    write_IER<='1' WHEN write='1' AND address="001" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address..see UART Protocol and DLB(reg_LCR(7)) = '0'
+    read_IER<='1' WHEN read='1' AND address="000" ELSE '0'; 
+    write_IER<='1' WHEN write='1' AND address="000" ELSE '0'; 
     
     PROCESS(clk, rst)
     BEGIN
@@ -359,7 +359,7 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read the LSR register? 
-    read_LSR<='1' WHEN read='1' AND address="101" AND reg_LCR(7) = '0'  ELSE '0'; --CHANGE: New address...see the UART protocol and DLB(reg_LCR(7)) = '0'
+    read_LSR<='1' WHEN read='1' AND address="100" ELSE '0'; 
     
     PROCESS(clk, rst)
     BEGIN
@@ -395,8 +395,8 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read/Write the DLL register? 
-    read_DLL<='1' WHEN read='1' AND address="000" AND reg_LCR(7) = '1'  ELSE '0'; --Accessible if DLB(reg_LCR(7)) = '1'
-    write_DLL<='1' WHEN write='1' AND address="000" AND reg_LCR(7) = '1' ELSE '0'; --Accessible if DLB(reg_LCR(7)) = '1'
+    read_DLL<='1' WHEN read='1' AND address="101" ELSE '0';
+    write_DLL<='1' WHEN write='1' AND address="101" ELSE '0'; 
     
     PROCESS(clk, rst)
     BEGIN
@@ -410,13 +410,13 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read/Write the DLM register? 
-    read_DLM<='1' WHEN read='1' AND address="001" AND reg_LCR(7) = '1'   ELSE '0'; --Change: New address...see UART Protocol and Accessible if DLB(reg_LCR(7)) = '1
-    write_DLM<='1' WHEN write='1' AND address="001" AND reg_LCR(7) = '1' ELSE '0'; --Change: New address...see UART Protocol and Accessible if DLB(reg_LCR(7)) = '1
+    read_DLM<='1' WHEN read='1' AND address="110" ELSE '0';
+    write_DLM<='1' WHEN write='1' AND address="110" ELSE '0';
     
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            reg_DLM<=X"01";
+            reg_DLM<=X"00";
         ELSIF rising_edge(clk) THEN
             IF write_DLM='1' THEN
                 reg_DLM<=busDataIn;
@@ -425,13 +425,21 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read/Write the THR register? 
-    write_THR<='1' WHEN write='1' AND address="000" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address...see UART Protocol and DLB(reg_LCR(7)) = '0'
+    write_THR<='1' WHEN write='1' AND address="111" ELSE '0'; 
     
     --RHR register
-    read_RHR<='1' WHEN read='1' AND address="000" AND reg_LCR(7) = '0' ELSE '0'; --Change: New address...see UART Protocol and DLB(reg_LCR(7)) = '0'
+    read_RHR<='1' WHEN read='1' AND address="111" ELSE '0';
     
     --Do we want to Read the ISR register? 
-    read_ISR<='1' WHEN read='1' AND address="010" ELSE '0'; --Change: New address...see UART Protocol
+    read_ISR<='1' WHEN read='1' AND address="001" ELSE '0';
+    
+    PROCESS(clk, rst) --Changge: new process to initialize ISR
+    BEGIN
+        IF rst='1' THEN
+            reg_ISR(7 DOWNTO 4) <=X"0"; --The last 4 bits correspond to the Interruption identification code & Interrupt Status 
+            --These bits are set by the uart interrupt controller(uart_interrupt.vhd)
+        END IF;
+    END PROCESS;
     
     --busDataOut update 
     busDataOut<=reg_IER WHEN read_IER='1' ELSE 

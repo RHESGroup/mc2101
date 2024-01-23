@@ -1,0 +1,6 @@
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Equipo/Desktop/mc2101/MC2101 VIVADO/MC2101 VIVADO.srcs/sources_1/imports/mc2101/rtl/uart/uart_tx_core.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'uart_tx_core'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Equipo/Desktop/mc2101/MC2101 VIVADO/MC2101 VIVADO.srcs/sources_1/imports/mc2101/rtl/uart/uart.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'uart'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/Equipo/Desktop/mc2101/MC2101 VIVADO/MC2101 VIVADO.srcs/sources_1/new/tb_uart_periph.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'tb_uart_periph'

@@ -47,8 +47,8 @@ USE work.Constants.ALL;
 
 ENTITY uart_interrupt IS 
     GENERIC(
-        FIFO_DEPTH : INTEGER;
-        LOG_FIFO_D : INTEGER
+        FIFO_DEPTH : INTEGER := FIFO_DEPTH;
+        LOG_FIFO_D : INTEGER := LOG_FIFO_D
     );
 	PORT (
 	    --system signals
@@ -136,14 +136,9 @@ BEGIN
     --1)Receiver Line Status error
     --2)Receiver Data Ready OR Character timeout
     --3)Transmitter holding register is empty (data can be written)
-    PROCESS(interrupt_clear, rx_line_error, RX_LINE_int_enable, DR_int_enable, rx_trigger_reached, TX_EMPTY_int_enable, tx_elements, char_timeout)
+    PROCESS(rx_line_error, RX_LINE_int_enable, DR_int_enable, rx_trigger_reached, TX_EMPTY_int_enable, char_timeout, tx_elements)
     BEGIN --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
-        --interrupt reset
-        IF interrupt_clear='0' THEN
-            next_iic_register<=current_iic_register;
-        ELSE
-            next_iic_register<="0001"; --If interrupt_clear = '1' means that the system already took care of the respective interrupt and we want to update the ISR with zero pendings
-        END IF;
+            
         --Priority level 1
         IF (rx_line_error='1' AND RX_LINE_int_enable='1') THEN --If there ia an error in the Rx line and the interrupt is enabled(IER(2) = '1')...
             --receiver line status interrupt
@@ -157,10 +152,17 @@ BEGIN
             --receiver timeout interrupt
             next_iic_register<="1100";
         --Priority level 3
-        ELSIF (TX_EMPTY_int_enable='1' AND TO_INTEGER(UNSIGNED(tx_elements))=0) THEN --If the number of elements in the FIFO is 0 and the interrupt is enabled(IER(1) = '1')...
+        ELSIF (TX_EMPTY_int_enable='1' AND UNSIGNED(tx_elements)=0) THEN --If the number of elements in the FIFO is 0 and the interrupt is enabled(IER(1) = '1')...
             --transmitter empty interrupt
             next_iic_register<="0010";
+        ELSE
+            IF interrupt_clear = '1' THEN
+                next_iic_register<="0001";
+            ELSE
+                next_iic_register <= current_iic_register;
+            END IF;
         END IF;
+        
     END PROCESS;
 
     interrupt_isr_code<=current_iic_register;

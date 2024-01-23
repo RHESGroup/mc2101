@@ -88,6 +88,8 @@ ARCHITECTURE behavior OF uart_tx_core IS
     
     --number of data bits to be transmitted
     SIGNAL target_data_bits: UNSIGNED(2 DOWNTO 0);
+    SIGNAL temp_target_data_bits : UNSIGNED(2 DOWNTO 0) := "000"; --NEW: this signal keeps track of the value of target data bit such that even if data_width changes..
+    --..the value of width used for the current UART communication doesn't
     
     --signal used to enable baudrate generator
     SIGNAL baudgen: STD_LOGIC;
@@ -189,6 +191,7 @@ BEGIN
                 tx_ready<='0';
                 tx_out<='0';
                 baudgen<='1';
+                temp_target_data_bits <= target_data_bits; --New
                 IF bit_done='1' THEN
                     next_state<=S_DATA_BITS;
                 ELSE
@@ -202,7 +205,7 @@ BEGIN
                 baudgen<='1';
                 IF bit_done='1' THEN
                     next_data_bit<=current_data_bit + 1;
-                    IF current_data_bit=target_data_bits THEN
+                    IF current_data_bit=temp_target_data_bits THEN
                         IF parity_bit_en='1' THEN
                             next_state<=S_PARITY_BIT;
                         ELSE
