@@ -176,7 +176,7 @@ BEGIN
     END PROCESS;
     
     --FSM  (S_IDLE, S_START_BIT, S_DATA_BITS, S_PARITY_CHECK, S_STOP_1, S_STOP_2);
-    PROCESS(current_state, current_data_bit, current_data, rx_line_fall, sample, data_width) --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
+    PROCESS(current_state, current_data_bit, current_data, rx_line_fall, sample, data_width, rx_line_sync) --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
     BEGIN
         start_bit<='0'; 
         next_data<=current_data;
