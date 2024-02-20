@@ -52,7 +52,7 @@ ENTITY uart IS
 		clk            : IN  STD_LOGIC;
 		rst            : IN  STD_LOGIC;
 		--input signals
-		address        : IN  STD_LOGIC_VECTOR(2 DOWNTO 0);
+		address        : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); --New size for addresses
 		busDataIn      : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
 		read           : IN  STD_LOGIC;
 		write          : IN  STD_LOGIC;
@@ -74,7 +74,7 @@ ARCHITECTURE behavior of uart IS
     CONSTANT DATA_ERRORS: INTEGER:= DATA_ERRORS; --(parity + framing + break are saved foreach received frame)
 
     --Register file signals
-    --Interrupt enable register -- Address : 000 -- Access type: R/W
+    --Interrupt enable register -- Address : 0000 -- Access type: R/W
     --IER(0): Data ready
     --IER(1): THR Empty
     --IER(2): Receiver line status
@@ -86,7 +86,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL write_IER: STD_LOGIC;
     
     
-    -- Interrupt Status Register -- Address : 001 -- Access type: R
+    -- Interrupt Status Register -- Address : 0001 -- Access type: R
     -- ISR(3:0): Interrupt Indentification Code & Interrupt status 
     -- ISR(4): DMA Rx END
     -- ISR(5): DMA Tx END
@@ -96,7 +96,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL read_ISR: STD_LOGIC;
     
     
-    --Fifo control register -- Address: 010 -- Access type: W
+    --Fifo control register -- Address: 0010 -- Access type: W
     --FCR(0): FIFO enable
     --FCR(1): Rx FIFO Reset
     --FCR(2): Tx FIFO Reset
@@ -107,7 +107,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL reg_FCR: STD_LOGIC_VECTOR(7 DOWNTO 0);  --Now, we consider all the bits
     SIGNAL write_FCR: STD_LOGIC;
     
-    --Line control register -- Address: 011 -- Access type: R/W
+    --Line control register -- Address: 0011 -- Access type: R/W
     --LCR(1:0): Word length
     --LCR(2): Stop bits
     --LCR(3): Parity enable
@@ -119,7 +119,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL read_LCR: STD_LOGIC;
     SIGNAL write_LCR: STD_LOGIC;
     
-    --Line status register -- Address: 100 -- Access type: R
+    --Line status register -- Address: 0100 -- Access type: R
     --LSR(0): Data ready
     --LSR(1): Overrun error
     --LSR(2): Parity error
@@ -131,13 +131,13 @@ ARCHITECTURE behavior of uart IS
     SIGNAL reg_LSR: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_LSR: STD_LOGIC;
     
-    --Divisor latch least significant byte register -- Address: 101 -- Access type: R/W --  Accesible when DLAB = 1
+    --Divisor latch least significant byte register -- Address: 0101 -- Access type: R/W 
     --DLL(7:0): Baudrate divisor's constant least significant byte
     SIGNAL reg_DLL: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_DLL: STD_LOGIC;
     SIGNAL write_DLL: STD_LOGIC;
     
-    --Divisor latch most significant byte register -- Address: 110 -- Access type: R/W --  Accesible when DLAB = 1
+    --Divisor latch most significant byte register -- Address: 0110 -- Access type: R/W 
     --DLM(7:0): Baudrate divisor's constant most significant byte
     SIGNAL reg_DLM: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_DLM: STD_LOGIC;
@@ -149,14 +149,19 @@ ARCHITECTURE behavior of uart IS
     --Divisor (DLL + DLM)
     SIGNAL divisor: STD_LOGIC_VECTOR(15 DOWNTO 0);
     
-    --Transmitter holding register 
+    --Prescaler division -- Address: 1000 -- Access type: W 
+    --prescaler(3:0) : prescaler divisor value
+    SIGNAL prescaler :  STD_LOGIC_VECTOR(7 DOWNTO 0);
+    
+    SIGNAL write_prescaler :  STD_LOGIC;
+    
+    --Transmitter holding register -- Address: 0111 -- Access type: W 
     SIGNAL write_THR: STD_LOGIC; 
     
-    --Receiver holding register 
+    --Receiver holding register -- Address: 0111 -- Access type: R 
     SIGNAL read_RHR: STD_LOGIC;
     
     
-     --TODO: Implment the prescaler Division
     
     --Receiver signals
     SIGNAL rx_parity_error: STD_LOGIC;
@@ -199,10 +204,11 @@ BEGIN
 		rst=>rst,
 		--INPUTS
 		divisor=>divisor, --divisor value for baudrate
+		prescaler=>prescaler(3 DOWNTO 0), --prescaler divisor for baudrate
 		parity_bit_en=>reg_LCR(3), --emable for parity bit
 		parity_type=>reg_LCR(4), --even(1) or odd(0) parity xheck
 		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 5,6,7,8 bits
-		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 atop bit, 1 -> 2 stop bits)
+		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 stop bit, 1 -> 2 stop bits)
 		rx_in_async=>uart_rx, --RX line
 		--OUTPUTS
 		break_interrupt=>rx_break_interrupt, --Break interrupt
@@ -315,8 +321,8 @@ BEGIN
 	rx_frame<=rx_break_interrupt & rx_framing_error & rx_parity_error & rx_data_i;
     
     --Do we want to Write/Read the IER register? 
-    read_IER<='1' WHEN read='1' AND address="000" ELSE '0'; 
-    write_IER<='1' WHEN write='1' AND address="000" ELSE '0'; 
+    read_IER<='1' WHEN read='1' AND address="0000" ELSE '0'; 
+    write_IER<='1' WHEN write='1' AND address="0000" ELSE '0'; 
     
     PROCESS(clk, rst)
     BEGIN
@@ -330,7 +336,7 @@ BEGIN
     END PROCESS;
     
     --Do we want to Write the FCR register? 
-    write_FCR<='1' WHEN write='1' AND address="010" ELSE '0';
+    write_FCR<='1' WHEN write='1' AND address="0010" ELSE '0';
     
     PROCESS(clk, rst)
     BEGIN
@@ -344,8 +350,8 @@ BEGIN
     END PROCESS;
     
     --Do we want to Write/Read the LCR register? 
-    read_LCR<='1' WHEN read='1' AND address="011" ELSE '0';
-    write_LCR<='1' WHEN write='1' AND address="011" ELSE '0';
+    read_LCR<='1' WHEN read='1' AND address="0011" ELSE '0';
+    write_LCR<='1' WHEN write='1' AND address="0011" ELSE '0';
     
     PROCESS(clk, rst)
     BEGIN
@@ -359,7 +365,7 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read the LSR register? 
-    read_LSR<='1' WHEN read='1' AND address="100" ELSE '0'; 
+    read_LSR<='1' WHEN read='1' AND address="0100" ELSE '0'; 
     
     PROCESS(clk, rst)
     BEGIN
@@ -395,13 +401,13 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read/Write the DLL register? 
-    read_DLL<='1' WHEN read='1' AND address="101" ELSE '0';
-    write_DLL<='1' WHEN write='1' AND address="101" ELSE '0'; 
+    read_DLL<='1' WHEN read='1' AND address="0101" ELSE '0';
+    write_DLL<='1' WHEN write='1' AND address="0101" ELSE '0'; 
     
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            reg_DLL<=X"00"; --I'll have to change this to X"01" again
+            reg_DLL<=X"01";
         ELSIF rising_edge(clk) THEN
             IF write_DLL='1' THEN
                 reg_DLL<=busDataIn;
@@ -410,8 +416,8 @@ BEGIN
     END PROCESS;
     
     --Do we want to Read/Write the DLM register? 
-    read_DLM<='1' WHEN read='1' AND address="110" ELSE '0';
-    write_DLM<='1' WHEN write='1' AND address="110" ELSE '0';
+    read_DLM<='1' WHEN read='1' AND address="0110" ELSE '0';
+    write_DLM<='1' WHEN write='1' AND address="0110" ELSE '0';
     
     PROCESS(clk, rst)
     BEGIN
@@ -424,14 +430,28 @@ BEGIN
         END IF;
     END PROCESS;
     
+    --Do we want to Write the Prescaler register?
+    write_prescaler <= '1' WHEN write = '1' and address = "1000" ELSE '0';
+    
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            prescaler <= X"00";
+        ELSIF rising_edge(clk) THEN
+            IF write_prescaler = '1' THEN
+                prescaler <= busDataIn;
+            END IF;
+        END IF;
+    END PROCESS;
+    
     --Do we want to Read/Write the THR register? 
-    write_THR<='1' WHEN write='1' AND address="111" ELSE '0'; 
+    write_THR<='1' WHEN write='1' AND address="0111" ELSE '0'; 
     
     --RHR register
-    read_RHR<='1' WHEN read='1' AND address="111" ELSE '0';
+    read_RHR<='1' WHEN read='1' AND address="0111" ELSE '0';
     
     --Do we want to Read the ISR register? 
-    read_ISR<='1' WHEN read='1' AND address="001" ELSE '0';
+    read_ISR<='1' WHEN read='1' AND address="0001" ELSE '0';
     
     PROCESS(clk, rst) --Changge: new process to initialize ISR
     BEGIN
@@ -480,7 +500,7 @@ BEGIN
             IF (rx_fifo_empty='1' OR read_RHR='1' OR rx_finished='1') THEN
                 clear_cnt<='1';
                 timeout_counter<=(OTHERS=>'0');
-            ELSIF (rx_fifo_empty='0' AND baud_counter=UNSIGNED(divisor) AND timeout_counter(5)='0') THEN
+            ELSIF (rx_fifo_empty ='0' AND baud_counter = ((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))  AND timeout_counter(5)='0') THEN
                 timeout_counter<=timeout_counter+1;
                 clear_cnt<='1';
             ELSE

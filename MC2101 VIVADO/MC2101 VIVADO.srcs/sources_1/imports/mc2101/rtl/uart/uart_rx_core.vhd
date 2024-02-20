@@ -46,6 +46,7 @@ ENTITY uart_rx_core IS
 		rst             : IN  STD_LOGIC;
 		--input signals
 		divisor         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);--divisor value for baudrate 
+		prescaler       : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); --prescaler divisor for baudrate
 		parity_bit_en   : IN  STD_LOGIC;  --enable for parity bit
 		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
@@ -79,10 +80,9 @@ ARCHITECTURE behavior OF uart_rx_core IS
     
     --baudrate generator signal (frequency divider)
     --sampling window is in the half of a bit frame
-    --baudrate is BR=fck/(DIVISOR + 1)
+    --baudrate is BR=fck/ ((Prescaler + 1) * DIVISOR)
     SIGNAL count : UNSIGNED(15 DOWNTO 0);
     SIGNAL sample: STD_LOGIC;
-    SIGNAL half_divisor : UNSIGNED(15 downto 0);
     
     --signal that indicates that we are inside the start bit
     SIGNAL start_bit: STD_LOGIC;
@@ -111,8 +111,6 @@ ARCHITECTURE behavior OF uart_rx_core IS
     
     
 BEGIN
-
-    half_divisor <= '0' & UNSIGNED(divisor(15 DOWNTO 1)); 
 
     target_data_bits <= "100" WHEN data_width="00" ELSE
                         "101" WHEN data_width="01" ELSE
@@ -147,11 +145,13 @@ BEGIN
         IF (rst='1' OR baudgen='0') THEN
             count<=(OTHERS=>'0');
             sample<='0';
+            
+        --BR=fck/ ((Prescaler + 1) * DIVISOR)
         ELSIF rising_edge(clk) THEN
-            IF ( start_bit='1' AND (count=half_divisor) ) THEN --To follow step 2)
+            IF ( start_bit='1' AND (count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor)) - 1)/2) ) THEN --To follow step 2)
                 sample<='1';
                 count<=(OTHERS=>'0');
-            ELSIF ( start_bit='0' AND (count=UNSIGNED(divisor)) ) THEN --To follow step 3)
+            ELSIF ( start_bit = '0' AND (count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))- 1) )) THEN --To follow step 3)
                 sample<='1';
                 count<=(OTHERS=>'0');
             ELSE
@@ -233,7 +233,7 @@ BEGIN
                 baudgen<='1';
                 IF sample='1' THEN
                     next_data_bit<=STD_LOGIC_VECTOR(UNSIGNED(current_data_bit) + 1);
-                    read <= '1';    
+                    read <= '1'; --Indicates the process upon to start filling the shift register
                     IF current_data_bit=target_data_bits THEN
                         next_data_bit<=(OTHERS=>'0');
                         IF parity_bit_en='1' THEN

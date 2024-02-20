@@ -48,14 +48,14 @@ ARCHITECTURE Behavioral OF tb_uart_periph IS
     --System signals
     SIGNAL clk_s, rst_s :  STD_LOGIC := '0';
     --Input signals
-    SIGNAL address_s :  STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL address_s :  STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL busDataIn_s : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_s, write_s, uart_rx_s :  STD_LOGIC; 
     --Output signals
     SIGNAL interrupt_s, uart_tx_s : STD_LOGIC;
     SIGNAL busDataOut_s : STD_LOGIC_VECTOR(7 DOWNTO 0);
     
-    SIGNAL input_uart_periph :  STD_LOGIC_VECTOR(13 DOWNTO 0);
+    SIGNAL input_uart_periph :  STD_LOGIC_VECTOR(14 DOWNTO 0);
    
 BEGIN
 
@@ -78,9 +78,9 @@ BEGIN
 			FOR i IN inputline'RANGE LOOP
 				read(inputline, inputbit);
 				IF inputbit = '1' THEN		
-				    input_uart_periph(14 - i) <= '1';
+				    input_uart_periph(15 - i) <= '1';
 				ELSE
-                    input_uart_periph(14 - i) <= '0';        
+                    input_uart_periph(15 - i) <= '0';        
 				END IF;
 			END LOOP; 
 	        WAIT FOR ClockPeriod; 
@@ -89,7 +89,7 @@ BEGIN
 		WAIT;
 	END PROCESS pattern;
 	
-	address_s <= input_uart_periph(13 DOWNTO 11);
+	address_s <= input_uart_periph(14 DOWNTO 11);
 	busDataIn_s <= input_uart_periph(10 DOWNTO 3);
 	read_s <= input_uart_periph(2);
 	write_s <= input_uart_periph(1);
