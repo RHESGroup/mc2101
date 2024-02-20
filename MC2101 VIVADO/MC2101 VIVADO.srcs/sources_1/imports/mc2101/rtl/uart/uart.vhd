@@ -401,7 +401,7 @@ BEGIN
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            reg_DLL<=X"01";
+            reg_DLL<=X"00"; --I'll have to change this to X"01" again
         ELSIF rising_edge(clk) THEN
             IF write_DLL='1' THEN
                 reg_DLL<=busDataIn;

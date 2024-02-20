@@ -39,20 +39,19 @@ LIBRARY STD;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
-
 ENTITY uart_rx_core IS 
 	PORT (
 	    --system signals
 		clk             : IN  STD_LOGIC;
 		rst             : IN  STD_LOGIC;
-		--INPUTS
+		--input signals
 		divisor         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);--divisor value for baudrate 
 		parity_bit_en   : IN  STD_LOGIC;  --enable for parity bit
-		parity_type     : IN  STD_LOGIC;  --even(0) or odd(1) parity check ---Opposite values with respect to the UART Protocol
+		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
-		rx_in_async     : IN  STD_LOGIC; --RX line --It receives one character at a time
-		--OUTPUTS
+		rx_in_async     : IN  STD_LOGIC; --RX line
+		--output signals
 		break_interrupt : OUT STD_LOGIC; --break interrupt
 		frame_error     : OUT STD_LOGIC; --frame error
 		parity_error    : OUT STD_LOGIC; --parity error
@@ -63,22 +62,15 @@ END uart_rx_core;
 
 --TODO: check if BI are correct with respect to UART 16550 specifications
 
---How to guarantee a transition in each frame?
---UART line keeps at logic 1 when IDLE
---Stop bits are always at logic 1
---Start bit is always at logic 0
---A new frame causes the start bit to make a transition from 1 to 0. The start bit transition synchronizes clocks at the beginning of the frame.
---Receiver checks the start bit and changes its clock. 
-
---Order of UART message:
---Start bit(logic 0) -> Message(LSB first) -> Parity bit -> Stop bits(logic 1)
-
- ARCHITECTURE behavior OF uart_rx_core IS
+ARCHITECTURE behavior OF uart_rx_core IS
+    
+    SIGNAL read: STD_LOGIC;
+    SIGNAL data_received : STD_LOGIC_VECTOR(7 DOWNTO 0);
 
     --flag used to detect the falling edge of the start bit
     SIGNAL rx_line_fall: STD_LOGIC;
     
-    --cascade of 3 FF used to synchronize the async RX input line. If we have an incoming value, UART recognize it three clock cycles later
+    --cascade of 3 FF used to synchronize the async RX input line
     SIGNAL rx_line_sync: STD_LOGIC_VECTOR(2 DOWNTO 0);
     
     --receiver FSM states
@@ -122,7 +114,6 @@ BEGIN
 
     half_divisor <= '0' & UNSIGNED(divisor(15 DOWNTO 1)); 
 
-    --This signal makes reference to the expected word length
     target_data_bits <= "100" WHEN data_width="00" ELSE
                         "101" WHEN data_width="01" ELSE
                         "110" WHEN data_width="10" ELSE
@@ -132,15 +123,24 @@ BEGIN
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            rx_line_sync <= (OTHERS=>'1');  --Originally, UART line keeps at logic 1 when IDLE
-        ELSIF rising_edge(CLK) THEN 
-            rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async; --We shift left by 1 and concanate the incoming value
+            rx_line_sync <= (OTHERS=>'1');
+        ELSIF rising_edge(CLK) THEN
+            rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async;
         END IF;
     END PROCESS;
     
     --falling edge detector
-    rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1)); ---if '1', there is a trasition from 1 to 0 
-      
+    rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1));
+    
+    
+    --We want to avoid oversampling in UART:
+    --1)We wait until the incoming signal becomes 0(start bit = '0' - rx_line_fall = '1'), then we start the sampling counter
+    --2)When tick counter reaches 7(middle of the start bit), we clear the tick counter and restart. We want to sample at the middle of the bit
+    --3)When tick counter reaches 15(middle of data bit), we shift the value into the register and restart the tick counter.
+    --4) We repeat step 3) more times for the remaining bits.
+    
+    
+    
     --baudrate generator (assert sample signal [like a delta] at half of the bit frame)
     PROCESS(clk, rst)
     BEGIN
@@ -148,16 +148,28 @@ BEGIN
             count<=(OTHERS=>'0');
             sample<='0';
         ELSIF rising_edge(clk) THEN
-            IF ( start_bit='1' AND (count=half_divisor) ) THEN
+            IF ( start_bit='1' AND (count=half_divisor) ) THEN --To follow step 2)
                 sample<='1';
                 count<=(OTHERS=>'0');
-            ELSIF ( start_bit='0' AND (count=UNSIGNED(divisor)) ) THEN
+            ELSIF ( start_bit='0' AND (count=UNSIGNED(divisor)) ) THEN --To follow step 3)
                 sample<='1';
                 count<=(OTHERS=>'0');
             ELSE
                 sample<='0';
                 count<=count + 1;
             END IF; 
+        END IF;
+    END PROCESS;
+    
+    --PROCESS related to the reading of the characters
+    PROCESS(clk, rst) 
+    BEGIN
+        IF rst = '1' THEN
+            data_received <= (OTHERS => '0');
+        ELSIF rising_edge(clk) THEN
+            IF read = '1' THEN
+                data_received <= rx_line_sync(2) & data_received(7 DOWNTO 1);
+            END IF;
         END IF;
     END PROCESS;
     
@@ -176,9 +188,9 @@ BEGIN
     END PROCESS;
     
     --FSM  (S_IDLE, S_START_BIT, S_DATA_BITS, S_PARITY_CHECK, S_STOP_1, S_STOP_2);
-    PROCESS(current_state, current_data_bit, current_data, rx_line_fall, sample, data_width, rx_line_sync) --Change: ALL for sensitivity list is not compatible with all simulators. Explicit description of the list
+    PROCESS(current_state, current_data_bit, current_data, rx_line_fall, sample, data_width, rx_line_sync)
     BEGIN
-        start_bit<='0'; 
+        start_bit<='0';
         next_data<=current_data;
         next_data_bit<=current_data_bit;
         next_state<=current_state;
@@ -186,12 +198,13 @@ BEGIN
         baudgen<='0';
         clear_parity_bit_received<='0';
         sample_parity_bit_received<='0';
+        read <= '0';
         
         CASE current_state IS
             WHEN S_IDLE=>
                 clear_parity_bit_received<='1';
                 --move to S_START_BIT when falling detected
-                IF rx_line_fall='1' THEN --If there was a transition from 1 to 0...means we have receive a start bit
+                IF rx_line_fall='1' THEN
                     next_state<=S_START_BIT;
                     start_bit<='1';
                     baudgen<='1';
@@ -201,13 +214,14 @@ BEGIN
                 
             WHEN S_START_BIT=>
                 baudgen<='1';
-                start_bit<='1'; --We already recognized that there is a start bit
+                start_bit<='1';
                 --when first sample point is asserted the FSM can move to S_DATA_BITS and be ready to sample data
                 IF sample='1' THEN
-                    --start bit acceptance(If to confirm that the bit corresponds to a start bit(logic 0) 
-                    IF rx_line_sync(2)='0' THEN --We make sure that the bits have been shifted and now the MSB corresponds to the start bit 
+                    --start bit acceptance
+                    IF rx_line_sync(2)='0' THEN
                         next_state<=S_DATA_BITS;
-                    ELSE --rx_line_sync(1) = '1' means that the incoming bit was not a '0'; therefore, it does not correspond to the start bit and we go bak to IDLE
+                        read <= '1';
+                    ELSE
                         next_state<=S_IDLE;
                     END IF;
                 ELSE
@@ -217,25 +231,17 @@ BEGIN
             WHEN S_DATA_BITS=>
                 --now at each sample point the data is read
                 baudgen<='1';
-                IF sample='1' THEN --We set the size of the data depending on the value coming from the reg_LCR(1 DOWNTO 0)
+                IF sample='1' THEN
                     next_data_bit<=STD_LOGIC_VECTOR(UNSIGNED(current_data_bit) + 1);
-                    IF data_width="00" THEN --Word Length: 5 bits
-                        next_data<= "000" & rx_line_sync(2) & current_data(4 DOWNTO 1); 
-                    ELSIF data_width="01" THEN --Word Length: 6 bits
-                        next_data<= "00" & rx_line_sync(2) & current_data(5 DOWNTO 1);
-                    ELSIF data_width="10" THEN --Word Length: 7 bits
-                        next_data<= "0" & rx_line_sync(2) & current_data(6 DOWNTO 1);
-                    ELSE
-                        next_data<= rx_line_sync(2) & current_data(7 DOWNTO 1); --Word Length: 8 bits
-                    END IF;
-                    
-                    IF current_data_bit=target_data_bits THEN --If we have read the number of characters expected(word length), we can mover forward
+                    read <= '1';    
+                    IF current_data_bit=target_data_bits THEN
                         next_data_bit<=(OTHERS=>'0');
-                        IF parity_bit_en='1' THEN --If parity is enabled in the line control register(reg_LCR(3))...   
-                            next_state<=S_PARITY_CHECK;                          
+                        IF parity_bit_en='1' THEN
+                            next_state<=S_PARITY_CHECK;
                         ELSE
-                            next_state<=S_STOP_1; 
-                        END IF;  
+                            next_state<=S_STOP_1;
+                        END IF;
+                        
                     ELSE
                         next_state<=S_DATA_BITS;
                     END IF;
@@ -244,7 +250,7 @@ BEGIN
             WHEN S_PARITY_CHECK=>
                 baudgen<='1';
                 IF sample='1' THEN
-                    sample_parity_bit_received<='1'; --Signal that acknowledges that the system has already read all the characters corresponding to the message and received a new character corresponding to the parity
+                    sample_parity_bit_received<='1';
                     next_state<=S_STOP_1;
                 ELSE
                     next_state<=S_PARITY_CHECK;
@@ -255,7 +261,7 @@ BEGIN
                 IF sample='1' THEN
                     --save received stop bit 1 (transmission is considered finished)
                     rx_valid<='1';
-                    IF stop_bits='0' THEN -- ('0' == 1 stop bit) ('1' == 2 stop bits)
+                    IF stop_bits='0' THEN
                         next_state<=S_IDLE;
                     ELSE
                         next_state<=S_STOP_2;
@@ -268,11 +274,9 @@ BEGIN
                 baudgen<='1';
                 IF sample='1' THEN
                     next_state<=S_IDLE;
-                ELSE 
+                ELSE
                     next_state<=S_STOP_2;
-                END IF;     
-            WHEN OTHERS=>
-                next_state<=S_IDLE;            
+                END IF;                 
         END CASE;
     END PROCESS;
     
@@ -285,37 +289,36 @@ BEGIN
                     current_data(3) XOR 
                     current_data(2) XOR 
                     current_data(1) XOR 
-                    current_data(0) XOR (parity_type); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
+                    current_data(0) XOR (NOT parity_type);
     
     
     rx_data_buffer <= current_data; 
     
     --errors computation
     
-    -- PARITY ERROR -- When it is set, it indicates that parity of the received character is wrong according to the current setting in LCR
+    -- PARITY ERROR
     PROCESS(clk, rst)
     BEGIN
         IF (rst='1' OR clear_parity_bit_received='1') THEN
             parity_bit_received<='0';
             parity_error<='0';
         ELSIF rising_edge(CLK) THEN
-            IF sample_parity_bit_received='1' THEN --The FSM tells us when the system has already read all the characters corresponding to the message and received a new character corresponding to the parity
+            IF sample_parity_bit_received='1' THEN
                 parity_bit_received<=rx_line_sync(2);
-                parity_error<=rx_line_sync(2) XOR parity_value; --'1' if parity type and the parity bit are different and we get an error
+                parity_error<=rx_line_sync(2) XOR parity_value;
             END IF;
         END IF;
     END PROCESS;
     
     
 
-    -- FRAME ERROR -- It indicates that the received character did not have a valid stop bit(a '0' was detected instead of a '1')
+    -- FRAME ERROR
     frame_error <= '1' when current_state=S_STOP_1 AND  
                             rx_line_sync(2)='0' AND
                             sample='1'
                             ELSE '0';
     
-    -- BREAK INTERRUPT -- It is set to 1 if the receiver's line input was held at zero for a complete character time
-    -- The positions corresponding to the start bit, the data, the parity bit and the first stop bit were all detected as 0s
+    -- BREAK INTERRUPT
     break_interrupt <= '1' WHEN parity_bit_received = '0' AND 
                                 current_state=S_STOP_1 AND  
                                 rx_line_sync(2)='0' AND
@@ -325,3 +328,4 @@ BEGIN
         
     
 END behavior;
+
