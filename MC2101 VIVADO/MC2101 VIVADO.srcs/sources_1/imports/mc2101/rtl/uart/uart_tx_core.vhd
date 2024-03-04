@@ -47,6 +47,7 @@ ENTITY uart_tx_core IS
 		rst             : IN  STD_LOGIC;
 		--input signals
 		divisor         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);--divisor value for baudrate
+		prescaler       : IN STD_LOGIC_VECTOR(3 DOWNTO 0); --prescaler divisor for baudrate
 		parity_bit_en   : IN  STD_LOGIC;  --enable for parity bit
 		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
@@ -94,7 +95,9 @@ ARCHITECTURE behavior OF uart_tx_core IS
     --signal used to enable baudrate generator
     SIGNAL baudgen: STD_LOGIC;
     
-    --counter for baudrate
+    --baudrate generator signal (frequency divider)
+    --sampling window is in the half of a bit frame
+    --baudrate is BR=fck/ ((Prescaler + 1) * DIVISOR)
     SIGNAL count : UNSIGNED(15 DOWNTO 0);
     
     --signal used to indicate the end of a bit frame
@@ -142,7 +145,7 @@ BEGIN
             count<=(OTHERS=>'0');
             --bit_done<='0';
         ELSIF rising_edge(clk) THEN
-            IF count=UNSIGNED(divisor) THEN
+            IF count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))- 1) THEN
                 count<=(OTHERS=>'0');
                 --bit_done<='1';
             ELSE
@@ -246,7 +249,7 @@ BEGIN
                 baudgen<='1';
                 IF bit_done='1' THEN
                     next_state<=S_IDLE;
-                    tx_ready<='1';
+                    --tx_ready<='1';
                 ELSE
                     next_state<=S_STOP_BIT2;                 
                 END IF;   
