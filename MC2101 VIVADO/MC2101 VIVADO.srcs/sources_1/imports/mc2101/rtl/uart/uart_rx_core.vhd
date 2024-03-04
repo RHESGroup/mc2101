@@ -87,8 +87,6 @@ ARCHITECTURE behavior OF uart_rx_core IS
     --signal that indicates that we are inside the start bit
     SIGNAL start_bit: STD_LOGIC;
     
-    --shift register
-    SIGNAL current_data, next_data: STD_LOGIC_VECTOR(7 DOWNTO 0);
     
     --frame data bit counter
     SIGNAL current_data_bit, next_data_bit: STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -109,6 +107,9 @@ ARCHITECTURE behavior OF uart_rx_core IS
     --used to enable baudrate generator
     SIGNAL baudgen: STD_LOGIC;
     
+    --Signal that helps to ensure that the system puts the uart line idle after finishing reading the message
+    SIGNAL line_to_idle : STD_LOGIC;
+    
     
 BEGIN
 
@@ -120,7 +121,7 @@ BEGIN
     --RX synchronizer (111 = IDLE STATE)
     PROCESS(clk, rst)
     BEGIN
-        IF rst='1' THEN
+        IF rst='1' or line_to_idle = '1' THEN
             rx_line_sync <= (OTHERS=>'1');
         ELSIF rising_edge(CLK) THEN
             rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async;
@@ -164,7 +165,7 @@ BEGIN
     --PROCESS related to the reading of the characters
     PROCESS(clk, rst) 
     BEGIN
-        IF rst = '1' THEN
+        IF rst = '1' or line_to_idle = '1' THEN
             data_received <= (OTHERS => '0');
         ELSIF rising_edge(clk) THEN
             IF read = '1' THEN
@@ -178,20 +179,17 @@ BEGIN
     BEGIN
         IF rst='1' THEN
             current_state<=S_IDLE;
-            current_data<=(OTHERS=>'0'); 
             current_data_bit<=(OTHERS=>'0');
         ELSIF rising_edge(clk) THEN
             current_state<=next_state;
             current_data_bit<=next_data_bit;
-            current_data<=next_data;
         END IF;
     END PROCESS;
     
     --FSM  (S_IDLE, S_START_BIT, S_DATA_BITS, S_PARITY_CHECK, S_STOP_1, S_STOP_2);
-    PROCESS(current_state, current_data_bit, current_data, rx_line_fall, sample, data_width, rx_line_sync)
+    PROCESS(current_state, current_data_bit, rx_line_fall, sample, data_width, rx_line_sync)
     BEGIN
         start_bit<='0';
-        next_data<=current_data;
         next_data_bit<=current_data_bit;
         next_state<=current_state;
         rx_valid<='0';
@@ -199,6 +197,7 @@ BEGIN
         clear_parity_bit_received<='0';
         sample_parity_bit_received<='0';
         read <= '0';
+        line_to_idle <= '0';
         
         CASE current_state IS
             WHEN S_IDLE=>
@@ -259,9 +258,10 @@ BEGIN
             WHEN S_STOP_1=>
                 baudgen<='1';
                 IF sample='1' THEN
-                    --save received stop bit 1 (transmission is considered finished)
                     rx_valid<='1';
                     IF stop_bits='0' THEN
+                        --save received stop bit 1 (transmission is considered finished)
+                        line_to_idle <= '1';
                         next_state<=S_IDLE;
                     ELSE
                         next_state<=S_STOP_2;
@@ -273,6 +273,7 @@ BEGIN
             WHEN S_STOP_2=>
                 baudgen<='1';
                 IF sample='1' THEN
+                    line_to_idle <= '1';
                     next_state<=S_IDLE;
                 ELSE
                     next_state<=S_STOP_2;
@@ -282,17 +283,17 @@ BEGIN
     
     
     --parity value computation 
-    parity_value <= current_data(7) XOR 
-                    current_data(6) XOR 
-                    current_data(5) XOR 
-                    current_data(4) XOR 
-                    current_data(3) XOR 
-                    current_data(2) XOR 
-                    current_data(1) XOR 
-                    current_data(0) XOR (NOT parity_type);
+    parity_value <= data_received(7) XOR 
+                    data_received(6) XOR 
+                    data_received(5) XOR 
+                    data_received(4) XOR 
+                    data_received(3) XOR 
+                    data_received(2) XOR 
+                    data_received(1) XOR 
+                    data_received(0) XOR (parity_type); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
     
     
-    rx_data_buffer <= current_data; 
+    rx_data_buffer <= data_received; 
     
     --errors computation
     
@@ -323,7 +324,7 @@ BEGIN
                                 current_state=S_STOP_1 AND  
                                 rx_line_sync(2)='0' AND
                                 sample='1' AND
-                                current_data = "00000000" 
+                                data_received = "00000000" 
                            ELSE '0';
         
     
