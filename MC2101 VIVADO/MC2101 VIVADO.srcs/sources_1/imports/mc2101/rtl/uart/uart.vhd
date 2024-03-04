@@ -42,7 +42,7 @@ USE work.CONSTANTS.ALL;
 
 --TODO: this uart has been designed starting from the standard UART 16550
 --      some functionality are not included in this current version
---      FEATURES NOT INCLUDED: DMA, MODEM, PRESCALER DIVISION FACTOR are not currently implememnted
+--      FEATURES NOT INCLUDED: DMA, MODEM  are not currently implememnted
 --      see: http://caro.su/msx/ocm_de1/16550.pdf    
 
 
@@ -143,7 +143,11 @@ ARCHITECTURE behavior of uart IS
     SIGNAL read_DLM: STD_LOGIC;
     SIGNAL write_DLM: STD_LOGIC;
     
-
+    --Transmitter holding register -- Address: 0111 -- Access type: W 
+    SIGNAL write_THR: STD_LOGIC; 
+    
+    --Receiver holding register -- Address: 0111 -- Access type: R 
+    SIGNAL read_RHR: STD_LOGIC;
 
     
     --Divisor (DLL + DLM)
@@ -155,11 +159,17 @@ ARCHITECTURE behavior of uart IS
     
     SIGNAL write_prescaler :  STD_LOGIC;
     
-    --Transmitter holding register -- Address: 0111 -- Access type: W 
-    SIGNAL write_THR: STD_LOGIC; 
+    --Modem Control register -- Address: 1001 -- Access type: R/W
+    SIGNAL reg_MCR : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL write_MCR : STD_LOGIC;
+    SIGNAL read_MCR : STD_LOGIC;
     
-    --Receiver holding register -- Address: 0111 -- Access type: R 
-    SIGNAL read_RHR: STD_LOGIC;
+    --Modem Control register -- Address: 1010 -- Access type: R
+    SIGNAL reg_MSR : STD_LOGIC_VECTOR(7 DOWNTO 0);
+    SIGNAL read_MSR : STD_LOGIC;
+    
+    
+
     
     
     
@@ -175,6 +185,7 @@ ARCHITECTURE behavior of uart IS
 	SIGNAL rx_fifo_empty: STD_LOGIC;
 	SIGNAL rx_fifo_full: STD_LOGIC;
 	SIGNAL rx_line_error: STD_LOGIC;
+	SIGNAL input_rx : STD_LOGIC;
     
     --Transmitter signals
     SIGNAL tx_fifo_data_out: STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -183,6 +194,7 @@ ARCHITECTURE behavior of uart IS
     SIGNAL tx_elements: STD_LOGIC_VECTOR(LOG_FIFO_D DOWNTO 0);
     SIGNAL tx_fifo_full : STD_LOGIC;
     SIGNAL is_TXvalid : STD_LOGIC;
+    SIGNAL output_tx : STD_LOGIC;
     
     --Timeout counters
     SIGNAL baud_counter: UNSIGNED(15 DOWNTO 0);
@@ -193,6 +205,9 @@ ARCHITECTURE behavior of uart IS
     --Interrupt signals
     SIGNAL clear_int: STD_LOGIC;
     
+    --NEW: reset used when we change from normal mode to test mode or from test mode to normal mode
+    SIGNAL reset_tx_rx, reset: STD_LOGIC;
+    
 
 BEGIN
 
@@ -201,7 +216,7 @@ BEGIN
 	PORT MAP(
 	    --SYSTEM SIGNALS
 		clk=>clk,
-		rst=>rst,
+		rst=>reset, --NEW reset
 		--INPUTS
 		divisor=>divisor, --divisor value for baudrate
 		prescaler=>prescaler(3 DOWNTO 0), --prescaler divisor for baudrate
@@ -209,7 +224,7 @@ BEGIN
 		parity_type=>reg_LCR(4), --even(1) or odd(0) parity xheck
 		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits=>reg_LCR(2), --number of stop bits(0 -> 1 stop bit, 1 -> 2 stop bits)
-		rx_in_async=>uart_rx, --RX line
+		rx_in_async=>input_rx, --RX line
 		--OUTPUTS
 		break_interrupt=>rx_break_interrupt, --Break interrupt
 		frame_error=>rx_framing_error, --frame error
@@ -246,9 +261,10 @@ BEGIN
 	PORT MAP(
 	    --SYSTEM SIGNALS
 		clk=>clk,
-		rst=>rst,
+		rst=>reset, --NEW reset
 		--INPUTS
 		divisor=>divisor, --divisor value for baudrate
+		prescaler=>prescaler(3 DOWNTO 0), --prescaler divisor for baudrate
 		parity_bit_en=>reg_LCR(3), --enable for parity check
 		parity_type=>reg_LCR(4), --even(1) or odd(0) parity check
 		data_width=>reg_LCR(1 DOWNTO 0), --data bits in the frame can be on 4,6,7,8 bits
@@ -257,7 +273,7 @@ BEGIN
 		tx_valid=>is_TXvalid, --data ready to be transmitted
 		--OUTPUTS
 		tx_ready=>tx_ready, --transmitter ready for next data
-		tx_out=>uart_tx --TX line
+		tx_out=> output_tx --TX line
 	);
 	
 	--TRANSMITTER FIFO
@@ -305,6 +321,8 @@ BEGIN
 		interrupt=>interrupt,
 		interrupt_isr_code=>reg_ISR(3 DOWNTO 0) --ID of the interrupt raised
 	);
+	
+	reset <= rst OR reset_tx_rx; 
 	
 	is_TXvalid <= NOT(tx_fifo_empty); --Change: New signal
 
@@ -444,6 +462,30 @@ BEGIN
         END IF;
     END PROCESS;
     
+    --Do we want to Read/Write the MCR register? 
+    read_MCR<='1' WHEN read='1' AND address="1001" ELSE '0';
+    write_MCR<='1' WHEN write='1' AND address="1001" ELSE '0';
+    
+    PROCESS(clk, rst)
+    BEGIN
+        IF rst='1' THEN
+            reg_MCR<=X"00";
+        ELSIF rising_edge(clk) THEN
+            IF write_MCR='1' THEN
+                reg_MCR<=busDataIn;
+                IF (busDataIn(4) XOR reg_MCR(4)) = '1' THEN --If we change from normal mode to test mode or viceseversa
+                    reset_tx_rx <= '1';
+                END IF;
+            ELSE
+                reset_tx_rx <= '0';
+            END IF;
+        END IF;
+    END PROCESS;
+    
+    ---Statement that controls the loopback function. It connects UART TX and UART RX for testing the communication
+    uart_tx <= 'Z' WHEN reg_MCR(4) = '1' ELSE output_tx;
+    input_rx <= output_tx WHEN reg_MCR(4) = '1' ELSE uart_rx ;
+    
     --Do we want to Read/Write the THR register? 
     write_THR<='1' WHEN write='1' AND address="0111" ELSE '0'; 
     
@@ -453,13 +495,19 @@ BEGIN
     --Do we want to Read the ISR register? 
     read_ISR<='1' WHEN read='1' AND address="0001" ELSE '0';
     
-    PROCESS(clk, rst) --Changge: new process to initialize ISR
+    PROCESS(clk, rst) --Change: new process to initialize ISR
     BEGIN
         IF rst='1' THEN
             reg_ISR(7 DOWNTO 4) <=X"0"; --The last 4 bits correspond to the Interruption identification code & Interrupt Status 
             --These bits are set by the uart interrupt controller(uart_interrupt.vhd)
         END IF;
     END PROCESS;
+    
+    
+    
+    
+    
+    
     
     --busDataOut update 
     busDataOut<=reg_IER WHEN read_IER='1' ELSE 
@@ -500,7 +548,7 @@ BEGIN
             IF (rx_fifo_empty='1' OR read_RHR='1' OR rx_finished='1') THEN
                 clear_cnt<='1';
                 timeout_counter<=(OTHERS=>'0');
-            ELSIF (rx_fifo_empty ='0' AND baud_counter = ((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))  AND timeout_counter(5)='0') THEN
+            ELSIF (rx_fifo_empty ='0' AND baud_counter = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor)) - 1)  AND timeout_counter(5)='0') THEN
                 timeout_counter<=timeout_counter+1;
                 clear_cnt<='1';
             ELSE
