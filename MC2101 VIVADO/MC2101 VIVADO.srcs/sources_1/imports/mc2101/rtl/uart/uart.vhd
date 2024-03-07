@@ -482,6 +482,8 @@ BEGIN
         END IF;
     END PROCESS;
     
+    -- TO DO(IMPROVE): If the mode changes while an UART transmission is occurring, the message sent to the external world is wrongly sent.
+    ---Then, the UART misses one of the messages to send while changing the connections and behavior
     ---Statement that controls the loopback function. It connects UART TX and UART RX for testing the communication
     uart_tx <= 'Z' WHEN reg_MCR(4) = '1' ELSE output_tx;
     input_rx <= output_tx WHEN reg_MCR(4) = '1' ELSE uart_rx ;

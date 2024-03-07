@@ -43,8 +43,10 @@ ENTITY aftab_core IS
 	(
 		clk                      : IN  STD_LOGIC;
 		rst                      : IN  STD_LOGIC;
+		--Input signals
 		memReady       	         : IN  STD_LOGIC;
 		memDataIn                : IN  STD_LOGIC_VECTOR (7 DOWNTO 0);
+		--Output signals
 		memDataOut               : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
 		memRead                  : OUT STD_LOGIC;
 		memWrite                 : OUT STD_LOGIC;

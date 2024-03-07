@@ -1,4 +1,4 @@
-#TCL script to create the environment to simulate the uartRX core
+#TCL script to create the environment to simulate the uart peripheral core
 set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
 if {[llength $sets]} {
     puts "The simulation sets are: $sets ";
@@ -38,7 +38,10 @@ add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/reg_LCR}
 add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/reg_LSR}
 add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/reg_DLL}
 add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/reg_DLM}
+add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/reg_MCR}
+add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/reg_MSR}
 add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/divisor}
+add_wave -into {Control_Registers} {/tb_uart_periph/uart_peripheral/prescaler}
 
 add_wave_group -into {Main_UART_peripheral_signals} {Control_Signals}
 add_wave -into {Control_Signals} {/tb_uart_periph/uart_peripheral/read_IER}
@@ -56,9 +59,11 @@ add_wave -into {Control_Signals} {/tb_uart_periph/uart_peripheral/write_THR}
 add_wave -into {Control_Signals} {/tb_uart_periph/uart_peripheral/read_RHR}
 add_wave -into {Control_Signals} {/tb_uart_periph/uart_peripheral/tx_elements} 
 add_wave -into {Control_Signals} {/tb_uart_periph/uart_peripheral/rx_elements} 
+add_wave -into {Control_Signals} {/tb_uart_periph/uart_peripheral/input_rx}
+add_wave -into {Control_Signals} {/tb_uart_periph/uart_peripheral/output_tx} 
 
 
-#Signals related to the fifo of uart TX
+#Signals related to the uart TX fifo 
 add_wave_group UART_TXFIFO_signals
 #Inputs
 add_wave -into {UART_TXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_TX_FIFO/clear} 
@@ -71,6 +76,8 @@ add_wave -into {UART_TXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_TX_FIFO/
 add_wave -into {UART_TXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_TX_FIFO/data_out}
 add_wave -into {UART_TXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_TX_FIFO/fifo_empty}  
 add_wave -into {UART_TXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_TX_FIFO/fifo_full} 
+
+
 
 
 #Signals related to the uart TX
@@ -87,8 +94,13 @@ add_wave -into {UART_TX_signals} {/tb_uart_periph/uart_peripheral/U_TX/tx_valid}
 add_wave -into {UART_TX_signals} {/tb_uart_periph/uart_peripheral/U_TX/tx_ready}
 add_wave -into {UART_TX_signals} {/tb_uart_periph/uart_peripheral/U_TX/tx_out}
 
+#Others
+add_wave -into {UART_TX_signals} {/tb_uart_periph/uart_peripheral/U_TX/current_state}  
+add_wave -into {UART_TX_signals} {/tb_uart_periph/uart_peripheral/U_TX/next_state} 
+add_wave -into {UART_TX_signals} {/tb_uart_periph/uart_peripheral/U_TX/reg_tx_data} 
 
-#Signals related to the fifo of uart RX
+
+#Signals related to the uart RX fifo
 add_wave_group UART_RXFIFO_signals
 #Inputs
 add_wave -into {UART_RXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_RX_FIFO/clear} 
@@ -103,7 +115,8 @@ add_wave -into {UART_RXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_RX_FIFO/
 add_wave -into {UART_RXFIFO_signals} {/tb_uart_periph/uart_peripheral/U_RX_FIFO/fifo_full} 
 
 
-#Signals related to the fifo of uart RX
+
+#Signals related to the uart RX
 add_wave_group UART_RX_signals
 #Inputs
 add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/divisor}
@@ -119,6 +132,16 @@ add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/parity_er
 add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/rx_data_buffer}
 add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/rx_valid}
 
+#Others
+add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/current_state} 
+add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/next_state} 
+add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/rx_line_fall}
+add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/rx_line_sync} 
+add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/data_received}
+add_wave -into {UART_RX_signals} {/tb_uart_periph/uart_peripheral/U_RX/read} 
+
+
+
 #Signals related to the interrupt controller of uart 
 add_wave_group UART_interruptcnt_signals
 #Inputs
@@ -132,6 +155,7 @@ add_wave -into {UART_interruptcnt_signals} {/tb_uart_periph/uart_peripheral/U_IN
 #Outputs
 add_wave -into {UART_interruptcnt_signals} {/tb_uart_periph/uart_peripheral/U_IN_CTRL/interrupt}
 add_wave -into {UART_interruptcnt_signals} {/tb_uart_periph/uart_peripheral/U_IN_CTRL/interrupt_isr_code}
+
 
 
 run 1000ns

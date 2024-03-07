@@ -68,66 +68,39 @@ END uart_bus_wrap;
 
 
 ARCHITECTURE behavior OF uart_bus_wrap IS
-
-    COMPONENT uart_controller IS   
-	PORT (
-	    clk         :IN STD_LOGIC;
-	    rst         :IN STD_LOGIC;
-	    chip_select :IN  STD_LOGIC;
-		request     :IN  STD_LOGIC;
-	    uart_read   :OUT STD_LOGIC;
-	    uart_write  :OUT STD_LOGIC;
-	    uart_ready  :OUT STD_LOGIC;
-	    uart_resp   :OUT STD_LOGIC
-	);
-    END COMPONENT;
     
     SIGNAL chip_select: STD_LOGIC;
     SIGNAL request: STD_LOGIC;
     SIGNAL read, write: STD_LOGIC;
     
-    COMPONENT uart IS 
-	PORT (
-	    --system signals
-		clk            : IN  STD_LOGIC;
-		rst            : IN  STD_LOGIC;
-		--input signals
-		address        : IN  STD_LOGIC_VECTOR(2 DOWNTO 0);
-		busDataIn      : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
-		read           : IN  STD_LOGIC;
-		write          : IN  STD_LOGIC;
-		uart_rx        : IN  STD_LOGIC; --async uart RX line
-		--output signals signals
-		interrupt      : OUT STD_LOGIC;
-		uart_tx        : OUT STD_LOGIC; --async uart TX line
-		busDataOut     : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
-	);
-    END COMPONENT;
-    
     
  
 BEGIN
 
-    uart_periph: uart 
+    uart_periph: ENTITY work.uart 
 	PORT MAP(
 		clk=>clk,
 		rst=>rst,
-		address=>haddr(2 DOWNTO 0), --The UART is controlled through a set of registers addressable with 3 bits
+		--input signals
+		address=>haddr(3 DOWNTO 0), --The UART is controlled through a set of registers addressable with 4 bits--NEw change
 		busDataIn=>hwrdata,
 		read=>read,
 		write=>write,
 		uart_rx=>uart_rx,
+		--output signals
 		interrupt=>uart_interrupt,
 		uart_tx=>uart_tx,
 		busDataOut=>hrdata
 	);
 	
-	uart_ctrl: uart_controller   
+	uart_ctrl: ENTITY work.uart_controller   
 	PORT MAP(
 	    clk=>clk,
 	    rst=>rst,
+	    --Input signals
 	    chip_select=>hselx,
 		request=>hwrite,
+		--Output signals
 	    uart_read=>read,
 	    uart_write=>write,
 	    uart_ready=>hready,

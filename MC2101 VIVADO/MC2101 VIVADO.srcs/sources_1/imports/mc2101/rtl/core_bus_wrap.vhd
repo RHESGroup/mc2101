@@ -74,33 +74,7 @@ ENTITY core_bus_wrap IS
 END core_bus_wrap;
 
 ARCHITECTURE behavior OF core_bus_wrap IS
-
-    --core
-    COMPONENT aftab_core IS
-	GENERIC
-		(len : INTEGER := 32);
-	PORT
-	(
-		clk                      : IN  STD_LOGIC;
-		rst                      : IN  STD_LOGIC;
-		memReady       	         : IN  STD_LOGIC;
-		memDataIn                : IN  STD_LOGIC_VECTOR (7 DOWNTO 0);
-		memDataOut               : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-		memRead                  : OUT STD_LOGIC;
-		memWrite                 : OUT STD_LOGIC;
-		memAddr                  : OUT STD_LOGIC_VECTOR (len - 1 DOWNTO 0);
-		--interrupt inputs and outputs
-		machineExternalInterrupt : IN  STD_LOGIC;
-		machineTimerInterrupt    : IN  STD_LOGIC;
-		machineSoftwareInterrupt : IN  STD_LOGIC;
-		userExternalInterrupt    : IN  STD_LOGIC;
-		userTimerInterrupt       : IN  STD_LOGIC;
-		userSoftwareInterrupt    : IN  STD_LOGIC;
-		platformInterruptSignals : IN  STD_LOGIC_VECTOR (15 DOWNTO 0);
-		interruptProcessing      : OUT STD_LOGIC
-	);
-    END COMPONENT;
-    
+   
     --read request
     SIGNAL coreReadReq: STD_LOGIC;
     --write request
@@ -133,12 +107,12 @@ ARCHITECTURE behavior OF core_bus_wrap IS
     TYPE BUS_STAT_TYPE IS (S_IDLE, S_READ, S_WRITE, S_BUS_FAULT);
     SIGNAL curr_bus_state, next_bus_state: BUS_STAT_TYPE;
     
-    SIGNAL haddr_cpy: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
+    SIGNAL haddr_signal: STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0);
     
 BEGIN
 
-    --modified to be compatible with older version of Quartus
-    haddr_cpy<=haddr;
+    --modified to be compatible with different synthetizers
+    haddr <= haddr_signal;
     
     hselram<=selRAM AND (coreReadReq OR coreWriteReq);
     hselflash<=selFLASH AND (coreReadReq OR coreWriteReq);
@@ -154,19 +128,22 @@ BEGIN
 	
 	--######################################
     --CORE
-    core: aftab_core
+    core: ENTITY work.aftab_core
 	GENERIC MAP
 		(len=>busAddressWidth)
 	PORT MAP
 	(
 		clk=>clk,
 		rst=>rst,
+		--Input signals
 		memReady=>hready,
 		memDataIn=>hrdata,
+		--Output signals
 		memDataOut=>hwrdata,
 		memRead=>coreReadReq,
 		memWrite=>coreWriteReq,
-		memAddr=>haddr,
+		memAddr=>haddr_signal, --Change: USE a signal here instead of the direct connection to the output
+		--interrupt inputs and outputs
 		machineExternalInterrupt=>'0',
 		machineTimerInterrupt=>'0',
 		machineSoftwareInterrupt=>'0',
@@ -189,16 +166,17 @@ BEGIN
 	    END IF;
 	END PROCESS;    
 	
-	PROCESS(hselram, hselflash, hselgpio, hseluart, curr_bus_state, coreReadReq, coreWriteReq, busFAULT)
+	--Change: Now, the activation list is composed of internal signal, not of outputs
+	PROCESS(selRAM, selFLASH, selGPIO, selUART, curr_bus_state, coreReadReq, coreWriteReq, busFAULT)
 	BEGIN
 	    CASE curr_bus_state IS
 	        WHEN S_IDLE=>
 	            htrans<="00";
 	            IF busFAULT='1' THEN
 	                next_bus_state<=S_BUS_FAULT;
-	            ELSIF( coreReadReq='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
+	            ELSIF( coreReadReq='1' AND ( (selRAM AND (coreReadReq OR coreWriteReq))= '1' OR (selFLASH AND (coreReadReq OR coreWriteReq)) = '1' OR (selGPIO AND (coreReadReq OR coreWriteReq)) = '1' OR (selUART AND (coreReadReq OR coreWriteReq)) = '1' ) ) THEN
 	                next_bus_state<=S_READ;
-	            ELSIF( coreWriteReq='1' AND (hselram='1' OR hselflash='1' OR hselgpio='1' OR hseluart='1') ) THEN
+	            ELSIF( coreWriteReq='1' AND ( (selRAM AND (coreReadReq OR coreWriteReq))= '1' OR (selFLASH AND (coreReadReq OR coreWriteReq)) = '1' OR (selGPIO AND (coreReadReq OR coreWriteReq)) = '1' OR (selUART AND (coreReadReq OR coreWriteReq)) = '1' ) ) THEN
 	                next_bus_state<=S_WRITE;
 	            ELSE
 	                next_bus_state<=S_IDLE;
@@ -235,23 +213,23 @@ BEGIN
     
     --DECODER, target peripheral selection
     --######################################
-    PROCESS(haddr)
+    PROCESS(haddr_signal)
     BEGIN
-        IF( (UNSIGNED(haddr(busAddressWidth-1 DOWNTO 0))<INSTRUCTIONS_END) OR 
-            (UNSIGNED(haddr(busAddressWidth-1 DOWNTO 0))>=DATA_START
-            AND UNSIGNED(haddr)<DATA_END)
+        IF( (UNSIGNED(haddr_signal(busAddressWidth-1 DOWNTO 0))<INSTRUCTIONS_END) OR 
+            (UNSIGNED(haddr_signal(busAddressWidth-1 DOWNTO 0))>=DATA_START
+            AND UNSIGNED(haddr_signal)<DATA_END)
           ) THEN
             selRAM<='1'; 
             selGPIO<='0';
             selUART<='0';
-        ELSIF( (UNSIGNED(haddr(busAddressWidth-1 DOWNTO 0))>=GPIO_START) AND 
-               (UNSIGNED(haddr(busAddressWidth-1 DOWNTO 0))<GPIO_END) 
+        ELSIF( (UNSIGNED(haddr_signal(busAddressWidth-1 DOWNTO 0))>=GPIO_START) AND 
+               (UNSIGNED(haddr_signal(busAddressWidth-1 DOWNTO 0))<GPIO_END) 
           ) THEN
             selRAM<='0';
             selGPIO<='1';
             selUART<='0';
-        ELSIF( (UNSIGNED(haddr(busAddressWidth-1 DOWNTO 0))>=UART_START) AND 
-               (UNSIGNED(haddr(busAddressWidth-1 DOWNTO 0))<UART_END)
+        ELSIF( (UNSIGNED(haddr_signal(busAddressWidth-1 DOWNTO 0))>=UART_START) AND 
+               (UNSIGNED(haddr_signal(busAddressWidth-1 DOWNTO 0))<UART_END)
           ) THEN
             selRAM<='0';
             selGPIO<='0';

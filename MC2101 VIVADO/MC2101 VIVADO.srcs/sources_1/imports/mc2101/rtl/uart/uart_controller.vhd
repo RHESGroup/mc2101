@@ -44,8 +44,10 @@ ENTITY uart_controller IS
 	PORT (
 	    clk         :IN STD_LOGIC;
 	    rst         :IN STD_LOGIC;
+	    --Input signals
 	    chip_select :IN  STD_LOGIC;
 		request     :IN  STD_LOGIC;
+		--Output signals
 	    uart_read   :OUT STD_LOGIC;
 	    uart_write  :OUT STD_LOGIC;
 	    uart_ready  :OUT STD_LOGIC;

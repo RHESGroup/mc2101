@@ -190,7 +190,13 @@ ARCHITECTURE behavior OF mc2101 IS
     SIGNAL gpio_interrupt: STD_LOGIC;  
     SIGNAL uart_interrupt: STD_LOGIC; 
     
+    
+    --POSITIVE RESET(to follow AMBA AHB protocol). The system has an active-low reset, but each component has an active-high reset
+    SIGNAL rst_pos : STD_LOGIC;
+    
 BEGIN
+
+    rst_pos <= NOT sys_rst_n;
 
     AFTAB: core_bus_wrap
     GENERIC MAP(
@@ -199,7 +205,7 @@ BEGIN
 	) 
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>NOT(sys_rst_n),
+		rst=>rst_pos,
 		hready=>hready,
 		hresp=>hresp,
 		hrdata=>hrdata,
@@ -221,7 +227,7 @@ BEGIN
 	)  
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>NOT(sys_rst_n),
+		rst=>rst_pos,
 		htrans=>htrans,
 		hselx=>hselram,
 		hwrite=>hwrite,
@@ -243,7 +249,7 @@ BEGIN
 	) 
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>NOT(sys_rst_n),
+		rst=>rst_pos,
 		htrans=>htrans,
 		hselx=>hselgpio,
 		hwrite=>hwrite,
@@ -263,7 +269,7 @@ BEGIN
 	)
 	PORT MAP(
 		clk=>sys_clk,
-		rst=>NOT(sys_rst_n),
+		rst=>rst_pos,
 		htrans=>htrans,
 		hselx=>hseluart,
 		hwrite=>hwrite,
