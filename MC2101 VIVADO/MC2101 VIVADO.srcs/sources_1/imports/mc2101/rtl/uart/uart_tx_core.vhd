@@ -180,7 +180,7 @@ BEGIN
         tx_ready<='1';
         CASE current_state IS
             WHEN S_IDLE=>
-                --start transmission when there is a data ready
+                --start transmission when there is data ready
                 IF tx_valid='1' THEN
                     next_state<=S_START_BIT;
                     sample_data_in<='1'; --register input data

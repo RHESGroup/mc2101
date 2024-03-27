@@ -75,7 +75,7 @@ ARCHITECTURE behavior OF ssram IS
 	VARIABLE end_iram : INTEGER := 16#FFFFF#;
     BEGIN
         file_open(f, filename, read_mode);
-        for index in MEMORY'range loop
+        for index in MEMORY'range loop  
             IF ENDFILE(f) THEN
                 exit;
             END IF;

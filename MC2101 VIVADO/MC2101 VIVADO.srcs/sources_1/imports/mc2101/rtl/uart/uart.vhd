@@ -88,16 +88,16 @@ ARCHITECTURE behavior of uart IS
     
     -- Interrupt Status Register -- Address : 0001 -- Access type: R
     -- ISR(3:0): Interrupt Indentification Code & Interrupt status 
-    -- ISR(4): DMA Rx END
-    -- ISR(5): DMA Tx END
-    -- ISR(6): FIFOs enabled
-    -- ISR(7): FIFOs enabled 
+    -- ISR(4): DMA Rx END --Not implemented
+    -- ISR(5): DMA Tx END --Not implemented
+    -- ISR(6): FIFOs enabled --Not implemented
+    -- ISR(7): FIFOs enabled --Not implemented
     SIGNAL reg_ISR : STD_LOGIC_VECTOR(7 DOWNTO 0); --Change: New register...see UART Protocol
     SIGNAL read_ISR: STD_LOGIC;
     
     
     --Fifo control register -- Address: 0010 -- Access type: W
-    --FCR(0): FIFO enable
+    --FCR(0): FIFO enable --Not currently used -- FIFOs are always enabled
     --FCR(1): Rx FIFO Reset
     --FCR(2): Tx FIFO Reset
     --FCR(3): DMA mode --Not currently used
@@ -127,7 +127,7 @@ ARCHITECTURE behavior of uart IS
     --LSR(4): Break interrupt
     --LSR(5): THR empty
     --LSR(6): Transmitter empty
-    --LSR(7): FIFO data error                               
+    --LSR(7): FIFO data error -- Not used                            
     SIGNAL reg_LSR: STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL read_LSR: STD_LOGIC;
     
@@ -394,7 +394,7 @@ BEGIN
             --LSR's Data Ready
             reg_LSR(0)<=NOT(rx_fifo_empty); 
             
-            --LSR's overrun error: -- Overrun errors occur when another byte of data arrives even before the previous data has not been read
+            --LSR's overrun error: -- Overrun errors occur when another byte of data arrives even before the previous data has been read
             IF read_LSR='1' THEN
                 reg_LSR(1)<='0';
             ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN 
