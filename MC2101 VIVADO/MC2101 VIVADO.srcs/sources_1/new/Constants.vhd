@@ -74,5 +74,8 @@ PACKAGE Constants IS
     --Constants related to testbenches
     CONSTANT ClockPeriod :            TIME := 20 ns;
     CONSTANT Number_BitsLFSR :        INTEGER := 20;
+
+	--Constants related to the BRAM
+	CONSTANT Physical_size :          INTEGER := 14;
 END Constants;
 
