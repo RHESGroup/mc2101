@@ -1,11 +1,11 @@
 -- **************************************************************************************
---	Filename:	ssram_controller.vhd
+--	Filename:	bram_controller.vhd
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		9 Sep 2022
+--	Date:		3 April 2024
 --
--- Copyright (C) 2022 CINI Cybersecurity National Laboratory
+-- Copyright (C) 2024 CINI Cybersecurity National Laboratory
 --
 -- This source file may be used and distributed without
 -- restriction provided that this copyright statement is not
@@ -31,7 +31,7 @@
 -- **************************************************************************************
 --
 --	File content description:
---	ssram hbus peripheral controller
+--	BRAM controller
 --
 -- **************************************************************************************
 LIBRARY IEEE;
@@ -40,7 +40,7 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
 
-ENTITY ssram_controller IS 
+ENTITY bram_controller IS 
 	PORT (
 	    --system signals
 		clk           : IN  STD_LOGIC;
@@ -48,17 +48,18 @@ ENTITY ssram_controller IS
 		--input
 		chip_select   : IN  STD_LOGIC;
 		request       : IN  STD_LOGIC;
+		is_busy       : IN STD_LOGIC; 
 		--output
-		memRead       : OUT STD_LOGIC;
+		enable        : OUT STD_LOGIC; --new signal
 		memWrite      : OUT STD_LOGIC;
 		memResponse   : OUT STD_LOGIC;
 		memReady      : OUT STD_LOGIC
 	);
-END ssram_controller;
+END bram_controller;
 
-ARCHITECTURE behavior OF ssram_controller IS
+ARCHITECTURE behavior OF bram_controller IS
 
-    TYPE statetype IS (IDLE, MEM_WR, MEM_RD);
+    TYPE statetype IS (IDLE, MEM_BUSY);
     SIGNAL next_state, current_state: statetype;
     SIGNAL readReq, writeReq: STD_LOGIC;
 
@@ -76,44 +77,39 @@ BEGIN
     readReq<=chip_select and (not request);
     writeReq<=chip_select and request;
     
-    PROCESS(readReq, writeReq, current_state)
+    PROCESS(readReq, writeReq, current_state, is_busy)
     BEGIN
         --memResponse is always 0 (no data integrity check or write protection mechanisms)
         memResponse<='0';
+        enable<='0';
+        memWrite<='0';
+        memReady <= '0';
+        next_state <= current_state;
         CASE current_state IS
             WHEN IDLE=>
-                memRead<='0';
+                enable<='0';
                 memWrite<='0';
-                memReady<='1';
-                IF readReq= '1' THEN
-                    next_state<=MEM_RD;
-                    memRead<='1';
-                ELSIF writeReq='1' THEN
-                    next_state<=MEM_WR;
-                    memWrite<='1';
-                ELSE
+                memReady <= '0';
+                IF is_busy = '0' THEN --The memory can be accessed
+                    IF readReq= '1' THEN
+                        next_state<=MEM_BUSY;
+                        enable <= '1';                   
+                    ELSIF writeReq='1' THEN
+                        next_state<=MEM_BUSY;
+                        memWrite <= '1';
+                        enable <= '1';
+                    END IF;
+                ELSE --The memory shouldn't be accessed when this signal is asserted
                     next_state<=IDLE;
                 END IF;
-            WHEN MEM_RD=>
-                memReady<='1';
-                memWrite<='0';
-                IF readReq='1' THEN
-                    next_state<=MEM_RD;
-                    memRead<='1';
-                ELSE
+            WHEN MEM_BUSY=>
+                IF is_busy = '1' THEN
+                    next_state<=MEM_busy;                  
+                ELSE --The process is done -- --The memory can be accessed
                     next_state<=IDLE;
-                    memRead<='0';
+                    memReady <= '1';
                 END IF;
-            WHEN MEM_WR=>
-                memReady<='1';
-                memRead<='0';
-                IF writeReq='1' THEN
-                    next_state<=MEM_WR;
-                    memWrite<='1';
-                ELSE
-                    next_state<=IDLE;
-                    memWrite<='0';
-                END IF;
+
         END CASE;
     END PROCESS;
 

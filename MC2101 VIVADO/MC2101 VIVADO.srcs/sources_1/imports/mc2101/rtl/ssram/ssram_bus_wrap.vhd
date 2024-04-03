@@ -3,9 +3,9 @@
 --	Project:	CNL_RISC-V
 --  Version:	1.0
 --	History:
---	Date:		9 Sep 2022
+--	Date:		3 April 2024
 --
--- Copyright (C) 2022 CINI Cybersecurity National Laboratory
+-- Copyright (C) 2024 CINI Cybersecurity National Laboratory
 --
 -- This source file may be used and distributed without
 -- restriction provided that this copyright statement is not
@@ -31,7 +31,7 @@
 -- **************************************************************************************
 --
 --	File content description:
---	ssram hbus peripheral wrapper
+--	BRAM wrapper
 --
 -- **************************************************************************************
 LIBRARY IEEE;
@@ -40,10 +40,11 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
 
 
-ENTITY ssram_bus_wrap IS
+ENTITY Mem_wrapper IS
 	GENERIC (
 		busDataWidth      : INTEGER := 8;
-		busAddressWidth   : INTEGER := 32
+		busAddressWidth   : INTEGER := 32;
+		Physical_size     : INTEGER := 14
 	);  
 	PORT (
 	    --system signals
@@ -58,39 +59,25 @@ ENTITY ssram_bus_wrap IS
 		--slave driven signals
 		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
 		hready        : OUT STD_LOGIC;
-		hresp         : OUT STD_LOGIC
+		hresp         : OUT STD_LOGIC;
+		---BRAM connections
+        data_from_BRAM: IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		is_busy       : IN  STD_LOGIC;
+		enable        : OUT STD_LOGIC;
+		write_enable  : OUT STD_LOGIC;	
+	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); 
+	    address_bram  : OUT  STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0)
 	);
-END ssram_bus_wrap;
+END Mem_wrapper;
 
 
-ARCHITECTURE behavior OF ssram_bus_wrap IS
+ARCHITECTURE behavior OF Mem_wrapper IS
 
-    --ssram
-    COMPONENT ssram IS
-	GENERIC (
-		dataWidth      : INTEGER :=8;
-		addressWidth   : INTEGER :=13
-	);  
-	PORT (
-		clk           : IN  STD_LOGIC;
-		readMem       : IN  STD_LOGIC;
-		writeMem      : IN  STD_LOGIC;
-		address       : IN  STD_LOGIC_VECTOR (addressWidth - 1 DOWNTO 0);
-		dataIn     	  : IN  STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0);
-		dataOut       : OUT STD_LOGIC_VECTOR (dataWidth -1 DOWNTO 0)
-	);
-    END COMPONENT;
-    
-    SIGNAL readMem: STD_LOGIC;
-    SIGNAL writeMem: STD_LOGIC;
-    SIGNAL dataOut: STD_LOGIC_VECTOR (busDataWidth -1 DOWNTO 0);
-    SIGNAL ready: STD_LOGIC;
     --The actual physical size of the ram is 2**14 (16 KB)
-    CONSTANT PHSIZE: integer:=14;
-    SIGNAL phyaddr: STD_LOGIC_VECTOR(PHSIZE-1 DOWNTO 0);
+    SIGNAL phyaddr: STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
     
     --controller
-    COMPONENT ssram_controller IS 
+    COMPONENT bram_controller IS 
 	PORT (
 	    --system signals
 		clk           : IN  STD_LOGIC;
@@ -98,57 +85,56 @@ ARCHITECTURE behavior OF ssram_bus_wrap IS
 		--input
 		chip_select   : IN  STD_LOGIC;
 		request       : IN  STD_LOGIC;
+		is_busy       : IN STD_LOGIC; 
 		--output
-		memRead       : OUT STD_LOGIC;
+		enable        : OUT STD_LOGIC; --new signal
 		memWrite      : OUT STD_LOGIC;
 		memResponse   : OUT STD_LOGIC;
 		memReady      : OUT STD_LOGIC
 	);
     END COMPONENT;
     
-    SIGNAL chip_select: STD_LOGIC;
-    SIGNAL request: STD_LOGIC;
-    
-    
+    SIGNAL internal_MC2101_BRAM, internal_BRAM_MC2101  : STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); 
+            
 BEGIN
 
-    memory: ssram
-	GENERIC MAP(
-		dataWidth      => busDataWidth,
-		addressWidth   => PHSIZE
-	)  
-	PORT MAP(
-		clk            =>clk,
-		readMem        =>readMem,
-		writeMem       =>writeMem,
-		address        =>phyaddr,
-		dataIn     	   =>hwrdata,
-		dataOut        =>dataOut		   
-	);
     
-    controller: ssram_controller 
+    
+    controller: bram_controller 
 	PORT MAP(
+	    --system signals
 		clk            =>clk,
 		rst            =>rst,
+		--input
 		chip_select    =>hselx,
 		request        =>hwrite,
-		memRead        =>readMem,
-		memWrite       =>writeMem,
+		is_busy        =>is_busy,
+		--output
+		enable         =>enable,
+		memWrite       =>write_enable,
 		memResponse    =>hresp, 
 		memReady       =>hready
 	);
 
-    hrdata   <= dataOut;
+    --Internal connections
+    internal_MC2101_BRAM <= hwrdata; 
+    data_to_BRAM <= internal_MC2101_BRAM; --This goes to the BRAM
     
-    --Viritual address to physical address
+    internal_BRAM_MC2101 <= data_from_BRAM;
+    hrdata <= internal_BRAM_MC2101; --This comes from the BRAM
+
+   
+    --Virtual address to physical address
     PROCESS(haddr)
     BEGIN
         IF haddr(20)='1' THEN
             --r/w to stack or data
-            phyaddr<='1' & haddr(PHSIZE-2 DOWNTO 0);
+            phyaddr<='1' & haddr(Physical_size-2 DOWNTO 0);
         ELSE
-            phyaddr<=haddr(PHSIZE-1 DOWNTO 0);
+            phyaddr<=haddr(Physical_size-1 DOWNTO 0);
         END IF;
     END PROCESS;
+    
+    address_bram <= phyaddr; --New address to access the BRAM
 
 END behavior;

@@ -38,23 +38,31 @@ LIBRARY IEEE;
 LIBRARY STD;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.NUMERIC_STD.ALL;
+USE work.Constants.ALL;
 
 ENTITY mc2101 IS
+    GENERIC( Physical_size     : INTEGER := Physical_size;
+    		 busDataWidth      : INTEGER := dataWidth ;
+		     busAddressWidth   : INTEGER := addressWidth
+    );
 	PORT(
 	    sys_clk     : IN  STD_LOGIC;
 	    sys_rst_n   : IN  STD_LOGIC;
 	    gpio_pads   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 	    uart_rx     : IN  STD_LOGIC;
-	    uart_tx     : OUT std_logic 
+	    uart_tx     : OUT std_logic;
+	    --Signals associated with the BRAM
+	    address_bram  : OUT  STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
+	    write_enable  : OUT STD_LOGIC;
+	    enable        : OUT STD_LOGIC;
+	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+	    data_from_BRAM :IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+	    is_BRAM_busy : IN STD_LOGIC
 	);
 END mc2101;
 
 
 ARCHITECTURE behavior OF mc2101 IS
-
-    --BUS CONFIGURATION
-    CONSTANT busDataWidth: INTEGER:=8;
-    CONSTANT busAddressWidth: INTEGER:=32;
 
     --MASTER INTERFACE
     COMPONENT core_bus_wrap IS
@@ -86,10 +94,11 @@ ARCHITECTURE behavior OF mc2101 IS
     END COMPONENT;
     
     --SLAVES INTERFACE
-    COMPONENT ssram_bus_wrap IS
+    COMPONENT Mem_wrapper IS
 	GENERIC (
 		busDataWidth      : INTEGER := 8;
-		busAddressWidth   : INTEGER := 32
+		busAddressWidth   : INTEGER := 32;
+		Physical_size     : INTEGER := 14
 	);  
 	PORT (
 	    --system signals
@@ -104,7 +113,14 @@ ARCHITECTURE behavior OF mc2101 IS
 		--slave driven signals
 		hrdata        : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
 		hready        : OUT STD_LOGIC;
-		hresp         : OUT STD_LOGIC
+		hresp         : OUT STD_LOGIC;
+		---BRAM connections
+        data_from_BRAM: IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+		is_busy       : IN  STD_LOGIC;
+		enable        : OUT STD_LOGIC;
+		write_enable  : OUT STD_LOGIC;	
+	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); 
+	    address_bram  : OUT  STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0)
 	);
     END COMPONENT;
     
@@ -220,27 +236,39 @@ BEGIN
 		platInterrupts=>platInterrupts
     );
     
-    SRAM: ssram_bus_wrap
-	GENERIC MAP(
-		busDataWidth=>busDataWidth,
-		busAddressWidth=>busAddressWidth
-	)  
-	PORT MAP(
-		clk=>sys_clk,
-		rst=>rst_pos,
-		htrans=>htrans,
-		hselx=>hselram,
-		hwrite=>hwrite,
-		hwrdata=>hwrdata,
-		haddr=>haddr,
-		hrdata=>ssram_hrdata,
-		hready=>ssram_hready,
-		hresp=>ssram_hresp
-	);
-	
 	platInterrupts(0)<=gpio_interrupt;
 	platInterrupts(1)<=uart_interrupt;
 	platInterrupts(15 DOWNTO 2)<=(OTHERS=>'0');
+	
+	
+	BRAM: Mem_wrapper
+    GENERIC MAP (
+		busDataWidth => busDataWidth,
+		busAddressWidth => busAddressWidth,
+		Physical_size => Physical_size
+	)
+	PORT MAP(
+	    --system signals
+		clk => sys_clk,
+		rst => rst_pos,
+		--master driven signals
+		htrans => htrans,
+		hselx => hselram,
+		hwrite => hwrite,
+		hwrdata => hwrdata,
+		haddr => haddr,
+		--slave driven signals
+		hrdata => hrdata,
+		hready => hready,
+		hresp => hresp,
+		---BRAM connections
+        data_from_BRAM => data_from_BRAM,
+		is_busy => is_BRAM_busy,
+		enable => enable,
+		write_enable => write_enable,
+	    data_to_BRAM => data_to_BRAM,
+	    address_bram => address_bram
+	);
 	
 	GPIO: gpio_bus_wrap
 	GENERIC MAP(
