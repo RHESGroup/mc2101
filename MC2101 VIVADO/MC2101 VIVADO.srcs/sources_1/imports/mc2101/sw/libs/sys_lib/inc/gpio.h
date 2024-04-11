@@ -1,8 +1,8 @@
 /**
  * @file  gpio.h
- * @version 1.0 
- * @date 9 Sep, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
+ * @version 2.0 
+ * @date 11 April, 2024
+ * @copyright Copyright (C) 2024 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains

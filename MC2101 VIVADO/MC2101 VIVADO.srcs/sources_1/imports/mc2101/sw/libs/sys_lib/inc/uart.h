@@ -1,8 +1,8 @@
 /**
  * @file  uart.h
- * @version 1.0 
- * @date 9 Sep, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
+ * @version 2.0 
+ * @date 11 April, 2024
+ * @copyright Copyright (C) 2024 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains
@@ -61,6 +61,13 @@
 /**THR ADDRESS*/
 #define UART_THR              ( UART_BASE_ADDR + 0x7 )
 
+/**PRESCALER ADDRESS*/                
+#define UART_PRESCALER        ( UART_BASE_ADDR + 0x8 )
+
+/**MCR ADDRESS*/
+#define UART_MCR              ( UART_BASE_ADDR + 0x9 )
+
+
 /** @} */
 
 /**
@@ -68,32 +75,38 @@
  * @{
  */
  
- /**PADDIR*/
+ /**Interrupt Enable Register(IER)*/
  #define  IER                 REGP8(UART_IER)
  
- /**PADIN*/
+ /**Interrupt Status Register(ISR)*/
  #define  ISR                 REGP8(UART_ISR)
  
- /**PADOUT*/
+ /**FIFO Control Register(FCR)*/
  #define  FCR                 REGP8(UART_FCR)
  
- /**PADOUT*/
+ /**Line Control Register(LCR)*/
  #define  LCR                 REGP8(UART_LCR)
  
- /**INTEN*/
+ /**Line Status Register(LSR)*/
  #define  LSR                 REGP8(UART_LSR)
  
- /**INTTYPE0*/
+ /**Divisor Latch Register(DLL)*/
  #define  DLL                 REGP8(UART_DLL)
  
- /**INTTYPE1*/
+ /**Divisor Latch Register(DLM)*/
  #define  DLM                 REGP8(UART_DLM)
  
- /**INTSTATUS*/
+ /**Receiver Holding Register(RHR)*/
  #define  RHR                 REGP8(UART_RHR)
  
- /**INTSTATUS*/
+ /**Tranmsitter Holding Register(THR)*/
  #define  THR                 REGP8(UART_THR)
+
+/**Prescaler Division Register(PRESCALER)*/
+ #define  PRESCALER           REG8(UART_PRESCALER)
+
+/**Modem Control Register(MCR)*/
+ #define  MCR                 REG8(UART_MCR)
  
  /** @} */
  
@@ -127,26 +140,32 @@
  #define WORD_LENGTH_5             0x0
  #define WORD_LENGTH_6             0x1
  #define WORD_LENGTH_7             0x2
- #define WORD_LENGTH_8             0x3
+ #define WORD_LENGTH_8             0x3 
  #define STOP_BIT_LENGTH_1         0x0
  #define STOP_BIT_LENGTH_2         0x1
  #define PARITY_ON                 0x1
  #define PARITY_OFF                0x0
  #define PARITY_EVEN               0x1
  #define PARITY_ODD                0x0
+ #define TEST_MODE                 0x1
+ #define NORMAL_MODE               0x0
+        
 
  /** @} */
+
+
+  /** @} */
  
  /**
- * @defgroup UART divisor values for standard baudrates (50MHz clock reference)
+ * @defgroup UART divisor values for standard baudrates (50MHz clock reference) when PRESCALER = 0
  * @{
  */
- 
- #define UART_DIV_BR_1200          41666
- #define UART_DIV_BR_9600          5207
- #define UART_DIV_BR_19200         2603
- #define UART_DIV_BR_57600         867
- #define UART_DIV_BR_115200        433
+  #define DEFAULT_PRESCALER         0
+  #define UART_DIV_BR_1200          41666
+  #define UART_DIV_BR_9600          5207
+  #define UART_DIV_BR_19200         2603
+  #define UART_DIV_BR_57600         867
+  #define UART_DIV_BR_115200        433
  
  /** @} */
  
@@ -164,13 +183,17 @@
                     uint8_t stop_bits, 
                     uint8_t parity_enable, 
                     uint8_t even_parity,  
-                    uint16_t divisor);
+                    uint16_t divisor,
+                    uint8_t prescaler);
+
  
  /**
  * @brief used to read the LCR register (used for uart configuration)
  * @return uart's current LCR value
  */
  uint8_t uart_get_cfg (void);
+
+
  
  /**
  * @brief used for peripheral interrupt configuration, set IER bits
@@ -179,52 +202,69 @@
  * @param rls: receiver line status (rx line error notification) interrupt enable
  */
  void uart_set_int_en(uint8_t dr, uint8_t thre, uint8_t rls);
+
+
  
  /**
  * @brief used to read the IER register (Interrupt Enable Register)
  * @return uart's current IER value
  */
  uint8_t uart_get_int_en (void);
+
  
  /**
  * @brief reset rx fifo
  */
  void uart_rx_rst (void);
+
+
  
  /**
  * @brief reset tx fifo
  */
  void uart_tx_rst (void);
+
+
  
  /**
  * @brief set rx fifo trigger level, FCR register
  * @param trig_lv: 0 (1 char), 1 (4 char), 2 (8 char), 3 (14 char)
  */
  void uart_set_trigger_lv(uint8_t trig_lv);
+
+
  
  /**
  * @brief used to read the LSR register (Line Status Register)
  * @return uart's current LSR value
  */
  uint8_t uart_get_lsr (void);
+
+
  
  /**
  * @brief used to read the ISR register (Interrupt Status Register)
  * @return uart's current ISR value
  */
  uint8_t uart_get_isr (void);
+
+
  
  /**
  * @brief send char on tx line
  * @param c: character to be transmitted (ASCII)
  */
  void uart_sendchar (const char c);
+
+
  
  /**
  * @brief get char received
  * @return character received (ASCII)
  */
  char uart_getchar (void);
+
+
  
  /**
  * @brief send a string on uart tx line
@@ -232,11 +272,47 @@
  * @param len: text size
  */
  void uart_send (const char *str, unsigned int len);
+
+ 
  
  /**
  * @brief uart Interrupt handler (weak procedure)
  */
  void ISR_UART(void);
+
+
+  /**
+ * @brief controls the mode of the UART(Normal or Testing)
+ * @param mode: mode of the UART(1 = Testing - 0 = Normal)
+ */
+ void uart_mode (uint8_t mode);
+
+  /**
+ * @brief used to read the MCR register (Modem Control Register)
+ * @return uart's current MCR value
+ */
+ uint8_t uart_get_mcr (void);
+
+
+  /**
+ * @brief used to read the DLL register (Divisor Latch Register)
+ * @return uart's current DLL value
+ */
+ uint8_t uart_get_dll(void);
+
+
+  /**
+ * @brief used to read the DLM register (Divisor Latch Register)
+ * @return uart's current DLM value
+ */
+ uint8_t uart_get_dlm(void);
+
+
+  /**
+ * @brief used to read the PRESCALER register (PRescaler Register)
+ * @return uart's current PRESCALER value
+ */
+ uint8_t uart_get_prescaler(void);
  
  #endif
  
