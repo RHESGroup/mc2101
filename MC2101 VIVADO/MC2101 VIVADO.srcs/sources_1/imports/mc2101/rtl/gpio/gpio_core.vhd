@@ -74,7 +74,7 @@ END gpio_core;
 ARCHITECTURE behavior OF gpio_core IS
 
     --GPIO REGISTERS
-    SIGNAL PADDIR    : STD_LOGIC_VECTOR(31 DOWNTO 0); --Control the direction of each of the GPIO pads
+    SIGNAL PADDIR    : STD_LOGIC_VECTOR(31 DOWNTO 0); --Controls the direction of each of the GPIO pads
     SIGNAL PADIN     : STD_LOGIC_VECTOR(31 DOWNTO 0); --Saves the input values coming from input pins
     SIGNAL PADOUT    : STD_LOGIC_VECTOR(31 DOWNTO 0); --Drives the output lines with its content
     SIGNAL PADINTEN  : STD_LOGIC_VECTOR(31 DOWNTO 0); --Interrupt enable bits for input lines
@@ -114,7 +114,7 @@ BEGIN
         END IF;
     END PROCESS;
     
-    --CHANGED Juan: Now the clock is the only thing checked by the elsif and there is another inner if statement. This causes more logic levels, but assures that any simulator/synthetizer can understand 
+    --CHANGED Juan: Now the clock is the only thing checked by the elsif and there is another inner if statement. This causes more logic levels, but ensures that any simulator/synthetizer can understand 
     --USER WRITABLE REGISTERS UPDATE
     PROCESS(clk, rst)
     BEGIN
@@ -187,7 +187,7 @@ BEGIN
     levels0<=NOT(PADIN) AND (INTTYPE0 AND (NOT(INTTYPE1)));
     interrupts<= (risings OR fallings OR levels1 OR levels0) AND PADINTEN;
     
-    --CHANGED Juan: Now the clock is the thing only checked by the elsif and there is another inner if statement. This causes more logic levels, but assures that any simulator/synthetizer can understand 
+    --CHANGED Juan: Now the clock is the thing only checked by the elsif and there is another inner if statement. This causes more logic levels, but ensures that any simulator/synthetizer can understand 
     --UPDATE INTERRUPT STATUS REGISTER
     --ASSERT INTERRUPT LINE
     PROCESS(clk, rst)

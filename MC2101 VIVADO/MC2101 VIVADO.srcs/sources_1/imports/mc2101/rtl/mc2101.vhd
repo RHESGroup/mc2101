@@ -258,9 +258,9 @@ BEGIN
 		hwrdata => hwrdata,
 		haddr => haddr,
 		--slave driven signals
-		hrdata => hrdata,
-		hready => hready,
-		hresp => hresp,
+		hrdata => ssram_hrdata,
+		hready => ssram_hready,
+		hresp => ssram_hresp,
 		---BRAM connections
         data_from_BRAM => data_from_BRAM,
 		is_busy => is_BRAM_busy,

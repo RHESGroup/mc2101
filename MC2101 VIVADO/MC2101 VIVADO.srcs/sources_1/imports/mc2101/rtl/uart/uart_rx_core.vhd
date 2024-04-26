@@ -48,7 +48,7 @@ ENTITY uart_rx_core IS
 		divisor         : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);--divisor value for baudrate 
 		prescaler       : IN  STD_LOGIC_VECTOR(3 DOWNTO 0); --prescaler divisor for baudrate
 		parity_bit_en   : IN  STD_LOGIC;  --enable for parity bit
-		parity_type     : IN  STD_LOGIC;  --even(0) or odd parity check 
+		parity_type     : IN  STD_LOGIC;  --even(1) or odd parity check 
 		data_width      : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --data bits in the frame can be on 5,6,7,8 bits
 		stop_bits       : IN  STD_LOGIC;  --number of stop bits (0 == 1 stop bit) (1 == 2 stop bits)
 		rx_in_async     : IN  STD_LOGIC; --RX line
@@ -290,7 +290,7 @@ BEGIN
                     data_received(3) XOR 
                     data_received(2) XOR 
                     data_received(1) XOR 
-                    data_received(0) XOR (parity_type); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
+                    data_received(0) XOR (NOT(parity_type)); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
     
     
     rx_data_buffer <= data_received; 

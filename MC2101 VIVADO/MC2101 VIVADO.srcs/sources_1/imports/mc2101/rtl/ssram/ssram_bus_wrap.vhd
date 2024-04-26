@@ -98,8 +98,6 @@ ARCHITECTURE behavior OF Mem_wrapper IS
             
 BEGIN
 
-    
-    
     controller: bram_controller 
 	PORT MAP(
 	    --system signals
