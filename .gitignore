@@ -2,3 +2,22 @@ MC2101 VIVADO/MC2101 VIVADO.cache
 MC2101 VIVADO/MC2101 VIVADO.sim/*
 MC2101 VIVADO/compile.bat
 MC2101 VIVADO/MC2101 VIVADO.xpr
+
+# Software build files
+*.bin
+*.dump
+*.memh
+*.elf
+*.gpt
+*.gpth
+*.o
+*.a
+*.dtb
+sw/deps/.patched
+
+
+# Xilinx generated files
+target/xilinx/build
+target/xilinx/out
+target/xilinx/scripts/add_sources.*
+vivado*

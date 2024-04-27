@@ -1,0 +1,45 @@
+package:
+  name: mc2101
+  authors:
+    - "Juan Jose Restrepo : Cybersecurity National Lab"
+
+dependencies:
+  aftab:                 { git: "https://github.com/RHESGroup/aftab.git",               version: 1.0  }
+
+
+export_include_dirs:
+  - hw/include
+
+#Specify all the general sources used in the project
+sources:
+  - hw/gpio/gpio_bus_wrap.vhd
+  - hw/gpio/gpio_controller.vhd
+  - hw/gpio/gpio_core.vhd
+  - hw/gpio/gpio_pads_if.vhd
+  - hw/gpio/gpio.vhd
+  - hw/uart/fifo.vhd
+  - hw/uart/uart_bus_wrap.vhd
+  - hw/uart/uart_controller.vhd
+  - hw/uart/uart_interrupt.vhd
+  - hw/uart/uart_rx_core.vhd
+  - hw/uart/uart_tx_core.vhd
+  - hw/uart/uart.vhd
+  - hw/core_bus_wrap.vhd
+  - hw/mc2101.vhd
+
+
+
+  - target: any(simulation, test)
+    files:
+      - target/sim/models/s25fs512s.v
+      - target/sim/models/24FC1025.v
+      - target/sim/src/vip_cheshire_soc.sv
+      - target/sim/src/tb_cheshire_pkg.sv
+      - target/sim/src/fixture_cheshire_soc.sv
+      - target/sim/src/tb_cheshire_soc.sv
+
+  - target: all(fpga, xilinx)
+    files:
+      - target/xilinx/src/design1.vhd
+      - target/xilinx/src/mc2101_wrapper.vhd
+      

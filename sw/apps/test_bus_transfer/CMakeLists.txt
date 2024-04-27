@@ -1,0 +1,1 @@
+add_application(test_bus_transfer test_bus_transfer.s)

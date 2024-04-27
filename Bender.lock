@@ -1,0 +1,6 @@
+packages:
+  aftab:
+    version: 1.0
+    source:
+      Git: https://github.com/RHESGroup/aftab.git
+
