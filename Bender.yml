@@ -4,7 +4,7 @@ package:
     - "Juan Jose Restrepo : Cybersecurity National Lab"
 
 dependencies:
-  aftab:                 { git: "https://github.com/RHESGroup/aftab.git",               version: 1.0  }
+  AFTAB:                    { git: "https://github.com/RHESGroup/aftab.git",               rev: 8c5d75a582451c7d2022248586bff2b8b270998e }
 
 
 export_include_dirs:
@@ -24,19 +24,14 @@ sources:
   - hw/uart/uart_rx_core.vhd
   - hw/uart/uart_tx_core.vhd
   - hw/uart/uart.vhd
+  - hw/ssram/ssram_controller.vhd
+  - hw/ssram/ssram_bus_wrap.vhd
   - hw/core_bus_wrap.vhd
   - hw/mc2101.vhd
+  - hw/include/Constants.vhd
 
 
 
-  - target: any(simulation, test)
-    files:
-      - target/sim/models/s25fs512s.v
-      - target/sim/models/24FC1025.v
-      - target/sim/src/vip_cheshire_soc.sv
-      - target/sim/src/tb_cheshire_pkg.sv
-      - target/sim/src/fixture_cheshire_soc.sv
-      - target/sim/src/tb_cheshire_soc.sv
 
   - target: all(fpga, xilinx)
     files:
