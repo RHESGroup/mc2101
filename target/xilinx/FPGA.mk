@@ -34,10 +34,6 @@ ip-dir  := xilinx
 
 all: $(bit)
 
-# Generate mcs from bitstream
-$(mcs): $(bit)
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/write_cfgmem.tcl -tclargs $@ $^
-
 $(bit): $(ips)
 	@mkdir -p $(out)
 	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ips/BlockMemGenerator/run.tcl -source scripts/prologue.tcl   -source scripts/run.tcl

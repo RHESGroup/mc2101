@@ -42,7 +42,7 @@ architecture STRUCTURE of mc2101_wrapper is
     RSTA       : IN STD_LOGIC;  --opt port
     ENA        : IN STD_LOGIC;  --opt port
     WEA        : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    ADDRA      : IN STD_LOGIC_VECTOR(addressWidthSRAM-1 DOWNTO 0);
+    ADDRA      : IN STD_LOGIC_VECTOR(Physical_size-1  DOWNTO 0);
     DINA       : IN STD_LOGIC_VECTOR(dataWidthSRAM-1 DOWNTO 0);
     DOUTA      : OUT STD_LOGIC_VECTOR(dataWidthSRAM-1 DOWNTO 0);
     RSTA_BUSY  : OUT STD_LOGIC;
