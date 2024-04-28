@@ -32,7 +32,7 @@ VIVADOFLAGS ?= -nojournal -mode batch
 
 ip-dir  := xilinx
 
-all: $(mcs)
+all: $(bit)
 
 # Generate mcs from bitstream
 $(mcs): $(bit)
@@ -40,10 +40,11 @@ $(mcs): $(bit)
 
 $(bit): $(ips)
 	@mkdir -p $(out)
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/prologue.tcl -source scripts/run.tcl
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ips/BlockMemGenerator/run.tcl -source scripts/prologue.tcl   -source scripts/run.tcl
 	cp $(PROJECT).runs/impl_1/$(PROJECT)* ./$(out)
 
-$(ips):
+
+$(ips): 
 	@echo "Generating IP $(basename $@)"
 	cd $(ip-dir)/$(basename $@) && $(MAKE) clean && $(VIVADOENV) VIVADO="$(VIVADO)" $(MAKE)
 	cp $(ip-dir)/$(basename $@)/$(basename $@).srcs/sources_1/ip/$(basename $@)/$@ $@

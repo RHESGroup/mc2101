@@ -4,6 +4,8 @@
 #
 # Author: Florian Zaruba <zarubaf@iis.ee.ethz.ch>
 
+set current_directory [file normalize [pwd]]
+
 # Ips selection
 switch $::env(BOARD) {
       "pynq-z1" {
@@ -18,14 +20,15 @@ switch $::env(BOARD) {
 
 read_ip $ips
 
+set board $::env(BOARD)
 
 source scripts/add_sources.tcl
 
-set_property mc2101_wrapper [current_fileset]
+add_files -fileset constrs_1 -norecurse $current_directory/constraints/$board.xdc
+
+set_property top mc2101_wrapper [current_fileset]
 
 update_compile_order -fileset sources_1
-
-add_files -fileset constrs_1 -norecurse constraints/$project.xdc
 
 set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
 set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]

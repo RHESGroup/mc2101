@@ -35,6 +35,5 @@ sources:
 
   - target: all(fpga, xilinx)
     files:
-      - target/xilinx/src/design1.vhd
       - target/xilinx/src/mc2101_wrapper.vhd
       
