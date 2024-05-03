@@ -12,19 +12,7 @@ VLOG_ARGS ?= -suppress 2583 -suppress 13314
 VSIM      ?= vsim
 
 # Define used paths (prefixed to avoid name conflicts)
-CHS_ROOT     ?= $(shell $(BENDER) path cheshire)
-CHS_REG_DIR   := $(shell $(BENDER) path register_interface)
-CHS_SLINK_DIR := $(shell $(BENDER) path serial_link)
-CHS_LLC_DIR   := $(shell $(BENDER) path axi_llc)
-
-# Define paths used in dependencies
-OTPROOT      := $(shell $(BENDER) path opentitan_peripherals)
-CLINTROOT    := $(shell $(BENDER) path clint)
-AXIRTROOT    := $(shell $(BENDER) path axi_rt)
-AXI_VGA_ROOT := $(shell $(BENDER) path axi_vga)
-IDMA_ROOT    := $(shell $(BENDER) path idma)
-
-REGTOOL ?= $(CHS_REG_DIR)/vendor/lowrisc_opentitan/util/regtool.py
+AFTAB_ROOT     ?= $(shell $(BENDER) path AFTAB)
 
 ################
 # Dependencies #
@@ -46,20 +34,9 @@ endif
 # Running this target will reset dependencies (without updating the checked-in Bender.lock)
 chs-clean-deps:
 	rm -rf .bender
-	cd $(CHS_ROOT) && git submodule deinit -f sw/deps/printf
+	rm -rf .bender_cache
+    rm -rf .bender_lock
 
-######################
-# Nonfree components #
-######################
-
-CHS_NONFREE_REMOTE ?= git@iis-git.ee.ethz.ch:pulp-restricted/cheshire-nonfree.git
-CHS_NONFREE_COMMIT ?= dafd3c1
-
-chs-nonfree-init:
-	git clone $(CHS_NONFREE_REMOTE) $(CHS_ROOT)/nonfree
-	cd $(CHS_ROOT)/nonfree && git checkout $(CHS_NONFREE_COMMIT)
-
--include $(CHS_ROOT)/nonfree/nonfree.mk
 
 ############
 # Build SW #
@@ -71,44 +48,8 @@ include $(CHS_ROOT)/sw/sw.mk
 # Generate HW #
 ###############
 
-# SoC registers
-$(CHS_ROOT)/hw/regs/cheshire_reg_pkg.sv $(CHS_ROOT)/hw/regs/cheshire_reg_top.sv: $(CHS_ROOT)/hw/regs/cheshire_regs.hjson
-	$(REGTOOL) -r $< --outdir $(dir $@)
 
-# CLINT
-CLINTCORES ?= 1
-include $(CLINTROOT)/clint.mk
-$(CLINTROOT)/.generated:
-	flock -x $@ $(MAKE) clint && touch $@
 
-# OpenTitan peripherals
-include $(OTPROOT)/otp.mk
-$(OTPROOT)/.generated: $(CHS_ROOT)/hw/rv_plic.cfg.hjson
-	flock -x $@ sh -c "cp $< $(dir $@)/src/rv_plic/; $(MAKE) -j1 otp" && touch $@
-
-# AXI RT
-AXIRT_NUM_MGRS ?= 8
-AXIRT_NUM_SUBS ?= 2
-include $(AXIRTROOT)/axirt.mk
-$(AXIRTROOT)/.generated: axirt_regs
-	touch $@
-
-# AXI VGA
-include $(AXI_VGA_ROOT)/axi_vga.mk
-$(AXI_VGA_ROOT)/.generated:
-	flock -x $@ $(MAKE) axi_vga && touch $@
-
-# Custom serial link
-$(CHS_SLINK_DIR)/.generated: $(CHS_ROOT)/hw/serial_link.hjson
-	cp $< $(dir $@)/src/regs/serial_link_single_channel.hjson
-	flock -x $@ $(MAKE) -C $(CHS_SLINK_DIR) update-regs BENDER="$(BENDER)" && touch $@
-
-CHS_HW_ALL += $(CHS_ROOT)/hw/regs/cheshire_reg_pkg.sv $(CHS_ROOT)/hw/regs/cheshire_reg_top.sv
-CHS_HW_ALL += $(CLINTROOT)/.generated
-CHS_HW_ALL += $(OTPROOT)/.generated
-CHS_HW_ALL += $(AXIRTROOT)/.generated
-CHS_HW_ALL += $(AXI_VGA_ROOT)/.generated
-CHS_HW_ALL += $(CHS_SLINK_DIR)/.generated
 
 
 
@@ -140,11 +81,12 @@ CHS_SIM_ALL += $(CHS_ROOT)/target/sim/models/24FC1025.v
 CHS_SIM_ALL += $(CHS_ROOT)/target/sim/vsim/compile.cheshire_soc.tcl
 
 #############
-# VIVADO Flow #
+# FPGA Flow #
 #############
 
-$(CHS_ROOT)/target/xilinx/scripts/add_sources.tcl: Bender.yml
-	$(BENDER) script vivado -t fpga -t cv64a6_imafdcsclic_sv39 -t cva6 > $@
+$(BENDER) script vivado -t fpga  > ${CHS_ROOT}/target/xilinx/scripts/add_sources.tcl
+
+include ${CHS_ROOT}/target/xilinx/FPGA.mk
 
 CHS_XILINX_ALL += $(CHS_ROOT)/target/xilinx/scripts/add_sources.tcl
 

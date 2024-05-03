@@ -31,7 +31,14 @@ sources:
   - hw/include/Constants.vhd
 
 
-
+  - target: simulation
+    files:
+      - target/sim/src/tb_mc2101.vhd
+      - target/sim/src/tb_uart_fifo.vhd
+      - target/sim/src/tb_uart_interrupt.vhd
+      - target/sim/src/tb_uart_tx_core.vhd
+      - target/sim/src/tb_uart_rx_core.vhd
+      - target/sim/src/tb_uart_periph.vhd
 
   - target: all(fpga, xilinx)
     files:

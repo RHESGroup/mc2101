@@ -1,4 +1,7 @@
 #TCL script to create the environment to simulate the uartTX core
+set project_name mc2101
+open_project ${project_name}.xpr
+
 set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
 if {[llength $sets]} {
     puts "The simulation sets are: $sets ";

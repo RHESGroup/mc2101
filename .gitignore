@@ -22,10 +22,11 @@ target/xilinx/out
 target/xilinx/scripts/add_sources.*
 vivado*
 target/xilinx/ips/BlockMemGenerator/blk_mem_gen_0*
+target/sim/ips/BlockMemGenerator/blk_mem_gen_0*
+target/xilinx/.Xil
+target/sim/.Xil
 mc2101*
-
-
-
+utilblk_mem_gen_0.mif
 #Bender files
 .bender
 

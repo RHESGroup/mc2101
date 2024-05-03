@@ -3,6 +3,10 @@ BOARD          = pynq-z1
 XILINX_PORT  ?= 3332
 XILINX_HOST  ?= bordcomputer
 
+BENDER ?= bender
+
+CHS_ROOT ?= $(shell pwd)
+
 
 ifeq ($(BOARD),pynq-z1)
 	XILINX_PART = xc7z020clg400-1
@@ -35,6 +39,7 @@ ip-dir  := xilinx
 all: $(bit)
 
 $(bit): $(ips)
+	$(BENDER) script vivado -t fpga  > ${CHS_ROOT}/scripts/add_sources.tcl
 	@mkdir -p $(out)
 	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ips/BlockMemGenerator/run.tcl -source scripts/prologue.tcl   -source scripts/run.tcl
 	cp $(PROJECT).runs/impl_1/$(PROJECT)* ./$(out)
@@ -45,6 +50,9 @@ $(ips):
 	cd $(ip-dir)/$(basename $@) && $(MAKE) clean && $(VIVADOENV) VIVADO="$(VIVADO)" $(MAKE)
 	cp $(ip-dir)/$(basename $@)/$(basename $@).srcs/sources_1/ip/$(basename $@)/$@ $@
 
+
+update_ips:
+	$(BENDER) update
 
 gui:
 	@echo "Starting $(VIVADO) GUI"
