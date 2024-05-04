@@ -1,6 +1,10 @@
 #TCL script to create the environment to simulate the uartTX core
 set project_name mc2101
+#Open the project only if it is not already running
+if {[catch {current_project } result ]} {
+puts "DEBUG: Project $projectName is not open"
 open_project ${project_name}.xpr
+}
 
 set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
 if {[llength $sets]} {
