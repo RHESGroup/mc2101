@@ -3,6 +3,8 @@ BOARD          = pynq-z1
 XILINX_PORT  ?= 3332
 XILINX_HOST  ?= bordcomputer
 
+
+
 BENDER ?= bender
 
 CHS_ROOT ?= $(shell pwd)
@@ -10,6 +12,8 @@ CHS_ROOT ?= $(shell pwd)
 
 VIVADOENV ?=  PROJECT=$(PROJECT)            \
               BOARD=$(BOARD)                \
+              XILINX_PART=$(XILINX_PART)    \
+              XILINX_BOARD=$(XILINX_BOARD)  \
 
 
 VIVADO ?= vivado
@@ -19,9 +23,14 @@ VIVADOFLAGS ?= -nojournal -mode batch
 
 ip-dir  := xilinx
 
+ifeq ($(BOARD),pynq-z1)
+	XILINX_PART = xc7z020clg400-1
+	XILINX_BOARD = www.digilentinc.com:pynq-z1:part0:1.0
+endif
+
 all: 
 	$(BENDER) script vivado -t simulation  > ${CHS_ROOT}/scripts/add_sources.tcl
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ${CHS_ROOT}/../xilinx/ips/BlockMemGenerator/run.tcl -source ${CHS_ROOT}/../xilinx/scripts/prologue.tcl -source ${CHS_ROOT}/scripts/run.tcl
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ${CHS_ROOT}/ips/BlockMemGenerator/run.tcl -source ${CHS_ROOT}/../xilinx/scripts/prologue.tcl -source ${CHS_ROOT}/scripts/run.tcl
 
 
 sim_uart_fifo: 

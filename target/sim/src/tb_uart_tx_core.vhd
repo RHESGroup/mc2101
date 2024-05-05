@@ -50,14 +50,15 @@ ARCHITECTURE test OF tb_uart_tx_core IS
     --System signals
     SIGNAL clock_s, rst_s : STD_LOGIC := '0';
     --INPUT signals
-    SIGNAL divisor_s : STD_LOGIC_VECTOR(15 DOWNTO 0);
+    SIGNAL divisor_s : STD_LOGIC_VECTOR(15 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL prescaler_s : STD_LOGIC_VECTOR(3 DOWNTO 0) := (OTHERS => '0');
     SIGNAL parity_bit_en_s, parity_type_s, stop_bits_s : STD_LOGIC;
     SIGNAL data_width_s : STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL tx_data_i_s : STD_LOGIC_VECTOR(7 DOWNTO 0);
     --OUTPUT signals
     SIGNAL tx_ready_s, tx_out_s, tx_valid_s : STD_LOGIC; 
     
-    SIGNAL configuration_uart :  STD_LOGIC_VECTOR(20 DOWNTO 0) := (OTHERS => '0'); -- divisor(16 bits) +  parity_bit_en_s(1 bit) + parity_type_s(1 bit) + stop_bits_s(1 bits) + data_width_s(2 bits) 
+    SIGNAL configuration_uart :  STD_LOGIC_VECTOR(24 DOWNTO 0) := (OTHERS => '0'); -- divisor(16 bits) + prescaler(4 bits) +  parity_bit_en_s(1 bit) + parity_type_s(1 bit) + stop_bits_s(1 bits) + data_width_s(2 bits) 
     
     SIGNAL transmission_uart :   STD_LOGIC_VECTOR(7 DOWNTO 0) := (OTHERS => '0');  
     
@@ -85,21 +86,23 @@ BEGIN
 			readline(inputFile, inputline);
 			FOR i IN inputline'RANGE LOOP
 				read(inputline, inputbit);
-				IF inputbit = '1' THEN		
-					IF i > 21 then
-					   transmission_uart(22 + 7 - i)<= '1';
-					ELSE
-					   configuration_uart(21 - i) <= '1';
-					END IF;
-				ELSE
-                    IF i > 21 THEN
-					   transmission_uart(22 + 7 - i)<= '0';
-					ELSE
-					   configuration_uart(21 - i) <= '0';
-					END IF;
-			         
-				END IF;
-			END LOOP; 
+				IF i < 34 THEN
+                    IF inputbit = '1' THEN		
+                        IF i > 25 then
+                           transmission_uart(26 + 7 - i)<= '1';
+                        ELSE
+                           configuration_uart(25 - i) <= '1';
+                        END IF;
+                    ELSE
+                        IF i > 25 THEN
+                           transmission_uart(26 + 7 - i)<= '0';
+                        ELSE
+                           configuration_uart(25 - i) <= '0';
+                        END IF;
+                         
+                    END IF;
+            END IF;    
+            END LOOP; 
 	        WAIT FOR ClockPeriod; --We have to wait until tx_valid_s is read in the IDLE state
 	        tx_valid_s <= '0'; 
 	        WAIT FOR ClockPeriod * (1 + 8 + 1 + 2); --Wait for 1 start bit + message(8 bits) + 1 parity bit + 2 start bits
@@ -109,7 +112,8 @@ BEGIN
 		WAIT;
 	END PROCESS pattern;
 
-    divisor_s <= configuration_uart(20 DOWNTO 5);
+    divisor_s <= configuration_uart(24 DOWNTO 9);
+    prescaler_s <= configuration_uart(8 DOWNTO 5);
     parity_bit_en_s <= configuration_uart(4);
     parity_type_s <= configuration_uart(3);
     stop_bits_s <= configuration_uart(2);
@@ -125,6 +129,7 @@ BEGIN
 		rst => rst_s,
 		--input signals
 		divisor => divisor_s, --divisor value for baudrate
+		prescaler => prescaler_s,
 		parity_bit_en => parity_bit_en_s,  --enable for parity bit
 		parity_type => parity_type_s,  --even(0) or odd parity check 
 		data_width => data_width_s, --data bits in the frame can be on 5,6,7,8 bits

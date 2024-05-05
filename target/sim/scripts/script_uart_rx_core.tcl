@@ -1,10 +1,7 @@
 #TCL script to create the environment to simulate the uartRX core
 set project_name mc2101
-#Open the project only if it is not already running
-if {[catch {current_project } result ]} {
-puts "DEBUG: Project $projectName is not open"
 open_project ${project_name}.xpr
-}
+
 
 set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
 if {[llength $sets]} {
@@ -40,8 +37,6 @@ add_wave {{/tb_uart_rx_core/uart_rx/target_data_bits}}
 add_wave {{/tb_uart_rx_core/uart_rx/start_bit}} 
 add_wave {{/tb_uart_rx_core/uart_rx/current_state}} 
 add_wave {{/tb_uart_rx_core/uart_rx/next_state}} 
-add_wave {{/tb_uart_rx_core/uart_rx/current_data}} 
-add_wave {{/tb_uart_rx_core/uart_rx/next_data}} 
 add_wave {{/tb_uart_rx_core/uart_rx/sample}} 
 
 run 3000ns

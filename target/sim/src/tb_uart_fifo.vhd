@@ -80,11 +80,13 @@ BEGIN
 			readline(inputFile, inputline);
 			FOR i IN inputline'RANGE LOOP
 				read(inputline, inputbit);
-				IF inputbit = '1' THEN		
-                    input_fifo(DATA_WIDTHFIFO + 3 - i) <=  '1';
-				ELSE
-                    input_fifo(DATA_WIDTHFIFO + 3 - i) <=  '0';
-				END IF;
+				IF i < 12 THEN
+                    IF inputbit = '1' THEN		
+                        input_fifo(DATA_WIDTHFIFO + 3 - i) <=  '1';
+                    ELSE
+                        input_fifo(DATA_WIDTHFIFO + 3 - i) <=  '0';
+                    END IF;
+                END IF;
 			END LOOP; 
 	        WAIT FOR ClockPeriod;
 		END LOOP;

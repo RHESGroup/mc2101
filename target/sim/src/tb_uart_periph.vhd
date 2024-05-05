@@ -77,11 +77,13 @@ BEGIN
 			readline(inputFile, inputline);
 			FOR i IN inputline'RANGE LOOP
 				read(inputline, inputbit);
-				IF inputbit = '1' THEN		
-				    input_uart_periph(15 - i) <= '1';
-				ELSE
-                    input_uart_periph(15 - i) <= '0';        
-				END IF;
+				IF i < 16 THEN
+                    IF inputbit = '1' THEN		
+                        input_uart_periph(15 - i) <= '1';
+                    ELSE
+                        input_uart_periph(15 - i) <= '0';        
+                    END IF;
+                END IF;
 			END LOOP; 
 	        WAIT FOR ClockPeriod; 
 		END LOOP;
