@@ -1,8 +1,8 @@
 /**
  * @file  uart.c
- * @version 1.0 
- * @date 9 Sep, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
+ * @version 2.0 
+ * @date 11 April, 2024
+ * @copyright Copyright (C) 2024 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains
@@ -30,19 +30,34 @@
                     uint8_t stop_bits, 
                     uint8_t parity_enable, 
                     uint8_t even_parity,  
-                    uint16_t divisor)
+                    uint16_t divisor,
+                    uint8_t prescaler) //Now, the prescaler is also considered
  {
-    REG8(DLL) = (uint8_t)divisor;
-    REG8(DLM) = (uint8_t)(divisor >> 8);
+    if (divisor < 1) { //We must ensure that the divisor is at least 1
+        REG8(DLL) = 0x01;
+        REG8(DLM) = 0x00;
+    } else {
+        REG8(DLL) = (uint8_t)divisor;
+        REG8(DLM) = (uint8_t)(divisor >> 8);
+    }
+
+    if (prescaler > 15) //We must ensure that the prescaler is maximun 15 because the register only uses 4 bits in reality
+    {
+        REG8(PRESCALER) = 15;
+    } else {
+        REG8(PRESCALER) = prescaler;
+    }
+    
     REG8(LCR) = 0xff & (word_length | (stop_bits<<2) | (parity_enable<<3) | (even_parity<<4));
     REG8(IER) = 0x00;
  }
- 
+
  
  uint8_t uart_get_cfg (void)
  {
     return REG8(LCR);
  }
+ 
  
  void uart_set_int_en(uint8_t dr, uint8_t thre, uint8_t rls)
  {
@@ -56,19 +71,19 @@
  
  void uart_rx_rst (void)
  {
-    REG8(FCR) |= 0x01;
-    REG8(FCR) &= 0xfe;
- }
- 
- void uart_tx_rst (void)
- {
     REG8(FCR) |= 0x02;
     REG8(FCR) &= 0xfd;
  }
  
+ void uart_tx_rst (void)
+ {
+    REG8(FCR) |= 0x04;
+    REG8(FCR) &= 0xfb;
+ }
+ 
  void uart_set_trigger_lv(uint8_t trig_lv)
  {
-    REG8(FCR) = (0xff & (trig_lv << 2));
+    REG8(FCR) = (0xff & (trig_lv << 6));
  }
  
  uint8_t uart_get_lsr (void)
@@ -108,6 +123,30 @@
             len--;
         }
     }
+ }
+
+ void uart_mode (uint8_t mode) 
+ {
+    REG8(MCR) = 0xff & (mode << 3);
+ }
+ uint8_t uart_get_mcr (void)
+ {
+    return REG8(MCR);
+ }
+
+ uint8_t uart_get_dll(void)
+ {
+    return REG8(DLL);
+ }
+
+ uint8_t uart_get_dlm(void)
+ {
+    return REG8(DLM);
+ }
+
+ uint8_t uart_get_prescaler(void)
+ {
+    return REG8(PRESCALER);
  }
  
  __attribute__ ((weak))

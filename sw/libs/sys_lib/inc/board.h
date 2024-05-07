@@ -1,8 +1,8 @@
 /**
  * @file  board.h
- * @version 1.0 
- * @date 12 Sep, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
+ * @version 2.0 
+ * @date 11 April, 2024
+ * @copyright Copyright (C) 2024 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains
@@ -31,39 +31,63 @@
  * @defgroup BOARD GPIO PINS
  * @{
  */
- 
- /** Switches */
- 
- #define SW0        0
- #define SW1        1
- #define SW2        2
- #define SW3        3
- #define SW4        4
- #define SW5        5
- #define SW6        6
- #define SW7        7
- #define SW8        8
- #define SW9        9
- 
+
+
  /** LEDs  */
  
- #define LEDR0      10
- #define LEDR1      11
- #define LEDR2      12
- #define LEDR3      13
- #define LEDR4      14
- #define LEDR5      15
- #define LEDR6      16
- #define LEDR7      17
- #define LEDR8      18
- #define LEDR9      19
+ #define LEDR0      0
+ #define LEDR1      1
+ #define LEDR2      2
+ #define LEDR3      3
+
+
+  /** Switches */
  
- /** KEY BUTTONS */
+ #define SW0        4
+ #define SW1        5
+
+
+  /** KEY BUTTONS */
  
- #define KEY1       20
- #define KEY2       21
- #define KEY3       22
+ #define KEY1       6
+ #define KEY2       7
+ #define KEY3       8
+
+
+ /** RGB LEDs  */
+
+ #define LED4B      9
+ #define LED4G      10
+ #define LED4R      11
+ #define LED5B      12
+ #define LED5G      13
+ #define LED5R      14
  
+/** ChipKit Digital I/O Low */
+#define  IO1        15
+#define  IO2        16
+#define  IO3        17
+#define  IO4        18
+#define  IO5        19
+#define  IO6        20
+#define  IO7        21
+#define  IO8        22
+#define  IO9        23
+#define  IO10       24
+#define  IO11       25
+#define  IO12       26
+#define  IO13       27
+#define  IO14       28
+
+/** ChipKit Digital I/O High */
+#define  IO15       29
+#define  IO16       30
+#define  IO17       31
+
+
+
+
+
  /** @} */
  
  /**
