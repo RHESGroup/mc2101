@@ -40,19 +40,19 @@
 if [ $# -lt 1 ]
 then
 	echo "usage: $0 program_name"
-	exit 1
+	#exit 1
 fi
 
 SW_ROOT_DIR=../sw
-TEST_PROGRAMS_ROOT_DIR=$SW_ROOT_DIR/build/apps/test_mc2101
+TEST_PROGRAMS_ROOT_DIR=$SW_ROOT_DIR/build/apps/
 PROGRAM_S19="$TEST_PROGRAMS_ROOT_DIR/$1/$1.s19"
-MIF_FILE=./utils/program.mif
+MIF_FILE=./program_${1}.mif
 
 #find s19 file used by pulpino tools to build the spi_stim.txt file
 if [ ! -f $PROGRAM_S19 ]
 then
 	echo "$PROGRAM_S19 not found!"
-	exit 1
+	#exit 1
 fi
 
 #create spi_stim file using pulpino s19toslm.py script
@@ -128,6 +128,71 @@ echo "END;" >> $MIF_FILE
 
 echo "mif file has been generated"
 
-ls utils/program.mif
+ls ./program_${1}.mif
 
 rm spi_stim.txt
+
+
+
+#File containing the memory initialization data
+file_from="${MIF_FILE}"
+
+# Check if the file exists
+if [ ! -f "$file_from" ]; then
+    echo "File not found: $file_from"
+    exit 1
+    
+fi
+
+
+#This part generates the .coe file
+#File to be written
+file_to="memory_initialization_${1}.coe"
+# Check if the file exists. If not, create it
+if [ ! -f "$file_to" ]; then
+    touch memory_initialization_${1}.coe
+fi
+
+#Delete current values of the coe file
+echo -n "" > "$file_to"
+
+
+#Copy the values from the mif file into the coe file
+sed 's/.*://g' "$file_from" >> "$file_to"
+
+# Delete useless lines of the .mif
+sed -i "1,14d" "$file_to" 
+
+#Modify the header accordingly
+search_text="DATA_RADIX=HEX;"
+replace_text="MEMORY_INITIALIZATION_RADIX=16;"
+sed -i "s/$search_text/$replace_text/g" "$file_to"
+
+search_text="CONTENT BEGIN"
+replace_text="MEMORY_INITIALIZATION_VECTOR="
+sed -i "s/$search_text/$replace_text/g" "$file_to"
+
+#Change semicolon for comma
+search_text=";"
+replace_text=","
+sed -i "s/$search_text/$replace_text/g" "$file_to"
+
+#Delete the last line of the file
+sed -i '$d' "$file_to"
+
+#Modify the new last element because it should have a semicolon instead of a comma
+# Search and replace the last occurrence of ',' with ';'
+sed -i '$s/,/;/' "$file_to"
+# Search and replace the first occurrence of ',' with ';'
+sed -i '1s/,/;/' "$file_to"
+
+
+
+
+
+
+
+
+
+
+
