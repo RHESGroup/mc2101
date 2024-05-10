@@ -1,27 +1,34 @@
+
+
 set partNumber $::env(XILINX_PART)
 set boardName  $::env(XILINX_BOARD)
+
+set file_to_memory $::env(file)
 
 set ipName blk_mem_gen_0
 
 set current_directory [file normalize [pwd]]
 puts $current_directory
+
 create_project $ipName $current_directory/ips/BlockMemGenerator -force -part $partNumber
 set_property board_part $boardName [current_project]
 
 create_ip -name blk_mem_gen -vendor xilinx.com -library ip -version 8.4 -module_name $ipName
 
+set path_file "../../../../../../../../util/${file_to_memory}.coe"
+
 if {$::env(BOARD) eq "pynq-z1"} {
     set_property -dict [list \
-                        CONFIG.Coe_File {/home/mc2101-pynq/Desktop/mc2101/target/xilinx/util/memory_initialization.coe} \
+                        CONFIG.Coe_File $path_file \
                         CONFIG.Load_Init_File {true} \
                         CONFIG.Use_RSTA_Pin {true} \
                         CONFIG.Write_Depth_A {16384} \
                         CONFIG.Write_Width_A {8} \
     ] [get_ips $ipName]
+
 } else {
     exit 1
 }
-
 
 puts "END IP configuration"
 
