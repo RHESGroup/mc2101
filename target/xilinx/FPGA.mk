@@ -62,6 +62,16 @@ program:
 	@echo "Programming board $(BOARD) ($(XILINX_PART))"
 	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/program.tcl
 
+help: 
+	@printf "\033[1mSystem creation\033[0m\n"
+	@printf "\033[31m\tall\033[39m Create the environment, run synthesis and implementation and obtain the bitstream.Remember: make -f SIM.k all file=namefile\n"
+	@printf "\033[31m\tprogram\033[39m Program the FPGA with the bistream previously generated\n"
+	@printf "\033[31m\tupdate_ips\033[39m Update the Bender dependencies\n"
+	@printf "\033[31m\tclean\033[39m Eliminate the project and files associated with it\n"
+	@printf "\033[31m\tgui\033[39m Open the GUI\n"
+
+
+
 clean:
 	rm -rf *.log *.jou *.str *.mif *.xci *.xpr .Xil/ $(out) $(PROJECT).cache $(PROJECT).hw $(PROJECT).ioplanning $(PROJECT).ip_user_files $(PROJECT).runs $(PROJECT).sim
 
