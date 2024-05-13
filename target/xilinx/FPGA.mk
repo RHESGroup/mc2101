@@ -39,7 +39,7 @@ ip-dir  := xilinx
 all: $(bit)
 
 $(bit): $(ips)
-	$(BENDER) script vivado -t fpga  > ${CHS_ROOT}/scripts/add_sources.tcl
+	$(BENDER) script vivado -t xilinx  > ${CHS_ROOT}/scripts/add_sources.tcl
 	@mkdir -p $(out)
 	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ips/BlockMemGenerator/run.tcl -source scripts/prologue.tcl   -source scripts/run.tcl
 	cp $(PROJECT).runs/impl_1/$(PROJECT)* ./$(out)
@@ -73,6 +73,6 @@ help:
 
 
 clean:
-	rm -rf *.log *.jou *.str *.mif *.xci *.xpr .Xil/ $(out) $(PROJECT).cache $(PROJECT).hw $(PROJECT).ioplanning $(PROJECT).ip_user_files $(PROJECT).runs $(PROJECT).sim
+	rm -rf *.log *.jou *.str *.mif *.xci *.xpr .Xil/ $(out) $(PROJECT).cache $(PROJECT).hw $(PROJECT).ioplanning $(PROJECT).ip_user_files $(PROJECT).runs $(PROJECT).sim ./ips/BlockMemGenerator/blk_mem_gen_0.*
 
 .PHONY: clean

@@ -71,6 +71,6 @@ help:
 
 
 clean:
-	rm -rf *.log *.jou *.str *.mif *.xci *.xpr .Xil/ $(PROJECT).cache $(PROJECT).hw $(PROJECT).ioplanning $(PROJECT).ip_user_files $(PROJECT).runs $(PROJECT).sim
+	rm -rf *.log *.jou *.str *.mif *.xci *.xpr .Xil/ $(PROJECT).cache $(PROJECT).hw $(PROJECT).ioplanning $(PROJECT).ip_user_files $(PROJECT).runs $(PROJECT).sim ./ips/BlockMemGenerator/blk_mem_gen_0.*
 
 .PHONY: clean help
