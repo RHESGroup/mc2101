@@ -40,7 +40,14 @@ sources:
       - target/sim/src/tb_uart_rx_core.vhd
       - target/sim/src/tb_uart_periph.vhd
 
-  - target: all(fpga, xilinx)
+  - target: xilinx
     files:
       - target/xilinx/src/mc2101_wrapper.vhd
+
+  - target: intel
+    files:
+      - target/intel/src/altera_mem_16384x8_dp.vhd
+      - target/intel/src/altera_mem_mc2101_bus_wrap.vhd
+      - target/intel/src/altera_mem_mc2101_controller.vhd
+
       
