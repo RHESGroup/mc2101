@@ -16,7 +16,6 @@ MC2101 contains all the necessary to perform RTL simulations as well as FPGA syn
 
 # Repository folder structure
 
-    .
     ├── docs
     │   ├── MC2101 User Manual.pdf
     ├── hw
@@ -96,13 +95,7 @@ bender --version
 ### 3. Install VIVADO:
 Vivado is downloaded from the website: [Vivado](https://www.xilinx.com/support/download.html)
 
-It is of paramount importance to install a couple of additional dependencies before running the installation program to avoid errors and get stuck when installing Vivado. The following are the libraries/dependencies that one should have:
-• libncurses5-dev
-• libncursesw5-dev
-• libncurses5
-• libtinfo5
-• libtinfo-dev
-To install them:
+It is of paramount importance to install a couple of additional dependencies before running the installation program to avoid errors and get stuck when installing Vivado. To install them:
 
 ```
 sudo apt-get update -y
@@ -120,13 +113,35 @@ sudo mkdir /opt/Xilinx
 sudo chmod -R 777 /opt/Xilinx
 ```
 4. Go to the extracted folder and run sudo ./xsetup. This is going to open the installer.
-5. Complete all the requirements asked by the installer and be sure to select the installation direc-
-tory as /opt/Xilinx.
+5. Complete all the requirements asked by the installer and be sure to select the installation directory as /opt/Xilinx.
 6. Once this process is finished, add the following command do the .bashrc file: 
 
 ```
-source /opt/Xilinx/Vivado/Versionofvivado/settings64.sh
+source /opt/Xilinx/Vivado/$Versionofvivado/settings64.sh
 ```
-7. Close the terminal and open a new one. From now on, you can open Vivado from the terminal by writiing "vivado". Note:this opens the GUI.
+7. Close the terminal and open a new one. From now on, you can open Vivado from the terminal by writing "vivado". Note:this opens the GUI.
+
+Moreover, you have to manually install the cable drivers for Vivado to recognize the FPGAs. To do so, you shold do the following:
+
+```
+cd /tools/Xilinx/Vivado/$Versionofvivado/data/xicom/cable_drivers/lin64/install_script/install_drivers
+sudo ./intall_drivers
+```
+Finally, you have to add the PYNQ-Z1 board file to Vivado:
+
+1. Go to the [PYNQ: Board files](https://pynq.readthedocs.io/en/v2.7.0/overlay_design_methodology/board_settings.html) and download the file corresponding to the PYNQ-Z1. This will download a .zip file
+
+2. Go to:
+
+```
+cd /tools/Xilinx/Vivado/$Versionofvivado/data/boards/board_files
+```
+and extract the file here.
+
+If Vivado is open, it must be restarted to load in the board files before a new project can be created.
+
+For additional informatin regarding the installation of Vivado, please refer to [Installing Vivado, Vitis, and Digilent Board Files](https://digilent.com/reference/programmable-logic/guides/installing-vivado-and-vitis)
+
+
 
 

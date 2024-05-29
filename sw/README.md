@@ -50,6 +50,14 @@ To use console mode and final checks of results (if available), use
 
     make applicationName.vsimc
 
+## Generating .coe file
+The .coe file corresponds to the file that includes the code that is uploaded into the memory(the Block RAM in this case). The current flow starts from the generation of a file called "spi_stim.txt"; then, it is translated into a .mif file and a .coe file. The VIVADO Block Memory Generator IP uses a .coe file to initialize the values of the memory. Thus, you should run the following once you have compiled the application(make applicationName):
+```
+chmod 777 /util/spi_to_mif.sh
+source spi_to_mif.sh applicationName applicationName
+```
+Note: run this commands in the directory MC2101/util
+
 # Applications
 ## How to add a new application
 
