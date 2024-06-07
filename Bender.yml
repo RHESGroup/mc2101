@@ -39,6 +39,7 @@ sources:
       - target/sim/src/tb_uart_tx_core.vhd
       - target/sim/src/tb_uart_rx_core.vhd
       - target/sim/src/tb_uart_periph.vhd
+      - target/sim/src/mc2101_wrapper.vhd
 
   - target: xilinx
     files:
