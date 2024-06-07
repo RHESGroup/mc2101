@@ -1,7 +1,7 @@
 PROJECT      ?= mc2101
 BOARD          = pynq-z1
-XILINX_PORT  ?= 3332
-XILINX_HOST  ?= bordcomputer
+XILINX_PORT  ?= 3121
+XILINX_HOST  ?= localhost
 
 BENDER ?= bender
 
@@ -17,8 +17,7 @@ endif
 # ips := $(addprefix $(CAR_XIL_DIR)/,$(addsuffix .xci ,$(basename $(ips-names))))
 
 out := out
-bit := $(out)/$(PROJECT)_top_xilinx.bit
-mcs := $(out)/$(PROJECT)_top_xilinx.mcs
+bit := $(out)/$(PROJECT)_wrapper.bit
 BIT ?= $(bit)
 
 VIVADOENV ?=  PROJECT=$(PROJECT)            \
@@ -61,6 +60,12 @@ gui:
 program:
 	@echo "Programming board $(BOARD) ($(XILINX_PART))"
 	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/program.tcl
+
+program-ILA:
+	@echo "Programming board $(BOARD) ($(XILINX_PART))"
+	$(VIVADOENV) $(VIVADO) -nojournal -mode gui -source scripts/program_ILA.tcl
+
+
 
 help: 
 	@printf "\033[1mSystem creation\033[0m\n"
