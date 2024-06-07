@@ -52,13 +52,21 @@ ENTITY mc2101 IS
 	    uart_rx     : IN  STD_LOGIC;
 	    uart_tx     : OUT std_logic;
 	    --Signals associated with the BRAM
-	    address_bram  : OUT  STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
-	    write_enable  : OUT STD_LOGIC;
-	    enable        : OUT STD_LOGIC;
-	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-	    data_from_BRAM :IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-	    is_BRAM_busy : IN STD_LOGIC
+        data_from_BRAM: IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); 
+	    address_bram  : OUT STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
+	    memRead       : OUT STD_LOGIC;
+	    memWrite      : OUT STD_LOGIC
 	);
+	
+	
+    attribute mark_debug : string;
+    attribute mark_debug of uart_rx: signal is "true";
+    attribute mark_debug of uart_tx: signal is "true";
+      
+    attribute dont_touch : string;
+    attribute dont_touch of uart_rx : signal is "true";
+    attribute dont_touch of uart_tx : signal is "true";
 END mc2101;
 
 
@@ -116,11 +124,10 @@ ARCHITECTURE behavior OF mc2101 IS
 		hresp         : OUT STD_LOGIC;
 		---BRAM connections
         data_from_BRAM: IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		is_busy       : IN  STD_LOGIC;
-		enable        : OUT STD_LOGIC;
-		write_enable  : OUT STD_LOGIC;	
 	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); 
-	    address_bram  : OUT  STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0)
+	    address_bram  : OUT STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
+	    memRead       : OUT STD_LOGIC;
+	    memWrite      : OUT STD_LOGIC
 	);
     END COMPONENT;
     
@@ -262,12 +269,13 @@ BEGIN
 		hready => ssram_hready,
 		hresp => ssram_hresp,
 		---BRAM connections
+		
         data_from_BRAM => data_from_BRAM,
-		is_busy => is_BRAM_busy,
-		enable => enable,
-		write_enable => write_enable,
-	    data_to_BRAM => data_to_BRAM,
-	    address_bram => address_bram
+	    data_to_BRAM  => data_to_BRAM,
+	    address_bram  => address_bram,
+	    memRead => memRead,
+	    memWrite => memWrite
+		
 	);
 	
 	GPIO: gpio_bus_wrap
