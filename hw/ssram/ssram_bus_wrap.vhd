@@ -62,11 +62,10 @@ ENTITY Mem_wrapper IS
 		hresp         : OUT STD_LOGIC;
 		---BRAM connections
         data_from_BRAM: IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-		is_busy       : IN  STD_LOGIC;
-		enable        : OUT STD_LOGIC;
-		write_enable  : OUT STD_LOGIC;	
 	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); 
-	    address_bram  : OUT  STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0)
+	    address_bram  : OUT STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
+	    memRead       : OUT STD_LOGIC;
+	    memWrite      : OUT STD_LOGIC
 	);
 END Mem_wrapper;
 
@@ -85,10 +84,9 @@ ARCHITECTURE behavior OF Mem_wrapper IS
 		--input
 		chip_select   : IN  STD_LOGIC;
 		request       : IN  STD_LOGIC;
-		is_busy       : IN STD_LOGIC; 
 		--output
-		enable        : OUT STD_LOGIC; --new signal
 		memWrite      : OUT STD_LOGIC;
+		memRead       : OUT STD_LOGIC;
 		memResponse   : OUT STD_LOGIC;
 		memReady      : OUT STD_LOGIC
 	);
@@ -100,18 +98,18 @@ BEGIN
 
     controller: bram_controller 
 	PORT MAP(
-	    --system signals
-		clk            =>clk,
-		rst            =>rst,
-		--input
-		chip_select    =>hselx,
-		request        =>hwrite,
-		is_busy        =>is_busy,
-		--output
-		enable         =>enable,
-		memWrite       =>write_enable,
-		memResponse    =>hresp, 
-		memReady       =>hready
+            --system signals
+        clk => clk,
+        rst => rst,
+        --input
+        chip_select => hselx,
+        request => hwrite,
+        --output
+        memWrite => memWrite,
+        memRead => memRead,
+        memResponse => hresp,
+        memReady => hready	
+
 	);
 
     --Internal connections

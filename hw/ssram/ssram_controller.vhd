@@ -48,10 +48,9 @@ ENTITY bram_controller IS
 		--input
 		chip_select   : IN  STD_LOGIC;
 		request       : IN  STD_LOGIC;
-		is_busy       : IN STD_LOGIC; 
 		--output
-		enable        : OUT STD_LOGIC; --new signal
 		memWrite      : OUT STD_LOGIC;
+		memRead       : OUT STD_LOGIC;
 		memResponse   : OUT STD_LOGIC;
 		memReady      : OUT STD_LOGIC
 	);
@@ -59,7 +58,7 @@ END bram_controller;
 
 ARCHITECTURE behavior OF bram_controller IS
 
-    TYPE statetype IS (IDLE, MEM_BUSY);
+    TYPE statetype IS (IDLE, MEM_READ1, MEM_READ2, MEM_WRITE);
     SIGNAL next_state, current_state: statetype;
     SIGNAL readReq, writeReq: STD_LOGIC;
 
@@ -77,40 +76,64 @@ BEGIN
     readReq<=chip_select and (not request);
     writeReq<=chip_select and request;
     
-    PROCESS(readReq, writeReq, current_state, is_busy)
+    PROCESS(readReq, writeReq, current_state)
     BEGIN
         --memResponse is always 0 (no data integrity check or write protection mechanisms)
         memResponse<='0';
-        enable<='0';
-        memWrite<='0';
-        memReady <= '0';
+        memWrite<= '0';
+        memRead <= '0';
+        memReady <= '1'; --The memory can be accessed when it's not perfoming any operation
         next_state <= current_state;
+        
         CASE current_state IS
+        
             WHEN IDLE=>
-                enable<='0';
-                memWrite<='0';
                 memReady <= '0';
-                IF is_busy = '0' THEN --The memory can be accessed
-                    IF readReq= '1' THEN
-                        next_state<=MEM_BUSY;
-                        enable <= '1';                   
-                    ELSIF writeReq='1' THEN
-                        next_state<=MEM_BUSY;
-                        memWrite <= '1';
-                        enable <= '1';
-                    END IF;
-                ELSE --The memory shouldn't be accessed when this signal is asserted
+                IF readReq= '1' THEN
+                    next_state<=MEM_READ1;  
+                    memRead <= '1';               
+                ELSIF writeReq='1' THEN
+                    next_state <= MEM_WRITE;
+                    memWrite <= '1';
+                ELSE 
                     next_state<=IDLE;
-                END IF;
-            WHEN MEM_BUSY=>
-                IF is_busy = '1' THEN
-                    next_state<=MEM_busy;                  
-                ELSE --The process is done -- --The memory can be accessed
-                    next_state<=IDLE;
-                    memReady <= '1';
                 END IF;
 
-        END CASE;
+            WHEN MEM_READ1 => --This state is necessary because the BRAM has a delayed for writing of 2 cc
+                memReady <= '0';
+                next_state <= MEM_READ2;
+            
+            
+            WHEN MEM_READ2 =>
+                memReady <= '1';
+                IF readReq = '1' THEN
+                    next_state <= MEM_READ1;
+                    memRead <= '1';
+                ELSIF writeReq = '1' THEN
+                    next_state <= MEM_WRITE;
+                    memWrite <= '1';
+                ELSE
+                    next_state <= IDLE;
+                    memRead <= '0';
+                END IF;
+                
+            
+            
+            WHEN MEM_WRITE =>
+                memReady <= '1';
+                IF writeReq = '1' THEN
+                    next_state <= MEM_WRITE;
+                    memWrite <= '1';
+                 ELSE 
+                    next_state <= IDLE;
+                    memWrite <= '0';
+                    
+                 END IF;
+            
+            WHEN OTHERS =>
+                next_state <= IDLE;
+
+            END CASE;
     END PROCESS;
 
 END behavior;

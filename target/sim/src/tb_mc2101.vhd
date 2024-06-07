@@ -36,38 +36,39 @@
 -- **************************************************************************************
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+use work.Constants.ALL;
 
 ENTITY tb_mc2101 IS
 END tb_mc2101;
 
 ARCHITECTURE tb OF tb_mc2101 IS
 
-    COMPONENT mc2101 IS
+    COMPONENT mc2101_wrapper IS
 	PORT(
-	    sys_clk     : IN  STD_LOGIC;
-	    sys_rst_n   : IN  STD_LOGIC;
-	    gpio_pads   : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-	    uart_rx     : IN  STD_LOGIC;
-	    uart_tx     : OUT std_logic 
+        gpio_pads_0 : inout STD_LOGIC_VECTOR ( 31 downto 0 );
+        reset_rtl : in STD_LOGIC;
+        sys_clock : in STD_LOGIC;
+        uart_rx_0 : in STD_LOGIC;
+        uart_tx_0 : out STD_LOGIC
 	);
     END COMPONENT;
     
 
 	CONSTANT clk_period : TIME := 10 ns;
-	SIGNAL pads:  STD_LOGIC_VECTOR(31 DOWNTO 0);
-	SIGNAL clk, rst_n: STD_LOGIC;
-	SIGNAL RX,TX: STD_LOGIC;
+	SIGNAL gpio_pads_0_s:  STD_LOGIC_VECTOR(31 DOWNTO 0);
+	SIGNAL clk, rst_rtl_s: STD_LOGIC;
+	SIGNAL uart_rx_0_s,uart_tx_0_s: STD_LOGIC;
 	
 
 BEGIN
 
-    microcontroller: mc2101
+    microcontroller: mc2101_wrapper
 	PORT MAP(
-	    sys_clk=>clk,
-	    sys_rst_n=>rst_n,
-	    gpio_pads=>pads,
-	    uart_rx=>RX,
-	    uart_tx=>TX
+        gpio_pads_0 => gpio_pads_0_s,
+        reset_rtl => rst_rtl_s,
+        sys_clock => clk,
+        uart_rx_0 => uart_rx_0_s,
+        uart_tx_0 => uart_tx_0_s
 	);
 
 	clk_process : PROCESS
@@ -80,12 +81,10 @@ BEGIN
 			
 	-- Stimulus process
 	stim_proc : PROCESS
-	BEGIN
-		-- hold reset state for 100 ns.
+	BEGIN		
+		rst_rtl_s <= '1';
 		WAIT FOR 120 ns;
-		rst_n <= '0';
-		WAIT FOR 40 ns;
-		rst_n <= '1';
+		rst_rtl_s <= '0';
 		WAIT;
 	END PROCESS;
 

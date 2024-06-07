@@ -21,17 +21,23 @@ entity mc2101_wrapper is
     uart_rx_0 : in STD_LOGIC;
     uart_tx_0 : out STD_LOGIC
   );
+
+
 end mc2101_wrapper;
 
 architecture STRUCTURE of mc2101_wrapper is
 
-  SIGNAL sys_reset_n : STD_LOGIC;
+  SIGNAL sys_reset_n, sys_clock_n : STD_LOGIC;
   SIGNAL enable_s : STD_LOGIC;
   SIGNAL write_enable_s : STD_LOGIC_VECTOR(0 DOWNTO 0);
   SIGNAL data_to_BRAM_s : STD_LOGIC_VECTOR(dataWidthSRAM-1 DOWNTO 0);
   SIGNAL data_from_BRAM_s : STD_LOGIC_VECTOR(dataWidthSRAM-1 DOWNTO 0);
   SIGNAL address_bram_s : STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
   SIGNAL is_BRAM_busy_s : STD_LOGIC;
+  SIGNAL rden : STD_LOGIC;
+  SIGNAL wren : STD_LOGIC;
+  
+  SIGNAL wea_s : STD_LOGIC_VECTOR(0 DOWNTO 0);
   
   
  
@@ -39,21 +45,24 @@ architecture STRUCTURE of mc2101_wrapper is
   COMPONENT blk_mem_gen_0 IS
   PORT (
     --Port A
-    RSTA       : IN STD_LOGIC;  --opt port
     ENA        : IN STD_LOGIC;  --opt port
     WEA        : IN STD_LOGIC_VECTOR(0 DOWNTO 0);
-    ADDRA      : IN STD_LOGIC_VECTOR(Physical_size-1  DOWNTO 0);
-    DINA       : IN STD_LOGIC_VECTOR(dataWidthSRAM-1 DOWNTO 0);
-    DOUTA      : OUT STD_LOGIC_VECTOR(dataWidthSRAM-1 DOWNTO 0);
-    RSTA_BUSY  : OUT STD_LOGIC;
-    CLKA       : IN STD_LOGIC
+    ADDRA      : IN STD_LOGIC_VECTOR(13  DOWNTO 0);
+    DINA       : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
+    CLKA       : IN STD_LOGIC;
+    --Port B
+    ENB        : IN STD_LOGIC;  --opt port
+    ADDRB      : IN STD_LOGIC_VECTOR(13  DOWNTO 0);
+    DOUTB      : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
+    CLKB       : IN STD_LOGIC
   );
-  END COMPONENT blk_mem_gen_0;
+  
+  END COMPONENT  blk_mem_gen_0;
   
   COMPONENT mc2101 IS
   GENERIC( Physical_size     : INTEGER := Physical_size;
     	   busDataWidth      : INTEGER := dataWidth ;
-		   usAddressWidth   : INTEGER := addressWidth
+		   busAddressWidth   : INTEGER := addressWidth
     );
 	PORT(
 	    sys_clk     : IN  STD_LOGIC;
@@ -62,38 +71,45 @@ architecture STRUCTURE of mc2101_wrapper is
 	    uart_rx     : IN  STD_LOGIC;
 	    uart_tx     : OUT std_logic;
 	    --Signals associated with the BRAM
-	    address_bram  : OUT  STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
-	    write_enable  : OUT  STD_LOGIC_VECTOR(0 DOWNTO 0);
-	    enable        : OUT STD_LOGIC;
-	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-	    data_from_BRAM :IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
-	    is_BRAM_busy : IN STD_LOGIC
+        data_from_BRAM: IN STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0);
+	    data_to_BRAM  : OUT STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); 
+	    address_bram  : OUT STD_LOGIC_VECTOR(Physical_size-1 DOWNTO 0);
+	    memRead       : OUT STD_LOGIC;
+	    memWrite      : OUT STD_LOGIC
 	);
-END COMPONENT mc2101;
+  END COMPONENT mc2101;
+
 
 begin
 
   sys_reset_n <= NOT(reset_rtl);
+  
+  sys_clock_n <= NOT(sys_clock);
+  
 
-  bmg0 : blk_mem_gen_0
+  wea_s <= (OTHERS => '0') WHEN wren ='0' ELSE (OTHERS => '1');
+
+  bmg0 : blk_mem_gen_0 
     PORT MAP (
-      --Port A
-      RSTA       => reset_rtl,
-      ENA        => enable_s,
-      WEA        => write_enable_s,
-      ADDRA      => address_bram_s,
-      DINA       => data_to_BRAM_s,
-      DOUTA      => data_from_BRAM_s,
-      RSTA_BUSY  => is_BRAM_busy_s,
-      CLKA       => sys_clock
-      
+   
+    --Port A(Port to write)
+    ENA => wren,
+    WEA => wea_s,
+    ADDRA => address_bram_s,
+    DINA => data_to_BRAM_s,
+    CLKA => sys_clock,
+    --Port B(Port to read)
+    ENB => rden,
+    ADDRB => address_bram_s,
+    DOUTB => data_from_BRAM_s,
+    CLKB => sys_clock_n
     );
     
     
   MC2101_1 : mc2101
   GENERIC MAP( Physical_size => Physical_size,
     	   busDataWidth => dataWidth, 
-		   usAddressWidth => addressWidth
+		   busAddressWidth => addressWidth
     )
 	PORT MAP(
 	    sys_clk => sys_clock,
@@ -102,13 +118,14 @@ begin
 	    uart_rx => uart_rx_0,
 	    uart_tx => uart_tx_0,
 	    --Signals associated with the BRAM
-	    address_bram => address_bram_s,
-	    write_enable => write_enable_s,
-	    enable => enable_s,
-	    data_to_BRAM => data_to_BRAM_s,
 	    data_from_BRAM => data_from_BRAM_s,
-	    is_BRAM_busy => is_BRAM_busy_s
+	    data_to_BRAM => data_to_BRAM_s,
+	    address_bram => address_bram_s,
+	    memRead => rden,
+	    memWrite => wren
+	    
 	);
+
   
 
 
