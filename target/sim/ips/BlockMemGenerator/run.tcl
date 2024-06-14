@@ -17,11 +17,14 @@ set path_file "../../../../../../../../util/${file_to_memory}.coe"
 
 if {$::env(BOARD) eq "pynq-z1"} {
     set_property -dict [list \
+                        CONFIG.Memory_Type {Simple_Dual_Port_RAM} \
                         CONFIG.Coe_File $path_file \
                         CONFIG.Load_Init_File {true} \
                         CONFIG.Use_RSTA_Pin {true} \
                         CONFIG.Write_Depth_A {16384} \
                         CONFIG.Write_Width_A {8} \
+                        CONFIG.Register_PortB_Output_of_Memory_Primitives {false} \
+
     ] [get_ips $ipName]
 
 } else {
