@@ -88,13 +88,14 @@ BEGIN
         CASE current_state IS
         
             WHEN IDLE=>
-                memReady <= '0';
                 IF readReq= '1' THEN
-                    next_state<=MEM_READ1;  
+                    next_state<=MEM_READ2;  
                     memRead <= '1';               
+                    memReady <= '0';
                 ELSIF writeReq='1' THEN
                     next_state <= MEM_WRITE;
                     memWrite <= '1';
+                    memReady <= '0';
                 ELSE 
                     next_state<=IDLE;
                 END IF;
@@ -129,6 +130,7 @@ BEGIN
                     memWrite <= '0';
                     
                  END IF;
+                 
             
             WHEN OTHERS =>
                 next_state <= IDLE;
