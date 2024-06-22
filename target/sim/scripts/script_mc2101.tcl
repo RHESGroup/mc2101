@@ -50,11 +50,156 @@ add_wave -into {CORE_datapath} {/tb_mc2101/microcontroller/MC2101_1/AFTAB/core/d
 add_wave_group CORE_controller
 add_wave -into {CORE_controller} {/tb_mc2101/microcontroller/MC2101_1/AFTAB/core/controllerAFTAB} 
 
-#Signals related to memory wrapper
+#Signals related to the Memory wrapper
 add_wave_group Mem_wrapper
 add_wave -into {Mem_wrapper} {/tb_mc2101/microcontroller/MC2101_1/BRAM} 
 
 add_wave_group -into {Mem_wrapper} {Controller}
 add_wave -into {Controller} {/tb_mc2101/microcontroller/MC2101_1/BRAM/controller} 
 
-run 1000ns
+#Signals related to the UART peripheral
+
+
+#Signals related to the Peripheral
+add_wave_group UART
+
+add_wave -into {UART} {/tb_mc2101/microcontroller/MC2101_1/UART/hselx}
+add_wave -into {UART} {/tb_mc2101/microcontroller/MC2101_1/UART/hwrite}
+add_wave -into {UART} {/tb_mc2101/microcontroller/MC2101_1/UART/hwrdata} 
+add_wave -into {UART} {/tb_mc2101/microcontroller/MC2101_1/UART/haddr}
+add_wave -into {UART} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/address}
+add_wave -into {UART} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/busDataIn}
+add_wave -into {UART} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/busDataOut} 
+
+
+add_wave_group -into {UART} {Control_Registers}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_IER}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_ISR}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_FCR}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_LCR}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_LSR}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_DLL}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_DLM}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_MCR}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/reg_MSR}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/divisor}
+add_wave -into {Control_Registers} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/prescaler}
+
+
+add_wave_group -into {UART} {Control_Signals}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/read_IER}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/write_IER}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/read_ISR}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/write_FCR}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/read_LCR}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/write_LCR}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/read_LSR} 
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/read_DLL}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/write_DLL}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/read_DLM}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/write_DLM} 
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/write_THR} 
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/read_RHR}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/tx_elements} 
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/rx_elements} 
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/input_rx}
+add_wave -into {Control_Signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/output_tx} 
+
+
+#Signals related to the uart TX fifo 
+add_wave_group -into {UART} {UART_TXFIFO_signals}
+#Inputs
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/clear} 
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/data_in}
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/read_request} 
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/write_request} 
+#Outputs
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/QUEUE} 
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/elements} 
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/data_out}
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/fifo_empty}  
+add_wave -into {UART_TXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX_FIFO/fifo_full} 
+
+
+
+
+#Signals related to the uart TX
+add_wave_group -into {UART} {UART_TX_signals}
+#Inputs
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/divisor}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/parity_bit_en}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/parity_type}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/data_width}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/stop_bits}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/tx_data_i}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/tx_valid}
+#Outputs
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/tx_ready}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/tx_out}
+
+#Others
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/current_state}  
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/next_state} 
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/reg_tx_data} 
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/bit_done}
+add_wave -into {UART_TX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_TX/sample_data_in}
+
+
+#Signals related to the uart RX fifo
+add_wave_group -into {UART} {UART_RXFIFO_signals}
+#Inputs
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/clear} 
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/data_in}
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/read_request} 
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/write_request} 
+#Outputs
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/QUEUE} 
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/elements} 
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/data_out}
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/fifo_empty}  
+add_wave -into {UART_RXFIFO_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX_FIFO/fifo_full} 
+
+
+
+#Signals related to the uart RX
+add_wave_group -into {UART} {UART_RX_signals}
+#Inputs
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/divisor}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/parity_bit_en}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/parity_type}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/data_width}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/stop_bits}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/rx_in_async}
+#Outputs
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/break_interrupt}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/frame_error}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/parity_error}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/rx_data_buffer}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/rx_valid}
+
+#Others
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/current_state} 
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/next_state} 
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/rx_line_fall}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/rx_line_sync} 
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/data_received}
+add_wave -into {UART_RX_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_RX/read} 
+
+
+
+#Signals related to the interrupt controller of uart 
+add_wave_group -into {UART} {UART_interruptcnt_signals}
+#Inputs
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/IER}
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/rx_fifo_trigger_lv}
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/rx_elements}
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/tx_elements}
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/rx_line_error}
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/interrupt_clear}
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/char_timeout}
+#Outputs
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/interrupt}
+add_wave -into {UART_interruptcnt_signals} {/tb_mc2101/microcontroller/MC2101_1/UART/uart_periph/U_IN_CTRL/interrupt_isr_code}
+
+
+run 1 ms
