@@ -54,47 +54,6 @@ void ISR_GPIO(void)
             printf("SW1 switched!\r\n");
             set_pin_value(LEDR1,!get_pin_value(LEDR1));
             break;
-            
-        case 1<<SW2:
-            printf("SW2 switched!\r\n");
-            set_pin_value(LEDR2,!get_pin_value(LEDR2));
-            break;
-            
-        case 1<<SW3:
-            printf("SW3 switched!\r\n");
-            set_pin_value(LEDR3,!get_pin_value(LEDR3));
-            break;
-            
-        case 1<<SW4:
-            printf("SW4 switched!\r\n");
-            set_pin_value(LEDR4,!get_pin_value(LEDR4));
-            break;
-            
-        case 1<<SW5:
-            printf("SW5 switched!\r\n");
-            set_pin_value(LEDR5,!get_pin_value(LEDR5));
-            break;
-            
-        case 1<<SW6:
-            printf("SW6 switched!\r\n");
-            set_pin_value(LEDR6,!get_pin_value(LEDR6));
-            break;
-            
-        case 1<<SW7:
-            printf("SW7 switched!\r\n");
-            set_pin_value(LEDR7,!get_pin_value(LEDR7));
-            break;
-            
-        case 1<<SW8:
-            printf("SW8 switched!\r\n");
-            set_pin_value(LEDR8,!get_pin_value(LEDR8));
-            break;
-            
-        case 1<<SW9:
-            printf("SW9 switched!\r\n");
-            set_pin_value(LEDR9,!get_pin_value(LEDR9));
-            break;
-            
         default: printf("Unknown GPIO\r\n"); break;        
     } 
 }
@@ -103,17 +62,17 @@ int main(void)
 {  
     board_setup();
     
-    printf("Please switch some switches SW[0-9]\r\n");
+    printf("Please switch some switches SW[0-1]\r\n");
     
     //enable interrupt for all switches as rising edges
-    for(int i=SW0; i<=SW9; i++)
+    for(int i=SW0; i<=SW1; i++)
     {
         set_pin_irq_type(i,GPIO_IRQ_RISE);
         set_pin_irq_enable(i,GPIO_INT_ENABLE);
     }
     
     //switch on all leds
-    for(int i=LEDR0; i<=LEDR9; i++)
+    for(int i=LEDR0; i<=LEDR3; i++)
         set_pin_value(i,GPIO_PIN_HIGH);
 
     //wait for switches to be switched

@@ -37,7 +37,7 @@ void waste_time()
 
 int main(void)
 {
-    int choice;
+    int choice = 0;
     
     board_setup();
     
@@ -93,7 +93,7 @@ int main(void)
     
     while(1) {
         printf("Enter led[0-3] to switch:\r\n");
-        scanf("%d",&choice);
+        //scanf("%d",&choice);
         switch(choice) 
         {
             case 0:
