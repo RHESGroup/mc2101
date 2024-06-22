@@ -69,8 +69,6 @@ END uart_bus_wrap;
 
 ARCHITECTURE behavior OF uart_bus_wrap IS
     
-    SIGNAL chip_select: STD_LOGIC;
-    SIGNAL request: STD_LOGIC;
     SIGNAL read, write: STD_LOGIC;
     
     

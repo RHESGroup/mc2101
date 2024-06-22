@@ -89,7 +89,7 @@ BEGIN
         
             WHEN IDLE=>
                 IF readReq= '1' THEN
-                    next_state<=MEM_READ2;  
+                    next_state<=MEM_READ1;  
                     memRead <= '1';               
                     memReady <= '0';
                 ELSIF writeReq='1' THEN
@@ -125,7 +125,11 @@ BEGIN
                 IF writeReq = '1' THEN
                     next_state <= MEM_WRITE;
                     memWrite <= '1';
-                 ELSE 
+                ELSIF readReq = '1' THEN
+                    next_state <= MEM_READ1;
+                    memRead <= '1';
+                
+                ELSE 
                     next_state <= IDLE;
                     memWrite <= '0';
                     

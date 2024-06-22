@@ -59,7 +59,7 @@ ENTITY mc2101 IS
 	    memWrite      : OUT STD_LOGIC
 	);
 	
-	
+	--Marking the signals for debugging	
     attribute mark_debug : string;
     attribute mark_debug of uart_rx: signal is "true";
     attribute mark_debug of uart_tx: signal is "true";
@@ -67,6 +67,8 @@ ENTITY mc2101 IS
     attribute dont_touch : string;
     attribute dont_touch of uart_rx : signal is "true";
     attribute dont_touch of uart_tx : signal is "true";
+
+	
 END mc2101;
 
 

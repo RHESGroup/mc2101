@@ -68,6 +68,7 @@ ENTITY gpio_bus_wrap IS
 	    --INOUTS
 	    gpio_pads     : INOUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);
+
 END gpio_bus_wrap;
 
 ARCHITECTURE behavior OF gpio_bus_wrap IS     
