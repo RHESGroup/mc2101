@@ -43,7 +43,7 @@
 
     if (prescaler > 15) //We must ensure that the prescaler is maximun 15 because the register only uses 4 bits in reality
     {
-        REG8(PRESCALER) = 15;
+        REG8(PRESCALER) = 0x0F;
     } else {
         REG8(PRESCALER) = prescaler;
     }
@@ -96,12 +96,6 @@
     return REG8(ISR);
  }
  
- void uart_sendchar (const char c)
- {
-    //wait tx fifo to be empty so that char can be immidiately send
-    while( (REG8(LSR) & 0x20) == 0);
-    REG8(THR) = c;
- }
  
  char uart_getchar (void)
  {
@@ -109,17 +103,24 @@
     while( (REG8(LSR) & 0x1) == 0); 
     return REG8(RHR);
  }
+
+ void uart_sendchar (const char c)
+ {
+    //wait tx fifo to be empty so that char can be immediately send
+    while( (REG8(LSR) & 0x60) == 0);
+    REG8(THR) = c;
+ }
+ 
  
  void uart_send (const char *str, unsigned int len)
  {
     unsigned int i;
     while(len > 0)
     {
-        //send text in block of 16 bytes
-        while( (REG8(LSR) & 0x20) == 0);
+  
         for(i=0; (i<UART_FIFO_DEPTH) && (len > 0); i++)
         {
-            REG8(THR) = *str++;
+            uart_sendchar(str[i]);
             len--;
         }
     }

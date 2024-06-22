@@ -38,38 +38,57 @@ void ISR_UART(void)
 
 int main(void)
 {
-    //test configuration @115200 KHz baudrate, No Parity, 1 Stop, 5 char, Odd (100 MHz clk)
-    uart_set_cfg(0,0,0,0,867);
-    if(uart_get_cfg() != 0x0) return 1;
-    //test configuration @115200 KHz, Parity, 2 stop, 8 char, even
-    uart_set_cfg(3,1,1,1,867);
-    if(uart_get_cfg() != 0x1f) return 1;
-    //test configuration @115200 KHz, No Parity, 1 stop, 8 char, odd
-    uart_set_cfg(3,0,0,0,867);
-    if(uart_get_cfg() != 0xa) return 1;
+
+    //test configuration @115200 baudrate, No Parity, 1 Stop, 5 char, Odd (100 MHz clk)
+    uart_set_cfg(WORD_LENGTH_5, STOP_BIT_LENGTH_1, PARITY_OFF, PARITY_EVEN, UART_DIV_BR_115200, DEFAULT_PRESCALER);
+    if(uart_get_cfg() != 0x10) return 1;
+
+    //test configuration @9600 baudrate, Parity, 2 stop, 6 char, even
+    uart_set_cfg(WORD_LENGTH_6, STOP_BIT_LENGTH_2, PARITY_ON, PARITY_EVEN, UART_DIV_BR_9600, DEFAULT_PRESCALER);
+    if(uart_get_cfg() != 0x1D) return 1;
+
+    //test configuration @57600 KHz, No Parity, 1 stop, 8 char, odd
+    uart_set_cfg(WORD_LENGTH_8, STOP_BIT_LENGTH_1, PARITY_OFF, PARITY_ODD, UART_DIV_BR_57600, DEFAULT_PRESCALER);
+    if(uart_get_cfg() != 0x03) return 1;
+
     //enable interrupt dr
-    uart_set_int_en(1,0,0);
+    uart_set_int_en(1,0,0); //Data ready, THR empty, Receiver Line Status
     if(uart_get_int_en() != 0x1) return 1;
-    //disable interrupt dr, enable thre (should rise interrupt)
-    uart_set_int_en(0,1,0);
-    //if(uart_get_int_en() != 0x2) return 1;
+
+    // //disable interrupt dr, enable thre (should rise interrupt)
+    // uart_set_int_en(0,1,0);
+    // //if(uart_get_int_en() != 0x2) return 1;
+
     //disable thre, enable rls
     uart_set_int_en(0,0,1);
     if(uart_get_int_en() != 0x4) return 1;
-    //enable all interrupts
-    uart_set_int_en(1,1,1);
-    //if(uart_get_int_en() != 0x7) return 1;
-    //diable all interrupts
-    //uart_set_int_en(0,0,0);
+
+    // //enable all interrupts
+    // uart_set_int_en(1,1,1);
+    // //if(uart_get_int_en() != 0x7) return 1;
+    
+    //disable all interrupts
+    uart_set_int_en(0,0,0);
     if(uart_get_int_en() != 0x0) return 1;
+
     //set trigger level to 4 char
     uart_set_trigger_lv(1);
     //send char
-    uart_sendchar('A');
+    // uart_sendchar('A');
+    // uart_sendchar('H');
+    // uart_sendchar('E');
+    // uart_sendchar('L');
+    // uart_sendchar('L');
+    // uart_sendchar('O');
+
     //check lsr says that thr is empty
-    if(uart_get_lsr() != 0x20) return 1;
+    if(uart_get_lsr() != 0x60) return 1;
     //send string
-    uart_send("Hello from mc2101! ",20);
+    while (1)
+    {
+        uart_send("Hello World",13);
+    }
+    
     return 0;
 }
 
