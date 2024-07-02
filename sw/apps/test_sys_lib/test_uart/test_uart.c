@@ -38,7 +38,7 @@ void ISR_UART(void)
 
 int main(void)
 {
-
+    
     //test configuration @115200 baudrate, No Parity, 1 Stop, 5 char, Odd (100 MHz clk)
     uart_set_cfg(WORD_LENGTH_5, STOP_BIT_LENGTH_1, PARITY_OFF, PARITY_EVEN, UART_DIV_BR_115200, DEFAULT_PRESCALER);
     if(uart_get_cfg() != 0x10) return 1;
@@ -73,20 +73,28 @@ int main(void)
 
     //set trigger level to 4 char
     uart_set_trigger_lv(1);
-    //send char
-    // uart_sendchar('A');
-    // uart_sendchar('H');
-    // uart_sendchar('E');
-    // uart_sendchar('L');
-    // uart_sendchar('L');
-    // uart_sendchar('O');
 
-    //check lsr says that thr is empty
-    if(uart_get_lsr() != 0x60) return 1;
-    //send string
+    uart_mode(TEST_MODE); //Activate the testing mode 
+
+    // //check lsr says that thr is empty
+    // if(uart_get_lsr() != 0x60) return 1;
+    // //send string
     while (1)
     {
-        uart_send("Hello World",13);
+        //send char
+    uart_sendchar('H');
+    uart_sendchar('E');
+    uart_sendchar('L');
+    uart_sendchar('L');
+    uart_sendchar('O');
+
+    uart_sendchar(' ');
+
+    uart_sendchar('W');
+    uart_sendchar('O');
+    uart_sendchar('R');
+    uart_sendchar('L');
+    uart_sendchar('D');
     }
     
     return 0;

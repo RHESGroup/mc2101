@@ -103,10 +103,10 @@
  #define  THR                 REGP8(UART_THR)
 
 /**Prescaler Division Register(PRESCALER)*/
- #define  PRESCALER           REG8(UART_PRESCALER)
+ #define  PRESCALER           REGP8(UART_PRESCALER)
 
 /**Modem Control Register(MCR)*/
- #define  MCR                 REG8(UART_MCR)
+ #define  MCR                 REGP8(UART_MCR)
  
  /** @} */
  

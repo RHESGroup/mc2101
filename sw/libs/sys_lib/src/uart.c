@@ -120,15 +120,16 @@
   
         for(i=0; (i<UART_FIFO_DEPTH) && (len > 0); i++)
         {
-            uart_sendchar(str[i]);
+            uart_sendchar(((uint8_t *)str)[i]);
             len--;
         }
+        str += i;
     }
  }
 
  void uart_mode (uint8_t mode) 
  {
-    REG8(MCR) = 0xff & (mode << 3);
+    REG8(MCR) = 0xff & (mode << 4);
  }
  uint8_t uart_get_mcr (void)
  {
