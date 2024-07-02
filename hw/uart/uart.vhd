@@ -164,10 +164,6 @@ ARCHITECTURE behavior of uart IS
     SIGNAL write_MCR : STD_LOGIC;
     SIGNAL read_MCR : STD_LOGIC;
     
-    --Modem Control register -- Address: 1010 -- Access type: R
-    SIGNAL reg_MSR : STD_LOGIC_VECTOR(7 DOWNTO 0);
-    SIGNAL read_MSR : STD_LOGIC;
-    
     
 
     

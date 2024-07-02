@@ -116,17 +116,18 @@ BEGIN
     target_data_bits <= "100" WHEN data_width="00" ELSE
                         "101" WHEN data_width="01" ELSE
                         "110" WHEN data_width="10" ELSE
-                        "111";
+                         "111";
 
     --RX synchronizer (111 = IDLE STATE)
     PROCESS(clk, rst)
     BEGIN
-        IF rst='1' or line_to_idle = '1' THEN
-            rx_line_sync <= (OTHERS=>'1');
-        ELSIF rising_edge(CLK) THEN
+        IF rst='1' or line_to_idle = '1' or rx_in_async = 'U' THEN 
+            rx_line_sync <= (OTHERS => '1');
+        ELSIF(rising_edge(clk)) THEN
             rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async;
         END IF;
     END PROCESS;
+    
     
     --falling edge detector
     rx_line_fall <= rx_line_sync(2) AND NOT(rx_line_sync(1));
@@ -293,7 +294,7 @@ BEGIN
                     data_received(0) XOR (NOT(parity_type)); --CHANGE: Now, EVEN(1) and ODD(0) to follow the protocol 
     
     
-    rx_data_buffer <= data_received; 
+    rx_data_buffer <= data_received WHEN current_state /= S_IDLE ELSE (OTHERS => '1'); 
     
     --errors computation
     
