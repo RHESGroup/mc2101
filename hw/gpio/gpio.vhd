@@ -66,6 +66,7 @@ ARCHITECTURE behavior OF gpio IS
     SIGNAL gpio_core_ins: STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL gpio_core_outs: STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL gpio_core_dirs: STD_LOGIC_VECTOR(31 DOWNTO 0);
+    SIGNAL gpio_core_en: STD_LOGIC_VECTOR(31 DOWNTO 0);
 
 BEGIN
 
@@ -81,7 +82,8 @@ BEGIN
 		interrupt=>interrupt,
 	    gpio_in_async=>gpio_core_ins,
 		gpio_out_sync=>gpio_core_outs,
-		gpio_pad_dir=>gpio_core_dirs
+		gpio_pad_dir=>gpio_core_dirs,
+		gpio_en=>gpio_core_en
 	);
     
     pads: ENTITY work.gpio_pads_if   
@@ -89,7 +91,8 @@ BEGIN
 	    gpio_pins=>gpio_pads,
 	    gpio_port_in=>gpio_core_ins,
 	    gpio_pad_dir=>gpio_core_dirs,
-	    gpio_port_out=>gpio_core_outs
+	    gpio_port_out=>gpio_core_outs,
+	    gpio_en=>gpio_core_en
 	);
 
 END behavior;

@@ -45,10 +45,11 @@ USE IEEE.NUMERIC_STD.ALL;
 --| 0x0000  | PADDIR   |
 --| 0x0004  | PADIN    |
 --| 0x0008  | PADOUT   |
---| 0x000C  | PADINTEN |
---| 0x0010  | INTTYPE0 |
---| 0x0014  | INTTYPE1 |
---| 0x0018  | INTSTATUS|
+--| 0x000C  | PADEN    |
+--| 0x0010  | PADINTEN |
+--| 0x0014  | INTTYPE0 |
+--| 0x0018  | INTTYPE1 |
+--| 0x001C  | INTSTATUS|
 --TOT BYTES: 32
 --REQUIRED ADDRESS WIDTH: 32
 --BYTE ADDRESSABLE PERIPHERAL: NOT
@@ -67,7 +68,8 @@ ENTITY gpio_core IS
 		busDataOut    : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		interrupt     : OUT STD_LOGIC;
 		gpio_out_sync : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-		gpio_pad_dir  : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+		gpio_pad_dir  : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		gpio_en       : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);
 END gpio_core;
 
@@ -77,6 +79,7 @@ ARCHITECTURE behavior OF gpio_core IS
     SIGNAL PADDIR    : STD_LOGIC_VECTOR(31 DOWNTO 0); --Controls the direction of each of the GPIO pads
     SIGNAL PADIN     : STD_LOGIC_VECTOR(31 DOWNTO 0); --Saves the input values coming from input pins
     SIGNAL PADOUT    : STD_LOGIC_VECTOR(31 DOWNTO 0); --Drives the output lines with its content
+    SIGNAL PADEN     : STD_LOGIC_VECTOR(31 DOWNTO 0); --Enables the GPIOs
     SIGNAL PADINTEN  : STD_LOGIC_VECTOR(31 DOWNTO 0); --Interrupt enable bits for input lines
     SIGNAL INTTYPE0  : STD_LOGIC_VECTOR(31 DOWNTO 0); --Controls the interrupt triggering behavior of each interrupt-enabled pin
     SIGNAL INTTYPE1  : STD_LOGIC_VECTOR(31 DOWNTO 0); --Controls the interrupt triggering behavior of each interrupt-enabled pin
@@ -119,9 +122,10 @@ BEGIN
     PROCESS(clk, rst)
     BEGIN
         IF rst='1' THEN
-            PADDIR<=(OTHERS=>'0');
+            PADDIR<=(OTHERS=>'0'); 
             PADOUT<=(OTHERS=>'0');
             PADINTEN<=(OTHERS=>'0');
+            PADEN<=(OTHERS => '0');
             INTTYPE0<=(OTHERS=>'0');
             INTTYPE1<=(OTHERS=>'0');
         ELSIF (rising_edge(clk)) THEN
@@ -133,14 +137,18 @@ BEGIN
                     --PADOUT
                     PADOUT<=busDataIn;
                 ELSIF eff_addr = "011" THEN
+                    --PADEN
+                    PADEN<=busDataIn;
+                ELSIF eff_addr = "100" THEN
                     --PADINTEN
                     PADINTEN<=busDataIn;
-                ELSIF eff_addr = "100" THEN
+                ELSIF eff_addr = "101" THEN
                     --INTTYPE0
                     INTTYPE0<=busDataIn;
-                ELSIF eff_addr = "101" THEN
-                    --INTTYPE1
+                ELSIF eff_addr = "110" THEN
                     INTTYPE1<=busDataIn;
+                ELSIF eff_addr = "111" THEN
+                    INTSTATUS<=busDataIn;     
                 END IF;
             END IF;
         END IF;
@@ -162,13 +170,15 @@ BEGIN
                     --PADOUT
                     busDataOut<=PADOUT;
                 WHEN "011"=>
+                    --PADEN
+                    busDataOut<=PADEN;
+                WHEN "100"=>
                     --PADINTEN
                     busDataOut<=PADINTEN;
-                WHEN "100"=>
+                WHEN "101"=>
                     --INTTYPE0
                     busDataOut<=INTTYPE0;
-                WHEN "101"=>
-                    --INTTYPE1
+                WHEN "110" =>
                     busDataOut<=INTTYPE1;
                 WHEN OTHERS=>
                     --INTSTATUS
@@ -214,5 +224,6 @@ BEGIN
     --OUTPUT SIGNALS TOGPIO PIN INTERFACE
     gpio_pad_dir<=PADDIR;
     gpio_out_sync<=PADOUT;
+    gpio_en<=PADEN; --Change Juan
     
 END behavior;

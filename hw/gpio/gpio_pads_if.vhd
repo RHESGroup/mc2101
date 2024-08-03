@@ -44,6 +44,7 @@ ENTITY gpio_pads_if IS
 	    --INPUTS
 	    gpio_pad_dir : IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
 	    gpio_port_out: IN STD_LOGIC_VECTOR( 31 DOWNTO 0);
+	    gpio_en      : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 	    --OUTPUTS
 	    gpio_port_in : OUT STD_LOGIC_VECTOR( 31 DOWNTO 0);
 	    --INOUTS
@@ -54,15 +55,21 @@ END gpio_pads_if;
 ARCHITECTURE behavior OF gpio_pads_if IS
 BEGIN
 
-    PROCESS(gpio_pad_dir, gpio_port_out, gpio_pins)
+    PROCESS(gpio_pad_dir, gpio_port_out, gpio_pins, gpio_en)
     BEGIN
         FOR i IN 0 TO (31) LOOP
-            gpio_port_in(i)<=gpio_pins(i);
-            IF gpio_pad_dir(i) = '0' THEN               
+            IF gpio_en(i) = '0' THEN --PAD in tri-state
                 gpio_pins(i)<='Z';
-            ELSE
-                gpio_pins(i)<=gpio_port_out(i);
+            ELSE --PAD is enabled
+                IF gpio_pad_dir(i) = '0' THEN --Works as input              
+                    gpio_port_in(i)<=gpio_pins(i);
+                ELSE --Works as output
+                    gpio_pins(i)<=gpio_port_out(i);
+                    gpio_port_in(i)<='Z';
+                END IF;   
             END IF;
+            
+
         END LOOP;
     END PROCESS;
     

@@ -56,7 +56,7 @@ ENTITY gpio_bus_wrap IS
 		htrans        : IN  STD_LOGIC_VECTOR(1 DOWNTO 0); --Shows the current state of the bus
 		hselx         : IN  STD_LOGIC; --CHIP SELECT signal -- Enables the peripheral selection
 		hwrite        : IN  STD_LOGIC; --Indicates the transfer direction. Write(1) or Read(0)
-		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); --Data lines from mater to slave. It comes from the AFTAB
+		hwrdata       : IN  STD_LOGIC_VECTOR(busDataWidth-1 DOWNTO 0); --Data lines from master to slave. It comes from the AFTAB
 		haddr         : IN  STD_LOGIC_VECTOR(busAddressWidth-1 DOWNTO 0); --Address
 		--OUTPUTS
 		--slave driven signals
