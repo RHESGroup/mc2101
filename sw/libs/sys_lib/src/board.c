@@ -30,6 +30,10 @@
  
  void board_setup()
  {
+    /**ENABLE GPIOS(0 to 15)*/
+    for(int i=LEDR0; i<=LED5R; i++)
+        set_enable_disable_pin(i, GPIO_ENABLE);
+
     /**Setup LEDR[i] as output pins*/
     for(int i=LEDR0; i<=LEDR3; i++)
         set_pin_direction(i,GPIO_OUT);

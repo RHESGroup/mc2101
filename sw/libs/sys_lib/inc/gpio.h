@@ -40,14 +40,16 @@
 #define GPIO_PADIN                 ( GPIO_BASE_ADDR + 0x04 )
 /**PADOUT ADDRESS*/
 #define GPIO_PADOUT                ( GPIO_BASE_ADDR + 0x08 )
+/**PADEN ADRESS */
+#define GPIO_PADEN                 ( GPIO_BASE_ADDR + 0x0C )
 /**INTEN ADDRESS*/
-#define GPIO_INTEN                 ( GPIO_BASE_ADDR + 0x0C )
+#define GPIO_INTEN                 ( GPIO_BASE_ADDR + 0x10 )
 /**INTTYPE0 ADDRESS*/
-#define GPIO_INTTYPE0              ( GPIO_BASE_ADDR + 0x10 )
+#define GPIO_INTTYPE0              ( GPIO_BASE_ADDR + 0x14 )
 /**INTTYPE1 ADDRESS*/
-#define GPIO_INTTYPE1              ( GPIO_BASE_ADDR + 0x14 )
+#define GPIO_INTTYPE1              ( GPIO_BASE_ADDR + 0x18 )
 /**INTSTATUS ADDRESS*/
-#define GPIO_INTSTATUS             ( GPIO_BASE_ADDR + 0x18 )
+#define GPIO_INTSTATUS             ( GPIO_BASE_ADDR + 0x1C )
 
 /** @} */
 
@@ -62,6 +64,8 @@
  #define  PADIN                    REGP32(GPIO_PADIN)
  /**PADOUT*/
  #define  PADOUT                   REGP32(GPIO_PADOUT)
+ /*PADEN*/
+ #define  PADEN                    REGP32(GPIO_PADEN)
  /**INTEN*/
  #define  INTEN                    REGP32(GPIO_INTEN)
  /**INTTYPE0*/
@@ -86,6 +90,10 @@
  #define GPIO_PIN_LOW              0x0
  /**Voltage HIGH*/
  #define GPIO_PIN_HIGH             0x1
+ /**Enable GPIO */
+ #define GPIO_ENABLE               0x1
+  /**Disable GPIO */
+ #define GPIO_DISABLE              0x0
  /**Enable interrupt*/
  #define GPIO_INT_ENABLE           0x1
  /**Disable interrupt*/
@@ -100,6 +108,22 @@
  #define GPIO_IRQ_FALL             0x3
  
  /** @} */
+
+ /**
+ * @brief used to enable/disable the GPIO
+ * @param pinnumber: pin id (0 to 31)
+ * @param state: enable=GPIO_ENABLE, disable=GPIO_DISABLE
+ */
+void set_enable_disable_pin(int pinnumber, int state);
+
+ /**
+ * @brief used to get the state of the GPIO
+ * @param pinnumber: pin id (0 to 31)
+ * @param state: enable=GPIO_ENABLE, disable=GPIO_DISABLE
+ */
+int get_enable_disable_pin(int pinnumber);
+
+
  
 /**
  * @brief used to set a pin direction to IN/OUT
@@ -107,6 +131,7 @@
  * @param direction: input=GPIO_IN, output=GPIO_OUT
  */
 void set_pin_direction(int pinnumber, int direction);
+
 
 /**
  * @brief used to get a pin direction

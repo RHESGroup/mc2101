@@ -25,10 +25,29 @@
  */
  
  #include "gpio.h"
+
+ 
+void set_enable_disable_pin(int pinnumber, int state)
+{
+    volatile unsigned int old_enable=REG32(PADEN);
+    if(state == 0)
+        old_enable &= ~(1<<pinnumber);
+    else
+        old_enable |= (1<<pinnumber);
+    REG32(PADEN)=old_enable;
+}
+
+ 
+int get_enable_disable_pin(int pinnumber)
+{
+    volatile unsigned int old_direction=REG32(PADEN);
+    old_direction &= (1<<pinnumber);
+    return (old_direction>>pinnumber);
+}
  
  void set_pin_direction(int pinnumber, int direction)
  {
-    volatile int old_direction=REG32(PADDIR);
+    volatile unsigned int old_direction=REG32(PADDIR);
     if(direction == 0)
         old_direction &= ~(1<<pinnumber);
     else
@@ -38,14 +57,14 @@
  
  int get_pin_direction(int pinnumber)
  {
-    volatile int old_direction=REG32(PADDIR);
+    volatile unsigned int old_direction=REG32(PADDIR);
     old_direction &= (1<<pinnumber);
     return (old_direction>>pinnumber);
  }
  
  void set_pin_value(int pinnumber, int value)
  {
-    volatile int old_output=REG32(PADOUT);
+    volatile unsigned int old_output=REG32(PADOUT);
     if(value == 0)
         old_output &= ~(1<<pinnumber);
     else
