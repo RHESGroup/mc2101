@@ -88,12 +88,17 @@ BEGIN
     
     pads: ENTITY work.gpio_pads_if   
 	PORT MAP(
-	    gpio_pins=>gpio_pads,
-	    gpio_port_in=>gpio_core_ins,
-	    gpio_pad_dir=>gpio_core_dirs,
-	    gpio_port_out=>gpio_core_outs,
-	    gpio_en=>gpio_core_en
-	);
+        --INPUTS
+	    clk => clk,
+	    rst => rst,
+	    gpios_dir => gpio_core_dirs,
+	    gpios_port_out => gpio_core_outs,
+	    gpios_en => gpio_core_en,
+	    --OUTPUTS
+	    gpios_port_in => gpio_core_ins,
+	    --INOUTS
+	    gpios_pin => gpio_pads
+    ); 
 
 END behavior;
 
