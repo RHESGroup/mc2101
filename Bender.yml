@@ -15,6 +15,7 @@ sources:
   - hw/gpio/gpio_bus_wrap.vhd
   - hw/gpio/gpio_controller.vhd
   - hw/gpio/gpio_core.vhd
+  - hw/gpio/gpio_pad.vhd
   - hw/gpio/gpio_pads_if.vhd
   - hw/gpio/gpio.vhd
   - hw/uart/fifo.vhd
@@ -39,6 +40,8 @@ sources:
       - target/sim/src/tb_uart_tx_core.vhd
       - target/sim/src/tb_uart_rx_core.vhd
       - target/sim/src/tb_uart_periph.vhd
+      - target/sim/src/tb_gpio_pad.vhd
+      - target/sim/src/tb_gpios_pads.vhd
       - target/sim/src/mc2101_wrapper.vhd
 
   - target: xilinx
