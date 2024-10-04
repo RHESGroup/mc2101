@@ -6,7 +6,7 @@ set ipName ila_0
 set current_directory [file normalize [pwd]]
 puts $current_directory
 
-create_project $ipName $current_directory/ips/ILA -force -part $partNumber
+create_project $ipName $current_directory/../../IP/ILA -force -part $partNumber
 set_property board_part $boardName [current_project]
 set_property target_language VHDL [current_project]
 

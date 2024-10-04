@@ -13,9 +13,11 @@ MC2101 VIVADO/MC2101 VIVADO.xpr
 *.o
 *.a
 *.dtb
-SW/deps/.patched
-SW/build
-SW/
+.vscode
+.Xil
+sw/deps/.patched
+sw/build
+
 
 # Xilinx generated files
 target/xilinx/build
@@ -29,7 +31,7 @@ target/sim/.Xil
 mc2101*
 utilblk_mem_gen_0.mif
 IP/ILA/ila_0*
-Work_directory/*
+Work_directory
 #Bender files
 .bender
 

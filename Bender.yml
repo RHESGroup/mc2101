@@ -8,24 +8,24 @@ dependencies:
 
 
 export_include_dirs:
-  - HW/include
+  - hw/include
 
 #Specify all the general sources used in the project
 sources:
-  - HW/gpio/gpio_bus_wrap.vhd
-  - HW/gpio/gpio_controller.vhd
-  - HW/uart/fifo.vhd
-  - HW/uart/uart_bus_wrap.vhd
-  - HW/uart/uart_controller.vhd
-  - HW/uart/uart_interrupt.vhd
-  - HW/uart/uart_rx_core.vhd
-  - HW/uart/uart_tx_core.vhd
-  - HW/uart/uart.vhd
-  - HW/ssram/ssram_controller.vhd
-  - HW/ssram/ssram_bus_wrap.vhd
-  - HW/core_bus_wrap.vhd
-  - HW/mc2101.vhd
-  - HW/include/Constants.vhd
+  - hw/gpio/gpio_bus_wrap.vhd
+  - hw/gpio/gpio_controller.vhd
+  - hw/uart/fifo.vhd
+  - hw/uart/uart_bus_wrap.vhd
+  - hw/uart/uart_controller.vhd
+  - hw/uart/uart_interrupt.vhd
+  - hw/uart/uart_rx_core.vhd
+  - hw/uart/uart_tx_core.vhd
+  - hw/uart/uart.vhd
+  - hw/ssram/ssram_controller.vhd
+  - hw/ssram/ssram_bus_wrap.vhd
+  - hw/core_bus_wrap.vhd
+  - hw/mc2101.vhd
+  - hw/include/Constants.vhd
 
 
   - target: any(simulation,test)

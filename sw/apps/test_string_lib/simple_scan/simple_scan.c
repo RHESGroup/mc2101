@@ -1,8 +1,8 @@
 /**
- * @file  board.c
- * @version 2.0 
- * @date 11 April, 2024
- * @copyright Copyright (C) 2024 CINI Cybersecurity National Laboratory
+ * @file  simple_scan.c
+ * @version 1.0 
+ * @date 12 Sep, 2022
+ * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains
@@ -20,42 +20,35 @@
  * You should have received a copy of the GNU Lesser General
  * Public License along with this source; if not, download it
  * from https://www.gnu.org/licenses/lgpl-3.0.txt
- * @brief init GPIO, UART peripherals
+ * @brief Simple test on printf
  *
  */
- 
- #include "gpio.h"
- #include "uart.h"
- #include "board.h" 
- 
- void board_setup()
- {
-    /**ENABLE GPIOS(0 to 15)*/
-    for(int i=LEDR0; i<=LED5R; i++)
-        set_enable_disable_pin(i, GPIO_ENABLE);
 
-    /**Setup LEDR[i] as output pins*/
-    for(int i=LEDR0; i<=LEDR3; i++)
-        set_pin_direction(i,GPIO_OUT);
-    
-    /**Setup LED-RGB[i] as output pins*/
-    for (int i = LED4B; i<=LED5R; i++)
-        set_pin_direction(i,GPIO_OUT);
-    
+#include "string_lib.h"
+#include "uart.h"
 
-    /**Setup SW[i] as input pins*/
-    for(int i=SW0; i<=SW1; i++)
-        set_pin_direction(i,GPIO_IN);
-        
-    /**Setup KEY[i] as input pins*/
-    for(int i=KEY1; i<=KEY3; i++)
-        set_pin_direction(i,GPIO_IN);
-        
-    /**Setup uart for IO operations*/
+void init_io(void)
+{
+    //init stdio to uart @9600 KHz
     uart_set_cfg(WORD_LENGTH_8,
                  STOP_BIT_LENGTH_1,
                  PARITY_OFF,
                  PARITY_ODD,
-                 UART_DIV_BR_115200,
-                 DEFAULT_PRESCALER);
- }
+                 UART_DIV_BR_9600);
+}
+
+int main(void)
+{
+    init_io();
+    char name[20];
+    char surname[20];
+    int age;
+    printf("Insert name:\r\n");
+    scanf("%s",name);
+    printf("Insert surname:\r\n");
+    scanf("%s",surname);
+    printf("Insert age:\r\n");
+    scanf("%d",&age);
+    printf("You are %s %s and your age is %d\r\n",name,surname,age);
+    return 0;
+}
