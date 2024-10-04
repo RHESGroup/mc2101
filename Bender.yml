@@ -8,31 +8,27 @@ dependencies:
 
 
 export_include_dirs:
-  - hw/include
+  - HW/include
 
 #Specify all the general sources used in the project
 sources:
-  - hw/gpio/gpio_bus_wrap.vhd
-  - hw/gpio/gpio_controller.vhd
-  - hw/gpio/gpio_core.vhd
-  - hw/gpio/gpio_pad.vhd
-  - hw/gpio/gpio_pads_if.vhd
-  - hw/gpio/gpio.vhd
-  - hw/uart/fifo.vhd
-  - hw/uart/uart_bus_wrap.vhd
-  - hw/uart/uart_controller.vhd
-  - hw/uart/uart_interrupt.vhd
-  - hw/uart/uart_rx_core.vhd
-  - hw/uart/uart_tx_core.vhd
-  - hw/uart/uart.vhd
-  - hw/ssram/ssram_controller.vhd
-  - hw/ssram/ssram_bus_wrap.vhd
-  - hw/core_bus_wrap.vhd
-  - hw/mc2101.vhd
-  - hw/include/Constants.vhd
+  - HW/gpio/gpio_bus_wrap.vhd
+  - HW/gpio/gpio_controller.vhd
+  - HW/uart/fifo.vhd
+  - HW/uart/uart_bus_wrap.vhd
+  - HW/uart/uart_controller.vhd
+  - HW/uart/uart_interrupt.vhd
+  - HW/uart/uart_rx_core.vhd
+  - HW/uart/uart_tx_core.vhd
+  - HW/uart/uart.vhd
+  - HW/ssram/ssram_controller.vhd
+  - HW/ssram/ssram_bus_wrap.vhd
+  - HW/core_bus_wrap.vhd
+  - HW/mc2101.vhd
+  - HW/include/Constants.vhd
 
 
-  - target: simulation
+  - target: any(simulation,test)
     files:
       - target/sim/src/tb_mc2101.vhd
       - target/sim/src/tb_uart_fifo.vhd
@@ -43,10 +39,19 @@ sources:
       - target/sim/src/tb_gpio_pad.vhd
       - target/sim/src/tb_gpios_pads.vhd
       - target/sim/src/mc2101_wrapper.vhd
+      - target/sim/src/gpio_pad.vhd
+      - target/sim/src/gpio_pads_if.vhd
+      - target/sim/src/gpio_core.vhd
+      - target/sim/src/gpio.vhd
 
-  - target: xilinx
+  - target: any(fpga,xilinx)
     files:
       - target/xilinx/src/mc2101_wrapper.vhd
+      - target/xilinx/src/tb_mc2101.vhd
+      - target/xilinx/src/gpio_pad.vhd
+      - target/xilinx/src/gpio_pads_if.vhd
+      - target/xilinx/src/gpio_core.vhd
+      - target/xilinx/src/gpio.vhd
 
   - target: intel
     files:

@@ -38,9 +38,9 @@ ip-dir  := xilinx
 all: $(bit)
 
 $(bit): $(ips)
-	$(BENDER) script vivado -t xilinx  > ${CHS_ROOT}/scripts/add_sources.tcl
+	$(BENDER) script vivado -t xilinx --no-default-target > ${CHS_ROOT}/scripts/add_sources.tcl
 	@mkdir -p $(out)
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ips/ILA/run.tcl  -source ips/BlockMemGenerator/run.tcl -source scripts/prologue.tcl   -source scripts/run.tcl
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ../../IP/ILA/run.tcl  -source ../../IP/BlockMemGenerator/run.tcl -source scripts/prologue.tcl   -source scripts/run.tcl
 	cp $(PROJECT).runs/impl_1/$(PROJECT)* ./$(out)
 
 
