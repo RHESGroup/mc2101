@@ -27,8 +27,8 @@ ifeq ($(BOARD),pynq-z1)
 endif
 
 all: 
-	$(BENDER) script vivado -t simulation  > ${CHS_ROOT}/scripts/add_sources.tcl
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ${CHS_ROOT}/ips/BlockMemGenerator/run.tcl -source ${CHS_ROOT}/../xilinx/scripts/prologue.tcl -source ${CHS_ROOT}/scripts/run.tcl
+	$(BENDER) script vivado -t simulation --no-default-target  > ${CHS_ROOT}/scripts/add_sources.tcl
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ${CHS_ROOT}/ips/BlockMemGenerator/run.tcl -source ${CHS_ROOT}/scripts/prologue.tcl -source ${CHS_ROOT}/scripts/run.tcl
 
 
 sim_uart_fifo: 
@@ -44,7 +44,7 @@ sim_uart_tx_core:
 	$(VIVADO) -nojournal -mode gui -source scripts/script_uart_tx_core.tcl		
 
 sim_uart_peripheral: 
-	$(VIVADO) -nojournal -mode gui -source scripts/script_uart_periph.tcl
+	$(VIVADO) -nojournal -mode gui -source scripts/script_uart_periph.tcl    
 	
 update_ips:
 	$(BENDER) update

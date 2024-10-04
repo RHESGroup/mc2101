@@ -16,7 +16,9 @@ if {[llength $sets]} {
     set_property top tb_mc2101 [get_filesets sim_1];
     set_property top_lib xil_defaultlib [get_filesets sim_1];
 }
-launch_simulation
+
+launch_simulation -mode post-synthesis -type functional
+
 set curr_wave [current_wave_config]
 if { [string length $curr_wave] == 0 } {
    if { [llength [get_objects]] > 0} {

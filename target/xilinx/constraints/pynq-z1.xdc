@@ -1,12 +1,12 @@
 ## This file is a general .xdc for the PYNQ-Z1 board Rev. C
 ## To use it in a project:
-## - uncomment the lines corresponding to used pins
+## - uncfomment the lines corresponding to used pins
 ## - rename the used ports (in each line, after get_ports) according to the top level signal names in the project
 
 ## Clock signal 50 MHz
 
 set_property -dict {PACKAGE_PIN H16 IOSTANDARD LVCMOS33} [get_ports sys_clock]
-create_clock -period 20.000 -name sys_clk_pin
+create_clock -name main_clock -period 20.000 [get_ports sys_clock]
 
 
 ##LEDs
@@ -198,3 +198,4 @@ set_property -dict {PACKAGE_PIN V7 IOSTANDARD LVCMOS33} [get_ports uart_rx_0]
 ##Crypto SDA
 
 #set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { crypto_sda }]; #IO_25_35 Sch=crypto_sda
+

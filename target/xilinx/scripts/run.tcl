@@ -56,10 +56,11 @@ set_property XPM_LIBRARIES XPM_MEMORY [current_project]
 
 set_param general.maxThreads 16
 
-#Generate the Outout products of the IPs which have changed
+#Generate the Output products of the IPs which have changed
 foreach ip [get_ips] {
     generate_target {all} $ip
 }
+
 synth_design -rtl -name rtl_1
 
 set_property STEPS.SYNTH_DESIGN.ARGS.RETIMING true [get_runs synth_1]

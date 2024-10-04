@@ -1,2 +1,0 @@
-add_application(test_asm_arithmetic test_asm_arithmetic.s)
-

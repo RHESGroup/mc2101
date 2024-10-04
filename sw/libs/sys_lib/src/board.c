@@ -30,7 +30,7 @@
  
  void board_setup()
  {
-    /**ENABLE GPIOS(0 to 15)*/
+    /**ENABLE GPIOS(0 to 14)*/
     for(int i=LEDR0; i<=LED5R; i++)
         set_enable_disable_pin(i, GPIO_ENABLE);
 

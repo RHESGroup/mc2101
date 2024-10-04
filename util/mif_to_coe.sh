@@ -1,20 +1,22 @@
-#!/bin/bash
+NAME=program
 
-# File containing the memory initialization data
-file_from="program.mif"
+#File containing the memory initialization data
+file_from="${NAME}.mif"
 
 # Check if the file exists
 if [ ! -f "$file_from" ]; then
     echo "File not found: $file_from"
-    exit 1
+    #exit 1
     
 fi
 
+
+#This part generates the .coe file
 #File to be written
-file_to="memory_initialization.coe"
+file_to="memory_initialization_${NAME}.coe"
 # Check if the file exists. If not, create it
 if [ ! -f "$file_to" ]; then
-    touch memory_initialization.coe
+    touch memory_initialization_${NAME}.coe
 fi
 
 #Delete current values of the coe file

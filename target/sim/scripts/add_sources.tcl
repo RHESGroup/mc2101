@@ -74,9 +74,10 @@ add_files -norecurse -fileset [current_fileset] [list \
     $ROOT/target/sim/src/tb_uart_tx_core.vhd \
     $ROOT/target/sim/src/tb_uart_rx_core.vhd \
     $ROOT/target/sim/src/tb_uart_periph.vhd \
-]
-add_files -norecurse -fileset [current_fileset] [list \
-    $ROOT/target/xilinx/src/mc2101_wrapper.vhd \
+    $ROOT/target/sim/src/tb_gpio_pad.vhd \
+    $ROOT/target/sim/src/tb_gpios_pads.vhd \
+    $ROOT/target/sim/src/mc2101_wrapper.vhd \
+    $ROOT/target/sim/src/gpio_pad.vhd \
 ]
 
 set_property include_dirs [list \
@@ -88,18 +89,10 @@ set_property include_dirs [list \
 ] [current_fileset -simset]
 
 set_property verilog_define [list \
-    TARGET_FPGA \
     TARGET_SIMULATION \
-    TARGET_SYNTHESIS \
-    TARGET_VIVADO \
-    TARGET_XILINX \
 ] [current_fileset]
 
 set_property verilog_define [list \
-    TARGET_FPGA \
     TARGET_SIMULATION \
-    TARGET_SYNTHESIS \
-    TARGET_VIVADO \
-    TARGET_XILINX \
 ] [current_fileset -simset]
 

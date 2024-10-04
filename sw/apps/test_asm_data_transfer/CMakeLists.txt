@@ -1,2 +1,0 @@
-add_application(test_asm_data_transfer test_asm_data_transfer.s)
-

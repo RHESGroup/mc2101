@@ -45,7 +45,7 @@ fi
 
 SW_ROOT_DIR=../sw
 TEST_PROGRAMS_ROOT_DIR=$SW_ROOT_DIR/build/apps/
-PROGRAM_S19="$TEST_PROGRAMS_ROOT_DIR/$1/$1.s19"
+PROGRAM_S19="$TEST_PROGRAMS_ROOT_DIR/$2/$1.s19"
 MIF_FILE=./program_${1}.mif
 
 #find s19 file used by pulpino tools to build the spi_stim.txt file
@@ -56,7 +56,7 @@ then
 fi
 
 #create spi_stim file using pulpino s19toslm.py script
-$SW_ROOT_DIR/utils/s19toslm.py $PROGRAM_S19
+python $SW_ROOT_DIR/utils/s19toslm.py $PROGRAM_S19
 
 echo "spi_stim.txt file has been generated"
 
@@ -130,7 +130,7 @@ echo "mif file has been generated"
 
 ls ./program_${1}.mif
 
-rm spi_stim.txt
+#rm spi_stim.txt
 
 
 
@@ -140,7 +140,7 @@ file_from="${MIF_FILE}"
 # Check if the file exists
 if [ ! -f "$file_from" ]; then
     echo "File not found: $file_from"
-    exit 1
+    #exit 1
     
 fi
 
