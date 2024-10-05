@@ -1,3 +1,5 @@
+#Script to create the project
+
 set project $::env(PROJECT)
 
 create_project $project ./Work_directory -force -part $::env(XILINX_PART)
