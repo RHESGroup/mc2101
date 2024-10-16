@@ -7,8 +7,8 @@ puts $current_directory
 switch $::env(BOARD) {
       "pynq-z1" {
             set ips {
-                  "../../IP/BlockMemGenerator/blk_mem_gen_0.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci" \
-                  "../../IP/ILA/ila_0.srcs/sources_1/ip/ila_0/ila_0.xci"
+                  "./IP/BlockMemGenerator/blk_mem_gen_0.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci" \
+                  "./IP/ILA/ila_0.srcs/sources_1/ip/ila_0/ila_0.xci"
             }
       }
       default {

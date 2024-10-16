@@ -50,6 +50,8 @@ $(ips):
 	cp $(ip-dir)/$(basename $@)/$(basename $@).srcs/sources_1/ip/$(basename $@)/$@ $@
 
 
+
+
 update_ips:
 	$(BENDER) update
 
@@ -65,6 +67,23 @@ program-ILA:
 	@echo "Programming board $(BOARD) ($(XILINX_PART))"
 	$(VIVADOENV) $(VIVADO) -nojournal -mode gui -source scripts/program_ILA.tcl
 
+generate_ips:
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source IP/BlockMemGenerator/run.tcl -source IP/ILA/run.tcl
+
+create_project:
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/prologue.tcl -source scripts/run.tcl
+
+synthesis:
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/synthesis.tcl
+
+implementation:
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/implementation.tcl
+
+bistream:
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/bitstream.tcl
+
+
+
 
 
 help: 
@@ -78,6 +97,6 @@ help:
 
 
 clean:
-	rm -rf *.log *.jou *.str *.mif *.xci *.xpr .Xil/ $(out) $(PROJECT).cache $(PROJECT).hw $(PROJECT).ioplanning $(PROJECT).ip_user_files $(PROJECT).runs $(PROJECT).sim ./ips/BlockMemGenerator/blk_mem_gen_0.*
+	rm -rf *.log *.jou *.str *.mif *.xci *.xpr .Xil/ $(out) $(PROJECT).cache $(PROJECT).hw $(PROJECT).ioplanning $(PROJECT).ip_user_files $(PROJECT).runs $(PROJECT).sim IP/BlockMemGenerator/blk_mem_gen_0.* IP/ILA/ila_0.* Work_directory
 
 .PHONY: clean
