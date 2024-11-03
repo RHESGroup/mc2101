@@ -338,12 +338,12 @@ BEGIN
     read_IER<='1' WHEN read='1' AND address="0000" ELSE '0'; 
     write_IER<='1' WHEN write='1' AND address="0000" ELSE '0'; 
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_IER<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF write_IER='1' THEN
+        IF rising_edge(clk) THEN
+            IF(rst='1') THEN
+                reg_IER<=(OTHERS=>'0');
+            ELSIF write_IER='1' THEN
                 reg_IER<=busDataIn; --Now, we write all the input value into the IER register...we had previously considered only (2:0)
             END IF;
         END IF;
@@ -352,12 +352,12 @@ BEGIN
     --Do we want to Write the FCR register? 
     write_FCR<='1' WHEN write='1' AND address="0010" ELSE '0';
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_FCR<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF write_FCR='1' THEN
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_FCR<=(OTHERS=>'0');
+            ELSIF write_FCR='1' THEN   
                 reg_FCR<=busDataIn; --Now, we write all the input value into the IER register...we had previously considered only (3:0)
             END IF;
         END IF;
@@ -367,63 +367,64 @@ BEGIN
     read_LCR<='1' WHEN read='1' AND address="0011" ELSE '0';
     write_LCR<='1' WHEN write='1' AND address="0011" ELSE '0';
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_LCR<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF write_LCR='1' THEN
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_LCR<=(OTHERS=>'0');
+            ELSIF write_LCR='1' THEN
                 reg_LCR<=busDataIn; --Now, we write all the input value into the IER register...we had previously considered only (4:0)
-            END IF;
+            END IF;    
         END IF;
     END PROCESS;
     
     --Do we want to Read the LSR register? 
     read_LSR<='1' WHEN read='1' AND address="0100" ELSE '0'; 
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_LSR<="01100000"; --When reset, the Transmitter is empty and and THR is empty
-        ELSIF rising_edge(clk) THEN
-        
-            --LSR's Data Ready
-            reg_LSR(0)<=NOT(rx_fifo_empty); 
-            
-            --LSR's overrun error: -- Overrun errors occur when another byte of data arrives even before the previous data has been read
-            IF read_LSR='1' THEN
-                reg_LSR(1)<='0';
-            ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN 
-                reg_LSR(1)<='1';
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_LSR<="01100000"; --When reset, the Transmitter is empty and and THR is empty
+            ELSE
+                --LSR's Data Ready
+                reg_LSR(0)<=NOT(rx_fifo_empty); 
+                
+                --LSR's overrun error: -- Overrun errors occur when another byte of data arrives even before the previous data has been read
+                IF read_LSR='1' THEN
+                    reg_LSR(1)<='0';
+                ELSIF (rx_fifo_full='1' AND rx_finished='1') THEN 
+                    reg_LSR(1)<='1';
+                END IF;
+                
+                --LSR's parity error - Parity errors occur when the parity of the received data does not match the parity previously defined
+                reg_LSR(2)<=rx_fifo_data_out(8);
+                
+                --LSR's framing error --Framing errors occur when the UART does not see a stop bit at the expected stop bit time
+                reg_LSR(3)<=rx_fifo_data_out(9);
+                
+                --LSR's break error --Break errors occur when the receiver input is at the space level(logic low, '0') for longer than some duration of time
+                reg_LSR(4)<=rx_fifo_data_out(10);
+                
+                --LSR's transmitter fifo empty
+                reg_LSR(5)<=tx_fifo_empty;
+                
+                --LSR's transmitter ready to send and fifo empty
+                reg_LSR(6)<=tx_ready AND tx_fifo_empty;  
             END IF;
-            
-            --LSR's parity error - Parity errors occur when the parity of the received data does not match the parity previously defined
-            reg_LSR(2)<=rx_fifo_data_out(8);
-            
-            --LSR's framing error --Framing errors occur when the UART does not see a stop bit at the expected stop bit time
-            reg_LSR(3)<=rx_fifo_data_out(9);
-            
-            --LSR's break error --Break errors occur when the receiver input is at the space level(logic low, '0') for longer than some duration of time
-            reg_LSR(4)<=rx_fifo_data_out(10);
-            
-            --LSR's transmitter fifo empty
-            reg_LSR(5)<=tx_fifo_empty;
-            
-            --LSR's transmitter ready to send and fifo empty
-            reg_LSR(6)<=tx_ready AND tx_fifo_empty;    
-        END IF; 
+        END IF;
     END PROCESS;
     
     --Do we want to Read/Write the DLL register? 
     read_DLL<='1' WHEN read='1' AND address="0101" ELSE '0';
     write_DLL<='1' WHEN write='1' AND address="0101" ELSE '0'; 
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_DLL<=X"01";
-        ELSIF rising_edge(clk) THEN
-            IF write_DLL='1' THEN
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_DLL<=X"01";
+            ELSIF write_DLL='1' THEN
                 reg_DLL<=busDataIn;
             END IF;
         END IF;
@@ -433,12 +434,12 @@ BEGIN
     read_DLM<='1' WHEN read='1' AND address="0110" ELSE '0';
     write_DLM<='1' WHEN write='1' AND address="0110" ELSE '0';
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_DLM<=X"00";
-        ELSIF rising_edge(clk) THEN
-            IF write_DLM='1' THEN
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_DLM<=X"00";
+            ELSIF write_DLM='1' THEN
                 reg_DLM<=busDataIn;
             END IF;
         END IF;
@@ -447,35 +448,35 @@ BEGIN
     --Do we want to Write the Prescaler register?
     write_prescaler <= '1' WHEN write = '1' and address = "1000" ELSE '0';
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            prescaler <= X"00";
-        ELSIF rising_edge(clk) THEN
-            IF write_prescaler = '1' THEN
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                prescaler <= X"00";
+            ELSIF write_prescaler = '1' THEN
                 prescaler <= busDataIn;
             END IF;
-        END IF;
+        END IF;   
     END PROCESS;
     
     --Do we want to Read/Write the MCR register? 
     read_MCR<='1' WHEN read='1' AND address="1001" ELSE '0';
     write_MCR<='1' WHEN write='1' AND address="1001" ELSE '0';
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_MCR<=X"00";
-        ELSIF rising_edge(clk) THEN
-            IF write_MCR='1' THEN
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_MCR<=X"00";
+            ELSIF write_MCR='1' THEN
                 reg_MCR<=busDataIn;
                 IF (busDataIn(4) XOR reg_MCR(4)) = '1' THEN --If we change from normal mode to test mode or viceseversa
                     reset_tx_rx <= '1';
+                ELSE
+                    reset_tx_rx <= '0';
                 END IF;
-            ELSE
-                reset_tx_rx <= '0';
             END IF;
-        END IF;
+        END IF;    
     END PROCESS;
     
     -- TO DO(IMPROVE): If the mode changes while an UART transmission is occurring, the message sent to the external world is wrongly sent.
@@ -493,20 +494,18 @@ BEGIN
     --Do we want to Read the ISR register? 
     read_ISR<='1' WHEN read='1' AND address="0001" ELSE '0';
     
-    PROCESS(clk, rst) --Change: new process to initialize ISR
+    PROCESS(clk) --Change: new process to initialize ISR
     BEGIN
-        IF rst='1' THEN
-            reg_ISR(7 DOWNTO 4) <=X"0"; --The last 4 bits correspond to the Interruption identification code & Interrupt Status 
-            --These bits are set by the uart interrupt controller(uart_interrupt.vhd)
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_ISR(7 DOWNTO 4) <=X"0"; --The last 4 bits correspond to the Interruption identification code & Interrupt Status 
+                --These bits are set by the uart interrupt controller(uart_interrupt.vhd)
+            END IF;
         END IF;
     END PROCESS;
     
     
-    
-    
-    
-    
-    
+
     --busDataOut update 
     busDataOut<=reg_IER WHEN read_IER='1' ELSE 
                 reg_ISR WHEN read_ISR='1' ELSE
@@ -525,32 +524,36 @@ BEGIN
                '0';
                 
     --Receiver transmission timeout
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            baud_counter<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF clear_cnt='1' THEN
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
                 baud_counter<=(OTHERS=>'0');
             ELSE
-                baud_counter<=baud_counter+1;
+                IF clear_cnt='1' THEN
+                    baud_counter<=(OTHERS=>'0');
+                ELSE
+                    baud_counter<=baud_counter+1;
+                END IF;
             END IF;
         END IF;
     END PROCESS;
     
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            timeout_counter<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF (rx_fifo_empty='1' OR read_RHR='1' OR rx_finished='1') THEN
-                clear_cnt<='1';
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
                 timeout_counter<=(OTHERS=>'0');
-            ELSIF (rx_fifo_empty ='0' AND baud_counter = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor)) - 1)  AND timeout_counter(5)='0') THEN
-                timeout_counter<=timeout_counter+1;
-                clear_cnt<='1';
             ELSE
-                clear_cnt<='0';
+                IF (rx_fifo_empty='1' OR read_RHR='1' OR rx_finished='1') THEN
+                    clear_cnt<='1';
+                    timeout_counter<=(OTHERS=>'0');
+                ELSIF (rx_fifo_empty ='0' AND baud_counter = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor)) - 1)  AND timeout_counter(5)='0') THEN
+                    timeout_counter<=timeout_counter+1;
+                    clear_cnt<='1';
+                ELSE
+                    clear_cnt<='0';
+                END IF;
             END IF;
         END IF;
     END PROCESS;

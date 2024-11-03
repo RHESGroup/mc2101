@@ -97,61 +97,62 @@ BEGIN
     fifo_full<=full;
     
     --update elements_counter based on the operation issued on the FIFO
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF (rst='1' OR clear='1') THEN 
-            elements_counter<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            --decrease the counter only if there's a read operation and the fifo is not empty
-            --at the same time check that there is not a write operation occuring
-            --write operation is valid only if the fifo is not full
-            IF (read_request='1' AND empty='0' AND (write_request='0' OR full='1')) THEN
-                elements_counter<=elements_counter-1;
-            --increase the counter if there is not a valid read operation 
-            --and also check that there is a valid write operation
-            ELSIF ((read_request='0' OR empty='1') AND write_request='1' AND full='0') THEN
-                elements_counter<=elements_counter+1;
+        IF rising_edge(clk) THEN
+            IF (rst='1' OR clear='1') THEN 
+                elements_counter<=(OTHERS=>'0');
+            ELSE
+                --decrease the counter only if there's a read operation and the fifo is not empty
+                --at the same time check that there is not a write operation occuring
+                --write operation is valid only if the fifo is not full
+                IF (read_request='1' AND empty='0' AND (write_request='0' OR full='1')) THEN
+                    elements_counter<=elements_counter-1;
+                --increase the counter if there is not a valid read operation 
+                --and also check that there is a valid write operation
+                ELSIF ((read_request='0' OR empty='1') AND write_request='1' AND full='0') THEN
+                    elements_counter<=elements_counter+1;
+                END IF;
             END IF;
-        END IF;    
+        END IF;   
     END PROCESS;
     
     
     --Update FIFO memory
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF (rst='1' OR clear='1') THEN
-            QUEUE<=(OTHERS=>(OTHERS=>'0'));
-        ELSIF rising_edge(clk) THEN
+        IF rising_edge(clk) THEN
+            IF (rst='1' OR clear='1') THEN
+                QUEUE<=(OTHERS=>(OTHERS=>'0'));
             --update on valid write operation
-            IF (write_request='1' AND full='0') THEN --If we want to write and the buffer is not full
+            ELSIF (write_request='1' AND full='0') THEN --If we want to write and the buffer is not full
                 QUEUE(TO_INTEGER(pointer_in))<=data_in;
             END IF;
         END IF;
     END PROCESS;
     
     --Update read and write pointers (ENQUEUE, DEQUEUE)
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF (rst='1' OR clear='1') THEN
-            pointer_in<=(OTHERS=>'0');
-            pointer_out<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
+        IF rising_edge(clk) THEN
+            IF (rst='1' OR clear='1') THEN
+                pointer_in<=(OTHERS=>'0');
+                pointer_out<=(OTHERS=>'0');
             --update pointer_in on valid write operation
-            IF (write_request='1' AND full='0') THEN --If we want to write and the buffer is not full
+            ELSIF (write_request='1' AND full='0') THEN --If we want to write and the buffer is not full
                 IF (to_integer(pointer_in) = (FIFO_DEPTH-1)) THEN --If we are in the last slot of the queue...
                     pointer_in<=(OTHERS=>'0');  --Go back and point to the beginning of the buffer
                 ELSE --If we still have more available slots
                     pointer_in<=pointer_in+1;
                 END IF;
-            END IF;
             --update pointer_out on valid read operation
-            IF (read_request='1' AND empty='0') THEN --If we want to read and the buffer is not empty
+            ELSIF (read_request='1' AND empty='0') THEN --If we want to read and the buffer is not empty
                 IF (to_integer(pointer_out) = (FIFO_DEPTH-1)) THEN --If we are in the last slot of the queue...
                     pointer_out<=(OTHERS=>'0'); --Go back and point to the beginning of the buffer
                 ELSE --If we still have more available slots
                     pointer_out<=pointer_out+1;
                 END IF;
-            END IF;                
+            END IF;
         END IF;
     END PROCESS;
 

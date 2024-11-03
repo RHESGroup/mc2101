@@ -119,12 +119,14 @@ BEGIN
                          "111";
 
     --RX synchronizer (111 = IDLE STATE)
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' or line_to_idle = '1' or rx_in_async = 'U' THEN 
-            rx_line_sync <= (OTHERS => '1');
-        ELSIF(rising_edge(clk)) THEN
-            rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async;
+        IF rising_edge(clk) THEN
+            IF rst='1' or line_to_idle = '1' or rx_in_async = 'U' THEN 
+                rx_line_sync <= (OTHERS => '1');
+            ELSE
+                rx_line_sync <= rx_line_sync(1 DOWNTO 0) & rx_in_async;
+            END IF;
         END IF;
     END PROCESS;
     
@@ -142,48 +144,52 @@ BEGIN
     
     
     --baudrate generator (assert sample signal [like a delta] at half of the bit frame)
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF (rst='1' OR baudgen='0') THEN
-            count<=(OTHERS=>'0');
-            sample<='0';
-            
-        --BR=fck/ ((Prescaler + 1) * DIVISOR)
-        ELSIF rising_edge(clk) THEN
-            IF ( start_bit='1' AND (count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor)) - 1)/2) ) THEN --To follow step 2)
-                sample<='1';
+        IF rising_edge(clk) THEN 
+            IF (rst='1' OR baudgen='0') THEN
                 count<=(OTHERS=>'0');
-            ELSIF ( start_bit = '0' AND (count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))- 1) )) THEN --To follow step 3)
-                sample<='1';
-                count<=(OTHERS=>'0');
-            ELSE
                 sample<='0';
-                count<=count + 1;
-            END IF; 
+               
+            --BR=fck/ ((Prescaler + 1) * DIVISOR) 
+            ELSE
+                IF ( start_bit='1' AND (count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor)) - 1)/2) ) THEN --To follow step 2)
+                    sample<='1';
+                    count<=(OTHERS=>'0');
+                ELSIF ( start_bit = '0' AND (count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))- 1) )) THEN --To follow step 3)
+                    sample<='1';
+                    count<=(OTHERS=>'0');
+                ELSE
+                    sample<='0';
+                    count<=count + 1;
+                END IF; 
+            END IF;
         END IF;
     END PROCESS;
     
     --PROCESS related to the reading of the characters
-    PROCESS(clk, rst) 
+    PROCESS(clk) 
     BEGIN
-        IF rst = '1' or line_to_idle = '1' THEN
-            data_received <= (OTHERS => '0');
-        ELSIF rising_edge(clk) THEN
-            IF read = '1' THEN
+        IF rising_edge(clk) THEN
+            IF rst = '1' or line_to_idle = '1' THEN
+                data_received <= (OTHERS => '0');
+            ELSIF read = '1' THEN
                 data_received <= rx_line_sync(2) & data_received(7 DOWNTO 1);
             END IF;
         END IF;
     END PROCESS;
     
     --FSM registers update
-    PROCESS(clk,rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            current_state<=S_IDLE;
-            current_data_bit<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            current_state<=next_state;
-            current_data_bit<=next_data_bit;
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                current_state<=S_IDLE;
+                current_data_bit<=(OTHERS=>'0');
+            ELSE 
+                current_state<=next_state;
+                current_data_bit<=next_data_bit;
+            END IF;
         END IF;
     END PROCESS;
     
@@ -299,21 +305,19 @@ BEGIN
     --errors computation
     
     -- PARITY ERROR
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF (rst='1' OR clear_parity_bit_received='1') THEN
-            parity_bit_received<='0';
-            parity_error<='0';
-        ELSIF rising_edge(CLK) THEN
-            IF sample_parity_bit_received='1' THEN
+        IF rising_edge(clk) THEN
+            IF (rst='1' OR clear_parity_bit_received='1') THEN
+                parity_bit_received<='0';
+                parity_error<='0';
+            ELSIF sample_parity_bit_received='1' THEN
                 parity_bit_received<=rx_line_sync(2);
                 parity_error<=rx_line_sync(2) XOR parity_value;
             END IF;
         END IF;
     END PROCESS;
     
-    
-
     -- FRAME ERROR
     frame_error <= '1' when current_state=S_STOP_1 AND  
                             rx_line_sync(2)='0' AND

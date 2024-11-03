@@ -122,12 +122,14 @@ BEGIN
     END PROCESS;
     
     --IICcode register update
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            current_iic_register<="0001"; --There is no interrupt pending
-        ELSIF rising_edge(clk) THEN
-            current_iic_register<=next_iic_register;
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                current_iic_register<="0001"; --There is no interrupt pending
+            ELSE
+                current_iic_register<=next_iic_register;
+            END IF;
         END IF;
     END PROCESS;
     

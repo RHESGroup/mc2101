@@ -125,47 +125,53 @@ BEGIN
                         "111";
 
     --updata reg_tx_data
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            reg_tx_data<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            IF (sample_data_in='1' AND current_state=S_IDLE) THEN
-                reg_tx_data<=tx_data_i;
-            ELSIF sample_data_in='1' THEN
-                reg_tx_data<='0' & reg_tx_data(7 DOWNTO 1);
-            END IF;
-        END IF;        
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                reg_tx_data<=(OTHERS=>'0');
+            ELSE
+                IF (sample_data_in='1' AND current_state=S_IDLE) THEN
+                    reg_tx_data<=tx_data_i;
+                ELSIF sample_data_in='1' THEN
+                    reg_tx_data<='0' & reg_tx_data(7 DOWNTO 1);
+                END IF;     
+            END IF;         
+        END IF;       
     END PROCESS;
     
     --baudrate generator
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF (rst='1' OR baudgen='0') THEN
-            count<=(OTHERS=>'0');
-            --bit_done<='0';
-        ELSIF rising_edge(clk) THEN
-            IF count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))- 1) THEN
+        IF rising_edge(clk) THEN
+            IF (rst='1' OR baudgen='0') THEN
                 count<=(OTHERS=>'0');
-                --bit_done<='1';
-            ELSE
-                count<=count + 1;
-               -- bit_done<='0';
-            END IF;
+                --bit_done<='0';
+            ELSE 
+                IF count = (((UNSIGNED(prescaler) + 1) * UNSIGNED(divisor))- 1) THEN
+                    count<=(OTHERS=>'0');
+                    --bit_done<='1';
+                ELSE
+                    count<=count + 1;
+                   -- bit_done<='0';
+                END IF;
+            END IF;    
         END IF;
     END PROCESS;
     
     bit_done <= '1' WHEN baudgen = '1' ELSE '0'; --Change: change to avoid being two clock cycles in the START BIT state
     
     --FSM registers update
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            current_state<=S_IDLE;
-            current_data_bit<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            current_state<=next_state;
-            current_data_bit<=next_data_bit;
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                current_state<=S_IDLE;
+                current_data_bit<=(OTHERS=>'0');
+            ELSE 
+                current_state<=next_state;
+                current_data_bit<=next_data_bit;
+            END IF;
         END IF;
     END PROCESS;
     
@@ -178,6 +184,8 @@ BEGIN
         baudgen<='0';
         tx_out<='1'; --line is idle as default
         tx_ready<='1';
+        temp_target_data_bits <= target_data_bits; --New
+
         CASE current_state IS
             WHEN S_IDLE=>
                 --start transmission when there is data ready
@@ -194,7 +202,6 @@ BEGIN
                 tx_ready<='0';
                 tx_out<='0';
                 baudgen<='1';
-                temp_target_data_bits <= target_data_bits; --New
                 IF bit_done='1' THEN
                     next_state<=S_DATA_BITS;
                 ELSE
