@@ -8,7 +8,8 @@ switch $::env(BOARD) {
       "pynq-z1" {
             set ips {
                   "./IP/BlockMemGenerator/blk_mem_gen_0.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci" \
-                  "./IP/ILA/ila_0.srcs/sources_1/ip/ila_0/ila_0.xci"
+                  "./IP/ILA/ila_0.srcs/sources_1/ip/ila_0/ila_0.xci" \
+                  "./IP/ClkWizard/clk_wiz_0.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci" 
             }
       }
       default {
@@ -28,7 +29,7 @@ set board $::env(BOARD)
 
 source scripts/add_sources.tcl
 
-add_files -fileset constrs_1 -norecurse $current_directory/constraints/$board.xdc
+add_files -fileset constrs_1 -norecurse $current_directory/constraints/physical_constraints_${board}.xdc $current_directory/constraints/timing_constraints_${board}.xdc
 
 set_property top mc2101_wrapper [current_fileset]
 
