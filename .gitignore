@@ -24,7 +24,10 @@ target/xilinx/build
 target/xilinx/out
 target/xilinx/scripts/add_sources.*
 vivado*
-IP/BlockMemGenerator/blk_mem_gen_0*
+target/xilinx/IP/BlockMemGenerator/blk_mem_gen_0*
+target/xilinx/IP/ILA/ila_0*
+target/xilinx/IP/ClkWizard/clk_wiz_0*
+target/xilinx/*.mif
 target/sim/ips/BlockMemGenerator/blk_mem_gen_0*
 target/xilinx/.Xil
 target/sim/.Xil
