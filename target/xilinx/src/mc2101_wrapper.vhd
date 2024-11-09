@@ -27,7 +27,7 @@ end mc2101_wrapper;
 
 architecture STRUCTURE of mc2101_wrapper is
 
-  SIGNAL sys_reset_n, sys_clock_n : STD_LOGIC;
+  SIGNAL sys_reset_n : STD_LOGIC;
   SIGNAL enable_s : STD_LOGIC;
   SIGNAL write_enable_s : STD_LOGIC_VECTOR(0 DOWNTO 0);
   SIGNAL data_to_BRAM_s : STD_LOGIC_VECTOR(dataWidthSRAM-1 DOWNTO 0);
@@ -38,7 +38,16 @@ architecture STRUCTURE of mc2101_wrapper is
   SIGNAL wren : STD_LOGIC;
   
   SIGNAL wea_s : STD_LOGIC_VECTOR(0 DOWNTO 0);
+  SIGNAL clock_p, clock_n : STD_LOGIC;
   
+  COMPONENT clk_wiz_0 IS
+    PORT(
+        clk_in1 : in STD_LOGIC;
+        reset: in STD_LOGIC;
+        clk_out1 : out STD_LOGIC;
+        clk_out2 : out STD_LOGIC
+    );
+  END COMPONENT clk_wiz_0;
   
  
 
@@ -84,11 +93,18 @@ begin
 
   sys_reset_n <= NOT(reset_rtl);
   
-  sys_clock_n <= NOT(sys_clock);
   
 
   wea_s <= (OTHERS => '0') WHEN wren ='0' ELSE (OTHERS => '1');
 
+  clk0: clk_wiz_0 
+  PORT MAP (
+    clk_in1 => sys_clock,
+    reset => reset_rtl,
+    clk_out1 => clock_p,
+    clk_out2 => clock_n
+  );
+  
   bmg0 : blk_mem_gen_0 
     PORT MAP (
    
@@ -97,12 +113,12 @@ begin
     WEA => wea_s,
     ADDRA => address_bram_s,
     DINA => data_to_BRAM_s,
-    CLKA => sys_clock,
+    CLKA => clock_p,
     --Port B(Port to read)
     ENB => rden,
     ADDRB => address_bram_s,
     DOUTB => data_from_BRAM_s,
-    CLKB => sys_clock_n
+    CLKB => clock_n
     );
     
     
@@ -112,7 +128,7 @@ begin
 		   busAddressWidth => addressWidth
     )
 	PORT MAP(
-	    sys_clk => sys_clock,
+	    sys_clk => clock_p,
 	    sys_rst_n => sys_reset_n, 
 	    gpio_pads => gpio_pads_0,
 	    uart_rx => uart_rx_0,
