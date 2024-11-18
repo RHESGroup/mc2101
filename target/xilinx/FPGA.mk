@@ -16,9 +16,7 @@ endif
 # Location of ip outputs
 # ips := $(addprefix $(CAR_XIL_DIR)/,$(addsuffix .xci ,$(basename $(ips-names))))
 
-out := out
-bit := $(out)/$(PROJECT)_wrapper.bit
-BIT ?= $(bit)
+
 
 VIVADOENV ?=  PROJECT=$(PROJECT)            \
               BOARD=$(BOARD)                \
@@ -26,7 +24,6 @@ VIVADOENV ?=  PROJECT=$(PROJECT)            \
               XILINX_BOARD=$(XILINX_BOARD)  \
               PORT=$(XILINX_PORT)           \
               HOST=$(XILINX_HOST)           \
-              BIT=$(BIT)
 
 VIVADO ?= vivado
 
@@ -34,22 +31,6 @@ VIVADO ?= vivado
 VIVADOFLAGS ?= -nojournal -mode batch
 
 ip-dir  := xilinx
-
-all: $(bit)
-
-$(bit): $(ips)
-	$(BENDER) script vivado -t xilinx --no-default-target > ${CHS_ROOT}/scripts/add_sources.tcl
-	@mkdir -p $(out)
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ../../IP/ILA/run.tcl  -source ../../IP/BlockMemGenerator/run.tcl -source scripts/prologue.tcl   -source scripts/run.tcl
-	cp $(PROJECT).runs/impl_1/$(PROJECT)* ./$(out)
-
-
-$(ips): 
-	@echo "Generating IP $(basename $@)"
-	cd $(ip-dir)/$(basename $@) && $(MAKE) clean && $(VIVADOENV) VIVADO="$(VIVADO)" $(MAKE)
-	cp $(ip-dir)/$(basename $@)/$(basename $@).srcs/sources_1/ip/$(basename $@)/$@ $@
-
-
 
 
 update_ips:
@@ -59,16 +40,8 @@ gui:
 	@echo "Starting $(VIVADO) GUI"
 	@$(VIVADOENV) $(VIVADO) -nojournal -mode gui $(PROJECT).xpr &
 
-program:
-	@echo "Programming board $(BOARD) ($(XILINX_PART))"
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/program.tcl
-
-program-ILA:
-	@echo "Programming board $(BOARD) ($(XILINX_PART))"
-	$(VIVADOENV) $(VIVADO) -nojournal -mode gui -source scripts/program_ILA.tcl
-
 generate_ips:
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source IP/BlockMemGenerator/run.tcl -source IP/ILA/run.tcl
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source IP/BlockMemGenerator/run.tcl -source IP/ILA/run.tcl -source IP/ClkWizard/run.tcl
 
 create_project:
 	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/prologue.tcl -source scripts/run.tcl
@@ -79,20 +52,31 @@ synthesis:
 implementation:
 	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/implementation.tcl
 
-bistream:
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/bitstream.tcl
+program:
+	@echo "Programming board $(BOARD) ($(XILINX_PART))"
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source scripts/program.tcl
+
+program-ILA:
+	@echo "Programming board $(BOARD) ($(XILINX_PART))"
+	$(VIVADOENV) $(VIVADO) -nojournal -mode gui -source scripts/program_ILA.tcl
 
 
-
+all:
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source IP/BlockMemGenerator/run.tcl -source IP/ILA/run.tcl -source IP/ClkWizard/run.tcl -source scripts/prologue.tcl -source scripts/run.tcl -source scripts/synthesis.tcl -source scripts/implementation.tcl
 
 
 help: 
 	@printf "\033[1mSystem creation\033[0m\n"
-	@printf "\033[31m\tall\033[39m Create the environment, run synthesis and implementation and obtain the bitstream.Remember: make -f SIM.k all file=namefile\n"
-	@printf "\033[31m\tprogram\033[39m Program the FPGA with the bistream previously generated\n"
-	@printf "\033[31m\tupdate_ips\033[39m Update the Bender dependencies\n"
-	@printf "\033[31m\tclean\033[39m Eliminate the project and files associated with it\n"
+	@printf "\033[31m\tgenerate_ips\033[39m Generate the IPs which will be used for the design\n"
+	@printf "\033[31m\tcreate_project\033[39m Create the project and add all the source files and IPs\n"
+	@printf "\033[31m\tsynthesis\033[39m Synthesize the design\n"
+	@printf "\033[31m\timplementation\033[39m Run implementation and generate the bitstream\n"
+	@printf "\033[31m\tprogram\033[39m Program the board with the bitstream\n"
+	@printf "\033[31m\tprogram-ILA\033[39m Program the board with the bitstream and the file associated with debugging \n"
 	@printf "\033[31m\tgui\033[39m Open the GUI\n"
+	@printf "\033[31m\tupdate_ips\033[39m Update the bender dependencies\n"
+	@printf "\033[31m\tall\033[39m Create the environment, run synthesis and implementation and obtain the bitstream.Remember: make -f FPGA.k all file=namefile\n"
+
 
 
 
