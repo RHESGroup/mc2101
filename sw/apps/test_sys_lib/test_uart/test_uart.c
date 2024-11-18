@@ -38,7 +38,7 @@ void ISR_UART(void)
 
 int main(void)
 {
-    uart_mode(TEST_MODE);
+    uart_mode(NORMAL_MODE);
     //test configuration @115200 baudrate, No Parity, 1 Stop, 5 char, Odd (100 MHz clk)
     uart_set_cfg(WORD_LENGTH_5, STOP_BIT_LENGTH_1, PARITY_OFF, PARITY_EVEN, UART_DIV_BR_115200, DEFAULT_PRESCALER);
     if(uart_get_cfg() != 0x10) return 1;
