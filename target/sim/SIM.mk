@@ -26,9 +26,9 @@ ifeq ($(BOARD),pynq-z1)
 	XILINX_BOARD = www.digilentinc.com:pynq-z1:part0:1.0
 endif
 
-all: 
+create_project: 
 	$(BENDER) script vivado -t simulation --no-default-target  > ${CHS_ROOT}/scripts/add_sources.tcl
-	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ${CHS_ROOT}/ips/BlockMemGenerator/run.tcl -source ${CHS_ROOT}/scripts/prologue.tcl -source ${CHS_ROOT}/scripts/run.tcl
+	$(VIVADOENV) $(VIVADO) $(VIVADOFLAGS) -source ${CHS_ROOT}/scripts/prologue.tcl -source ${CHS_ROOT}/scripts/run.tcl
 
 
 sim_uart_fifo: 
