@@ -58,22 +58,23 @@ ARCHITECTURE behavior OF gpio_pad IS
 
 TYPE state IS(TRISTATE, INPUT, OUTPUT);
 SIGNAL next_state, current_state : state;
---SIGNAL current_gpio_port_in, next_gpio_port_in : STD_LOGIC;
 SIGNAL current_gpio_pin, next_gpio_pin : STD_LOGIC;
 
 BEGIN
 
 
-    Clock: PROCESS(clk, rst)
+    Clock: PROCESS(clk)
     BEGIN
-        IF rst = '1' THEN
-            current_state<=TRISTATE;
-            current_gpio_pin <= 'Z'; 
-            --current_gpio_port_in <= 'Z';   
-        ELSIF(rising_edge(clk)) THEN
-           current_state <= next_state;  
-           current_gpio_pin <= next_gpio_pin;
-        END IF; 
+        
+        IF rising_edge(clk) THEN
+            IF rst = '1' THEN
+                current_state<=TRISTATE;
+                current_gpio_pin <= 'Z'; 
+            ELSE
+                current_state <= next_state;  
+                current_gpio_pin <= next_gpio_pin;
+            END IF;
+        END IF;
     END PROCESS; 
 
     PROCESS(gpio_dir, gpio_port_out, gpio_pin, gpio_en, current_state, current_gpio_pin)

@@ -16,16 +16,6 @@ ENTITY gpio_pads_if IS
 	    gpios_pin:      INOUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     ); 
 
-
-    	-- --Marking the signals for debugging	
-        attribute mark_debug : string;
-        attribute mark_debug of gpios_dir: signal is "true";
-        attribute mark_debug of gpios_en: signal is "true";
-    
-          
-        attribute dont_touch : string;
-        attribute dont_touch of gpios_dir: signal is "true";
-        attribute dont_touch of gpios_en: signal is "true";
      
 END ENTITY;
 
