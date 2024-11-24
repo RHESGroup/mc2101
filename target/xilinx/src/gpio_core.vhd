@@ -104,70 +104,73 @@ BEGIN
     eff_addr<=address(4 DOWNTO 2);
     
     --DOUBLE SYNCHRONIZER
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            gpio_in_sync1<=(OTHERS=>'0');
-            gpio_in_sync2<=(OTHERS=>'0');
-            PADIN<=(OTHERS=>'0');
-        ELSIF rising_edge(clk) THEN
-            gpio_in_sync1<=gpio_in_async;
-            gpio_in_sync2<=gpio_in_sync1;
-            PADIN<=gpio_in_sync2;
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                gpio_in_sync1<=(OTHERS=>'0');
+                gpio_in_sync2<=(OTHERS=>'0');
+                PADIN<=(OTHERS=>'0');
+            ELSE
+                gpio_in_sync1<=gpio_in_async;
+                gpio_in_sync2<=gpio_in_sync1;
+                PADIN<=gpio_in_sync2;
+            END IF; 
         END IF;
     END PROCESS;
     
     --CHANGED Juan: Now the clock is the only thing checked by the elsif and there is another inner if statement. This causes more logic levels, but ensures that any simulator/synthetizer can understand 
     --USER WRITABLE REGISTERS UPDATE
-    PROCESS(clk, rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            PADDIR<=(OTHERS=>'0'); 
-            PADOUT<=(OTHERS=>'0');
-            PADINTEN<=(OTHERS=>'0');
-            PADEN<=(OTHERS => '0');
-            INTTYPE0<=(OTHERS=>'0');
-            INTTYPE1<=(OTHERS=>'0');
-            INTSTATUS<=(OTHERS=>'0');
-            interrupt<='0';
-        ELSIF (rising_edge(clk)) THEN
-        
-            IF(read='1' AND eff_addr="111") THEN
-                --clear interupt status register
+        IF(rising_edge(clk)) THEN
+            IF rst='1' THEN
+                PADDIR<=(OTHERS=>'0'); 
+                PADOUT<=(OTHERS=>'0');
+                PADINTEN<=(OTHERS=>'0');
+                PADEN<=(OTHERS => '0');
+                INTTYPE0<=(OTHERS=>'0');
+                INTTYPE1<=(OTHERS=>'0');
                 INTSTATUS<=(OTHERS=>'0');
-                --deassert interrupt line
                 interrupt<='0';
-            --rise interrupt if there's one and if not yet pending and update status
-            --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN (not synthesizable by older version of Quartus)
-            --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND interrupts/=x"00000000")) THEN CHANGED JUAN
-            ELSIF(interrupts/=x"00000000") THEN --IF interrupts is not zero, it means there is at least one interrupt
-                interrupt<='1';
-                INTSTATUS<=interrupts;
-            END IF;
+             ELSE
+                IF(read='1' AND eff_addr="111") THEN
+                    --clear interupt status register
+                    INTSTATUS<=(OTHERS=>'0');
+                    --deassert interrupt line
+                    interrupt<='0';
+                --rise interrupt if there's one and if not yet pending and update status
+                --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND (OR(interrupts)='1'))) THEN (not synthesizable by older version of Quartus)
+                --ELSIF (rising_edge(clk) AND (NOT(interrupt)='1' AND interrupts/=x"00000000")) THEN CHANGED JUAN
+                ELSIF(interrupts/=x"00000000") THEN --IF interrupts is not zero, it means there is at least one interrupt
+                    interrupt<='1';
+                    INTSTATUS<=interrupts;
+                END IF;
             
-            IF(write = '1') THEN
-                IF    eff_addr = "000" THEN
-                    --PADDIR
-                    PADDIR<=busDataIn;
-                ELSIF eff_addr = "010" THEN
-                    --PADOUT
-                    PADOUT<=busDataIn;
-                ELSIF eff_addr = "011" THEN
-                    --PADEN
-                    PADEN<=busDataIn;
-                ELSIF eff_addr = "100" THEN
-                    --PADINTEN
-                    PADINTEN<=busDataIn;
-                ELSIF eff_addr = "101" THEN
-                    --INTTYPE0
-                    INTTYPE0<=busDataIn;
-                ELSIF eff_addr = "110" THEN
-                    INTTYPE1<=busDataIn;
-                ELSIF eff_addr = "111" THEN
-                    INTSTATUS<=busDataIn;     
+                IF(write = '1') THEN
+                    IF    eff_addr = "000" THEN
+                        --PADDIR
+                        PADDIR<=busDataIn;
+                    ELSIF eff_addr = "010" THEN
+                        --PADOUT
+                        PADOUT<=busDataIn;
+                    ELSIF eff_addr = "011" THEN
+                        --PADEN
+                        PADEN<=busDataIn;
+                    ELSIF eff_addr = "100" THEN
+                        --PADINTEN
+                        PADINTEN<=busDataIn;
+                    ELSIF eff_addr = "101" THEN
+                        --INTTYPE0
+                        INTTYPE0<=busDataIn;
+                    ELSIF eff_addr = "110" THEN
+                        INTTYPE1<=busDataIn;
+                    ELSIF eff_addr = "111" THEN
+                        INTSTATUS<=busDataIn;     
+                    END IF;
                 END IF;
             END IF;
-        END IF;
+        END IF;   
     END PROCESS;
     
     
