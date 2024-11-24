@@ -43,6 +43,8 @@ sources:
       - target/sim/src/gpio_pads_if.vhd
       - target/sim/src/gpio_core.vhd
       - target/sim/src/gpio.vhd
+      - target/sim/src/blk_mem_gen_0.vhd
+   
 
   - target: any(fpga,xilinx)
     files:
