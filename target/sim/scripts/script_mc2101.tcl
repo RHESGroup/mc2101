@@ -1,6 +1,6 @@
 #TCL script to create the environment to simulate the mc2101
-#set project_name mc2101
-#open_project ${project_name}.xpr
+set project_name mc2101
+open_project ./Work_directory/${project_name}.xpr
 
 set sets [get_filesets -regexp "sim_[0-9]+"] ;# Search if there is any simulation set already created
 if {[llength $sets]} {

@@ -31,7 +31,7 @@ target/xilinx/*.mif
 target/sim/ips/BlockMemGenerator/blk_mem_gen_0*
 target/xilinx/.Xil
 target/sim/.Xil
-mc2101*
+mc2101.*
 utilblk_mem_gen_0.mif
 IP/ILA/ila_0*
 Work_directory

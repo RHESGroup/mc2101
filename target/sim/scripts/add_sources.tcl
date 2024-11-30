@@ -51,9 +51,6 @@ add_files -norecurse -fileset [current_fileset] [list \
 add_files -norecurse -fileset [current_fileset] [list \
     $ROOT/hw/gpio/gpio_bus_wrap.vhd \
     $ROOT/hw/gpio/gpio_controller.vhd \
-    $ROOT/hw/gpio/gpio_core.vhd \
-    $ROOT/hw/gpio/gpio_pads_if.vhd \
-    $ROOT/hw/gpio/gpio.vhd \
     $ROOT/hw/uart/fifo.vhd \
     $ROOT/hw/uart/uart_bus_wrap.vhd \
     $ROOT/hw/uart/uart_controller.vhd \
@@ -78,6 +75,10 @@ add_files -norecurse -fileset [current_fileset] [list \
     $ROOT/target/sim/src/tb_gpios_pads.vhd \
     $ROOT/target/sim/src/mc2101_wrapper.vhd \
     $ROOT/target/sim/src/gpio_pad.vhd \
+    $ROOT/target/sim/src/gpio_pads_if.vhd \
+    $ROOT/target/sim/src/gpio_core.vhd \
+    $ROOT/target/sim/src/gpio.vhd \
+    $ROOT/target/sim/src/blk_mem_gen_0.vhd \
 ]
 
 set_property include_dirs [list \

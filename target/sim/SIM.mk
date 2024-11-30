@@ -44,7 +44,11 @@ sim_uart_tx_core:
 	$(VIVADO) -nojournal -mode gui -source scripts/script_uart_tx_core.tcl		
 
 sim_uart_peripheral: 
-	$(VIVADO) -nojournal -mode gui -source scripts/script_uart_periph.tcl    
+	$(VIVADO) -nojournal -mode gui -source scripts/script_uart_periph.tcl   
+
+sim_system: 
+	$(VIVADO) -nojournal -mode gui -source scripts/script_mc2101.tcl
+
 	
 update_ips:
 	$(BENDER) update
@@ -55,7 +59,7 @@ gui:
 
 help: 
 	@printf "\033[1mSystem creation\033[0m\n"
-	@printf "\033[31m\tall\033[39m Create the environment to simulate the MC2101 and its peripherals. Remember to run: make -f SIM.k all file=namefiletomemory\n"
+	@printf "\033[31m\tcreate_project\033[39m Create the environment to simulate the MC2101 and its peripherals. Remember to run: make -f SIM.k all file=namefiletomemory\n"
 	@printf "\033[31m\tupdate_ips\033[39m Update the Bender dependencies\n"
 	@printf "\033[31m\tclean\033[39m Eliminate the project and files associated with it\n"
 	@printf "\033[31m\tgui\033[39m Open the GUI\n"
@@ -67,6 +71,7 @@ help:
 	@printf "\033[31m\tsim_uart_rx_core\033[39m Open the GUI, open the project and simulate the uart RX\n"
 	@printf "\033[31m\tsim_uart_tx_core\033[39m Open the GUI, open the project and simulate the uart TX\n"
 	@printf "\033[31m\tsim_uart_peripheral\033[39m Open the GUI, open the project and simulate the uart peripheral\n"
+	@printf "\033[31m\tsim_system\033[39m Open the GUI, open the project and simulate the entire system\n"
 
 
 
