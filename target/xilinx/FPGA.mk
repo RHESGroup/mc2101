@@ -69,7 +69,7 @@ help:
 	@printf "\033[1mSystem creation\033[0m\n"
 	@printf "\033[31m\tgenerate_ips\033[39m Generate the IPs which will be used for the design\n"
 	@printf "\033[31m\tcreate_project\033[39m Create the project and add all the source files and IPs\n"
-	@printf "\033[31m\tsynthesis\033[39m Synthesize the design\n"
+	@printf "\033[31m\tsynthesis\033[39m Synthesize the design. Remember: make -f FPGA.k synthesis file=namefile\n"
 	@printf "\033[31m\timplementation\033[39m Run implementation and generate the bitstream\n"
 	@printf "\033[31m\tprogram\033[39m Program the board with the bitstream\n"
 	@printf "\033[31m\tprogram-ILA\033[39m Program the board with the bitstream and the file associated with debugging \n"
