@@ -80,5 +80,10 @@ EXAMPLE:
 make -f SIM.mk sim_system sim=VIVADO
 ```
 
+## Simulation flow
+To be able to run simulations, one has to create the project and then run the particular simulation script by selecting one makefile target.
+In particular, one has to generate the spi_stim.txt before running the simulation. 
+
+To do it, the person should follow the steps explained in the section "Generating .coe file" of README file of the sw folder. Every time somebody runs the "spi_to_mif.sh" script, the spi_stim.txt is updated with the values corresponding to the application previously selected.
 
 

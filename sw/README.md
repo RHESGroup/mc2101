@@ -29,6 +29,7 @@ Switch to the build folder and compile the application you are interested in:
 
     make applicationName
 
+### For Modelsim:
 This command will compile the application and generate stimuli for RTL
 simulation using ModelSim.
 
@@ -36,6 +37,10 @@ simulation using ModelSim.
 To compile the RTL using ModelSim, use
 
     make vcompile
+
+### For Vivado:
+Once "make applicationName" is run, one has to follow the steps shown in the "Generating .coe file" part.
+
 
 ## Executing
 
@@ -51,12 +56,22 @@ To use console mode and final checks of results (if available), use
     make applicationName.vsimc
 
 ## Generating .coe file
-The .coe file corresponds to the file that includes the code that is uploaded into the memory(the Block RAM in this case). The current flow starts from the generation of a file called "spi_stim.txt"; then, it is translated into a .mif file and a .coe file. The VIVADO Block Memory Generator IP uses a .coe file to initialize the values of the memory. Thus, you should run the following once you have compiled the application(make applicationName):
+The .coe file corresponds to the file that includes the code that is uploaded into the memory(the Block RAM in this case) when the target is an AMD's device. The current flow starts from the generation of a file called "spi_stim.txt" starting from the .s19 file; then, the .txt file is translated into a .mif file and a .coe file. The VIVADO Block Memory Generator IP uses a .coe file to initialize the values of the memory. Thus, you should run the following once you have compiled the application(make applicationName):
 ```
 chmod 777 /util/spi_to_mif.sh
-source spi_to_mif.sh applicationName applicationName
+source spi_to_mif.sh applicationName SUBFOLDERS'PATHOFapplicationName
+```
+For example, to create the .coe for testing the uart:
+```
+source spi_to_mif.sh test_uart test_sys_lib/test_uart
+```
+To create the .coe for testing the board in general:
+```
+source spi_to_mif.sh board_test_general test_mc2101/board_test_general
 ```
 Note: run this commands in the directory MC2101/util
+
+On the other hand, for simulation, a dual-port RAM memory is described in VHDL which reads the "spi_stim.txt" to initialize the memory. Similarly, the previous commands update the values of the spi_stim.txt file with the values associated with a particular application; thus, these commands should be used before simulating a new application.
 
 # Applications
 ## How to add a new application
