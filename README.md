@@ -35,6 +35,7 @@ MC2101 contains all the necessary to perform RTL simulations as well as FPGA syn
     │   ├── CMakeLists.txt
     │   ├── README.md
     │── target
+    │   ├── intel
     │   ├── sim
     │   ├── xilinx
     ├── util
