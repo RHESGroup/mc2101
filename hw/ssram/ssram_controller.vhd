@@ -64,12 +64,14 @@ ARCHITECTURE behavior OF bram_controller IS
 
 BEGIN
 
-    PROCESS(clk,rst)
+    PROCESS(clk)
     BEGIN
-        IF rst='1' THEN
-            current_state<=IDLE;
-        ELSIF rising_edge(clk) THEN
-            current_state<=next_state;
+        IF rising_edge(clk) THEN
+            IF rst='1' THEN
+                current_state<=IDLE;
+            ELSE
+                current_state<=next_state;
+            END IF;   
         END IF;
     END PROCESS;
     
