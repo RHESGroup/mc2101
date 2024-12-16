@@ -46,7 +46,7 @@ import math
 # Function to dump single bytes of a string to a file
 ###############################################################################
 def dump_bytes( filetoprint, addr, data_s):
-    for i in xrange(0,4,1):
+    for i in range(0,4,1):
         filetoprint.write("@%08X %s\n" % ( addr+i,  data_s[i*2:(i+1)*2] ))
 
 ###############################################################################
@@ -56,12 +56,15 @@ def s19_parse(filename, s19_dict):
     s19_file = open(filename, 'r')
 
     i = 1
+
+    acc = 0
+    addr = 0
     for line in s19_file:
         
         rec_field = line[:2]
         prefix    = line[:4]
 
-        
+        acc = acc + 1
         
         # Modified by Simone Peraccini 23/09/2021
         # Record S5,S6,S7,S8,S9 in s19 format does not contain data sequences therefore they should be skipped.
@@ -70,16 +73,26 @@ def s19_parse(filename, s19_dict):
         if rec_field == "S0" or rec_field == "S9" or rec_field == "S8" or rec_field == "S7" or rec_field == "S6" or rec_field == "S5"  or prefix == "S009" or prefix == "S505" or prefix == "S705" or prefix == "S017" or prefix == "S804" or line == "":
             continue 
 
-        data = line[-6:-4] # extract data byte
-        str_addr = line[4:-6]
+        #data = line[-6:-4] # extract data byte
+        data = line[-5:-3] # extract data byte  # Modification JUAN
+        #str_addr = line[4:-6]
 
 
-        addr = int("0x%s" % str_addr, 0)
-
+       
         s19_dict[addr] = data
 
+        addr = addr + 1
+
+        # print("BEGINNING")
+        # print(line)
+        # print(data)
+        # print(str_addr)
+        # print(addr)
+        # print("ENDING")
         
 
+        
+    #print("Accumulator:", acc)
     s19_file.close()
 
 ###############################################################################
@@ -115,7 +128,7 @@ def bytes_to_words(byte_dict, word_dict):
 # Start of file
 ###############################################################################
 if(len(sys.argv) < 2):
-    print "Usage s19toslm.py FILENAME"
+    print("Usage s19toslm.py FILENAME")
     quit()
 
 
@@ -138,7 +151,8 @@ s19_dict = {}
 slm_dict = {}
 
 s19_parse(sys.argv[1], s19_dict)
-
+#print(s19_dict)
+#print(len(s19_dict))
 bytes_to_words(s19_dict, slm_dict)
 
 
@@ -205,16 +219,16 @@ for addr in sorted(slm_dict.keys()):
         tcdm_size += 1
 
         spi_stim.write("%08X_%s\n" % (addr << 2, data))
-###############################################################################
-# write flash
-###############################################################################
+# ###############################################################################
+# # write flash
+# ###############################################################################
 
 # 4KB blocks
-l2_blocks   = (l2_size/1024+1)
-tcdm_blocks = (tcdm_size/1024+1)
+l2_blocks   = int(l2_size/1024+1)
+tcdm_blocks = int(tcdm_size/1024+1)
 header_size = 8<<2
 
-l2_off_s    = "%08X"%(((tcdm_size+8)/1024 + 1)*1024 <<2)
+l2_off_s    = "%08X"%(int(((tcdm_size+8)/1024 + 1)*1024) <<2)
 l2_start_s  = "%08X"%(l2_start << 2)
 l2_size_s   = "%08X"%(l2_size << 2)
 l2_blocks_s = "%08X"%(l2_blocks)
@@ -243,7 +257,7 @@ for addr in sorted(slm_dict.keys()):
     if(addr >= l2_start and addr <= l2_end):
         l2_base = (addr - l2_start)
         l2_addr = l2_base  + ((tcdm_size+8)/1024+1)*1024
-        dump_bytes(flash, l2_addr * 4, data)
+        dump_bytes(flash, int(l2_addr) * 4, data)
 
     # tcdm address range
     if(addr >= tcdm_start and addr <= tcdm_end):

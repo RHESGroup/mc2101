@@ -1,8 +1,8 @@
 /**
  * @file  board.c
- * @version 1.0 
- * @date 12 Sep, 2022
- * @copyright Copyright (C) 2022 CINI Cybersecurity National Laboratory
+ * @version 2.0 
+ * @date 11 April, 2024
+ * @copyright Copyright (C) 2024 CINI Cybersecurity National Laboratory
  * This source file may be used and distributed without
  * restriction provided that this copyright statement is not
  * removed from the file and that any derivative work contains
@@ -30,12 +30,21 @@
  
  void board_setup()
  {
+    /**ENABLE GPIOS(0 to 15)*/
+    for(int i=LEDR0; i<=LED5R; i++)
+        set_enable_disable_pin(i, GPIO_ENABLE);
+
     /**Setup LEDR[i] as output pins*/
-    for(int i=LEDR0; i<=LEDR9; i++)
+    for(int i=LEDR0; i<=LEDR3; i++)
         set_pin_direction(i,GPIO_OUT);
     
+    /**Setup LED-RGB[i] as output pins*/
+    for (int i = LED4B; i<=LED5R; i++)
+        set_pin_direction(i,GPIO_OUT);
+    
+
     /**Setup SW[i] as input pins*/
-    for(int i=SW0; i<=SW9; i++)
+    for(int i=SW0; i<=SW1; i++)
         set_pin_direction(i,GPIO_IN);
         
     /**Setup KEY[i] as input pins*/
@@ -47,5 +56,6 @@
                  STOP_BIT_LENGTH_1,
                  PARITY_OFF,
                  PARITY_ODD,
-                 UART_DIV_BR_115200);
+                 UART_DIV_BR_115200,
+                 DEFAULT_PRESCALER);
  }

@@ -1,0 +1,7 @@
+packages:
+  aftab:
+    revision: 8c5d75a582451c7d2022248586bff2b8b270998e
+    version: null
+    source:
+      Git: https://github.com/RHESGroup/aftab.git
+    dependencies: []
